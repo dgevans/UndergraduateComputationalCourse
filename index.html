@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EC 410/510 — Computational Economics</title>
+  <style>
+    :root {
+      --uo-green: #154733;
+      --uo-yellow: #FEE123;
+      --uo-green-light: #1a5c42;
+      --text-primary: #333;
+      --text-secondary: #555;
+      --bg-light: #f8f9fa;
+      --border-color: #dee2e6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--text-primary);
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    header {
+      background: var(--uo-green);
+      color: #fff;
+      padding: 2.5rem 1rem 2rem;
+      text-align: center;
+      border-bottom: 4px solid var(--uo-yellow);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.5px;
+    }
+
+    header .subtitle {
+      font-size: 1.1rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    header .term {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .description {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .syllabus-link {
+      display: inline-block;
+      margin-bottom: 2.5rem;
+      padding: 0.6rem 1.4rem;
+      background: var(--uo-green);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .syllabus-link:hover {
+      background: var(--uo-green-light);
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: var(--uo-green);
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--uo-yellow);
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      background: var(--bg-light);
+      border-bottom: 2px solid var(--border-color);
+      color: var(--uo-green);
+      font-weight: 600;
+    }
+
+    tbody td {
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    tbody tr:hover {
+      background: #f0f7f3;
+    }
+
+    a {
+      color: var(--uo-green);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .topic-name {
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>EC 410/510 — Computational Economics</h1>
+  <div class="subtitle">Dr. David G. Evans &middot; University of Oregon</div>
+  <div class="term">Spring 2026</div>
+</header>
+
+<main>
+  <p class="description">
+    This course provides an introduction to modern computational economics using the Julia programming language. Students learn to model and simulate random variables, solve dynamic optimization problems via dynamic programming, construct structural economic models, and use data to calibrate model parameters.
+  </p>
+
+  <a class="syllabus-link" href="syllabus.html">Course Syllabus</a>
+  <a class="syllabus-link" href="getting-started.html" style="margin-left: 0.75rem;">Getting Started</a>
+
+  <div class="section">
+    <h2>Lectures</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 5%">#</th>
+          <th>Topic</th>
+          <th style="width: 15%">Slides</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td class="topic-name">Course Introduction</td>
+          <td><a href="Slides/Intro.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td class="topic-name">Julia Basics</td>
+          <td><a href="Slides/JuliaBasicsLecture.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td class="topic-name">Linear Algebra</td>
+          <td><a href="Slides/Linear%20Algebra%20Lecture.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td class="topic-name">Markov Chains</td>
+          <td><a href="Slides/MarkovChainsLecture.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td class="topic-name">McCall Search Model</td>
+          <td><a href="Slides/McCall%20Search%20Lecture.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td class="topic-name">Rust (1987) — Optimal Engine Replacement</td>
+          <td><a href="Slides/Rust%201987%20Lecture.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td class="topic-name">Kydland &amp; Prescott (1982) — Real Business Cycles</td>
+          <td><a href="Slides/Kydland%20Prescott%201982%20Lecture.html">Slides</a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td class="topic-name">Sovereign Default — Eaton-Gersovitz / Arellano (2008)</td>
+          <td><a href="Slides/Sovereign%20Default%20Lecture.html">Slides</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Notes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 5%">#</th>
+          <th>Topic</th>
+          <th style="width: 15%">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td class="topic-name">Julia Basics</td>
+          <td><a href="Notes/JuliaBasicsNotes.html">Notes</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td class="topic-name">Linear Algebra</td>
+          <td><a href="Notes/Linear%20Algebra%20Notes.html">Notes</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td class="topic-name">Markov Chains</td>
+          <td><a href="Notes/MarkovChainsNotes.html">Notes</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td class="topic-name">McCall Search Model</td>
+          <td><a href="Notes/McCallSearchNotes.html">Notes</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td class="topic-name">Rust (1987) — Optimal Engine Replacement</td>
+          <td><a href="Notes/Rust%201987%20Notes.html">Notes</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td class="topic-name">Kydland &amp; Prescott (1982) — Real Business Cycles</td>
+          <td><a href="Notes/Kydland%20Prescott%201982%20Notes.html">Notes</a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td class="topic-name">Sovereign Default — Eaton-Gersovitz / Arellano (2008)</td>
+          <td><a href="Notes/Sovereign%20Default%20Notes.html">Notes</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  EC 410/510 &middot; Department of Economics &middot; University of Oregon &middot; Spring 2026
+</footer>
+
+</body>
+</html>

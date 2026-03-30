@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Evans">
+<meta name="dcterms.date" content="2026-03-24">
+
+<title>EC 410/510 – Computational Economics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Syllabus_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Syllabus_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Syllabus_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Syllabus_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="Syllabus_files/libs/quarto-html/popper.min.js"></script>
+<script src="Syllabus_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Syllabus_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Syllabus_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Syllabus_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Syllabus_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Syllabus_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Syllabus_files/libs/bootstrap/bootstrap-a5be5c2b86aab4cd02b109e9a469e1ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#course-information" id="toc-course-information" class="nav-link active" data-scroll-target="#course-information">Course Information</a></li>
+  <li><a href="#professor" id="toc-professor" class="nav-link" data-scroll-target="#professor">Professor</a></li>
+  <li><a href="#course-description-and-objectives" id="toc-course-description-and-objectives" class="nav-link" data-scroll-target="#course-description-and-objectives">Course Description and Objectives</a></li>
+  <li><a href="#course-text" id="toc-course-text" class="nav-link" data-scroll-target="#course-text">Course Text</a></li>
+  <li><a href="#software" id="toc-software" class="nav-link" data-scroll-target="#software">Software</a></li>
+  <li><a href="#grading-criteria" id="toc-grading-criteria" class="nav-link" data-scroll-target="#grading-criteria">Grading Criteria</a></li>
+  <li><a href="#problem-sets" id="toc-problem-sets" class="nav-link" data-scroll-target="#problem-sets">Problem Sets</a></li>
+  <li><a href="#late-policies-for-problem-sets" id="toc-late-policies-for-problem-sets" class="nav-link" data-scroll-target="#late-policies-for-problem-sets">Late Policies for Problem Sets</a></li>
+  <li><a href="#exam-policies" id="toc-exam-policies" class="nav-link" data-scroll-target="#exam-policies">Exam Policies</a>
+  <ul class="collapse">
+  <li><a href="#midterm-exam" id="toc-midterm-exam" class="nav-link" data-scroll-target="#midterm-exam">Midterm Exam</a></li>
+  <li><a href="#final-exam" id="toc-final-exam" class="nav-link" data-scroll-target="#final-exam">Final Exam</a></li>
+  </ul></li>
+  <li><a href="#undergraduate-student-workload" id="toc-undergraduate-student-workload" class="nav-link" data-scroll-target="#undergraduate-student-workload">Undergraduate Student Workload</a></li>
+  <li><a href="#graduate-student-workload" id="toc-graduate-student-workload" class="nav-link" data-scroll-target="#graduate-student-workload">Graduate Student Workload</a></li>
+  <li><a href="#academic-disruption-due-to-campus-emergency" id="toc-academic-disruption-due-to-campus-emergency" class="nav-link" data-scroll-target="#academic-disruption-due-to-campus-emergency">Academic Disruption due to Campus Emergency</a></li>
+  <li><a href="#access-and-accommodations" id="toc-access-and-accommodations" class="nav-link" data-scroll-target="#access-and-accommodations">Access and Accommodations</a></li>
+  <li><a href="#academic-misconduct" id="toc-academic-misconduct" class="nav-link" data-scroll-target="#academic-misconduct">Academic Misconduct</a></li>
+  <li><a href="#inclement-weather" id="toc-inclement-weather" class="nav-link" data-scroll-target="#inclement-weather">Inclement Weather</a></li>
+  <li><a href="#reporting-obligations" id="toc-reporting-obligations" class="nav-link" data-scroll-target="#reporting-obligations">Reporting Obligations</a></li>
+  <li><a href="#mental-health-and-wellness" id="toc-mental-health-and-wellness" class="nav-link" data-scroll-target="#mental-health-and-wellness">Mental Health and Wellness</a></li>
+  <li><a href="#basic-needs" id="toc-basic-needs" class="nav-link" data-scroll-target="#basic-needs">Basic Needs</a></li>
+  <li><a href="#accommodation-for-religious-observances" id="toc-accommodation-for-religious-observances" class="nav-link" data-scroll-target="#accommodation-for-religious-observances">Accommodation for Religious Observances</a></li>
+  <li><a href="#outline-of-course-material" id="toc-outline-of-course-material" class="nav-link" data-scroll-target="#outline-of-course-material">Outline of Course Material</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EC 410/510 – Computational Economics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Evans </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 24, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="course-information" class="level2">
+<h2 class="anchored" data-anchor-id="course-information">Course Information</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><strong>Term:</strong></td>
+<td>Spring 2026</td>
+</tr>
+<tr class="even">
+<td><strong>CRN:</strong></td>
+<td>XXXXX</td>
+</tr>
+<tr class="odd">
+<td><strong>Schedule:</strong></td>
+<td>TTh 2:00pm – 3:20pm</td>
+</tr>
+<tr class="even">
+<td><strong>Room:</strong></td>
+<td>TBD</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="professor" class="level2">
+<h2 class="anchored" data-anchor-id="professor">Professor</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><strong>Instructor:</strong></td>
+<td>Dr.&nbsp;David G. Evans</td>
+</tr>
+<tr class="even">
+<td><strong>Title:</strong></td>
+<td>Assistant Professor, Department of Economics</td>
+</tr>
+<tr class="odd">
+<td><strong>Email:</strong></td>
+<td>devans@uoregon.edu</td>
+</tr>
+<tr class="even">
+<td><strong>Office:</strong></td>
+<td>PLC 538</td>
+</tr>
+<tr class="odd">
+<td><strong>Office Hours:</strong></td>
+<td>Wednesdays 1pm – 3pm and by appointment</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="course-description-and-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="course-description-and-objectives">Course Description and Objectives</h2>
+<p>This course provides an introduction to modern computational economics. The ability to study economic models on a computer has become commonplace in academic research, private sector consulting, and policy work (see <a href="https://github.com/FRBNY-DSGE/DSGE.jl">https://github.com/FRBNY-DSGE/DSGE.jl</a>) as computational economics allows us to tackle problems that would be impossible or too time-consuming to solve by hand. This course will provide students with an introduction to computational modeling in economics and how to apply this approach to interesting economic problems. This course will teach students how to use dynamic programming to solve dynamic optimization problems, construct a structural model of the economy, and use data to inform that model.</p>
+<p>By the end of this course students will:</p>
+<ol type="1">
+<li>Learn how to model and simulate random variables on a computer.</li>
+<li>Understand how to write dynamic optimization problems recursively as a Bellman equation and then solve that equation on a computer.</li>
+<li>Identify how to break down complicated economic models into component parts that can be easily solved on a computer.</li>
+<li>Understand how to use economic data to calibrate parameters of an economic model.</li>
+</ol>
+</section>
+<section id="course-text" class="level2">
+<h2 class="anchored" data-anchor-id="course-text">Course Text</h2>
+<p>No formal text, however many lectures will be based on examples in <a href="http://quantecon.org/">http://quantecon.org/</a> by Thomas Sargent and John Stachurski. All lecture notes will be provided via Canvas.</p>
+</section>
+<section id="software" class="level2">
+<h2 class="anchored" data-anchor-id="software">Software</h2>
+<p>We will be using the Julia programming language as well as many scientific libraries. The first problem set will contain a guide to installing Julia and the tools we will be using for homework submission.</p>
+</section>
+<section id="grading-criteria" class="level2">
+<h2 class="anchored" data-anchor-id="grading-criteria">Grading Criteria</h2>
+<p>You are expected to: attend class; complete required readings; take notes during class; complete biweekly assignments and turn them in on the dates they are due; and take the midterm and final exams.</p>
+<p>Final course grades will be determined by the following point distribution (depending on enrollment in 410 (Undergraduate) or 510 (Graduate)):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Undergraduate</strong></th>
+<th><strong>Graduate</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Problem Sets:</td>
+<td>500 points (50% of grade)</td>
+<td>400 points (40% of grade)</td>
+</tr>
+<tr class="even">
+<td>Midterm Exam:</td>
+<td>250 points (25% of grade)</td>
+<td>200 points (20% of grade)</td>
+</tr>
+<tr class="odd">
+<td>Final Exam:</td>
+<td>250 points (25% of grade)</td>
+<td>200 points (20% of grade)</td>
+</tr>
+<tr class="even">
+<td>Final Project:</td>
+<td>NA</td>
+<td>200 points (20% of grade)</td>
+</tr>
+</tbody>
+</table>
+<p>Except for truly exceptional cases, incompletes or deferred grades will not be given. At my discretion I may give extra credit assignments or take into account improvement over the term.</p>
+<p>My grading policy is consistent with those that appear on the Economics website: <a href="https://economics.uoregon.edu/undergraduate-studies/department-grading-standards/">https://economics.uoregon.edu/undergraduate-studies/department-grading-standards/</a>. These standards are copied below:</p>
+<ul>
+<li><strong>A:</strong> <em>Superior mastery of material.</em> Consistently uses correct techniques and appropriate models for analysis. Able to provide intuition for calculated answers that displays excellent understanding of the relevant economic concepts. Makes few to no errors in calculations or in grammar for written assignments.</li>
+<li><strong>B:</strong> <em>Good mastery of material.</em> Can often identify correct techniques and appropriate models for analysis. Able to provide intuition for calculated answers that displays good understanding of the relevant economic concepts. Makes few errors in calculations or in grammar for written assignments.</li>
+<li><strong>C:</strong> <em>Adequate mastery of material.</em> Can identify correct techniques and appropriate models for analysis in a reasonable number of circumstances. Able to provide intuition for calculated answers that displays sufficient understanding of the relevant economic concepts. Makes some errors in calculations or in grammar for written assignments.</li>
+<li><strong>D:</strong> <em>Poor mastery of material.</em> Has difficulty identifying correct techniques and appropriate models for analysis. Often unable to provide sufficient intuition for calculated answers. Makes many errors in calculations or in grammar for written assignments.</li>
+<li><strong>F:</strong> <em>Inadequate mastery of material.</em> Can rarely identify correct techniques and appropriate models for analysis. Rarely able to provide sufficient intuition for calculated answers. Makes many errors in calculations or in grammar for written assignments.</li>
+</ul>
+<p>A grade of A+ is only to be given in rare circumstances when a student’s mastery of material is unusually outstanding.</p>
+</section>
+<section id="problem-sets" class="level2">
+<h2 class="anchored" data-anchor-id="problem-sets">Problem Sets</h2>
+<p>Approximately every two weeks students will be expected to turn in a problem set covering the topic we have been studying. See the course schedule below for detailed dates. <strong>Every problem set is due by 11:59pm on their due date.</strong> These problem sets are designed to help familiarize yourself with the topic and provide additional practice in writing code. <strong>Do not expect to be able to complete a problem set in one day.</strong> This is especially true if you are new to programming. These are designed to take time and be completed via trial and error. <strong>If you run into difficulty, please, do not hesitate to reach out via email or come to my office hours.</strong> Working in groups is permitted but make sure that all material submitted is your own work.</p>
+<p>Each problem set provides the numerical results you should expect to obtain. Problem sets are graded on a check plus, check, check minus or zero scale with the following rubric:</p>
+<ul>
+<li><strong><em>Check Plus:</em></strong> (100/100) All of the problems have been completed correctly.</li>
+<li><strong><em>Check:</em></strong> (85/100) Most of the problems have been completed correctly and code (when incorrect) demonstrates a clear understanding of the concepts.</li>
+<li><strong><em>Check Minus:</em></strong> (70/100) Some of the problems have been completed correctly and most of the code (when incorrect) demonstrates an understanding of the concepts.</li>
+<li><strong><em>Zero:</em></strong> (0/100) Problem set has either not been submitted or code does not demonstrate an understanding of the material.</li>
+</ul>
+</section>
+<section id="late-policies-for-problem-sets" class="level2">
+<h2 class="anchored" data-anchor-id="late-policies-for-problem-sets">Late Policies for Problem Sets</h2>
+<p>Late assignments create administration problems for the class and are unfair to students who hand in their work on time. At the same time, I recognize there will be times when turning a problem set in on time is infeasible. Therefore, <strong>problem sets can be turned in late but will receive a maximal grade of a check minus.</strong></p>
+</section>
+<section id="exam-policies" class="level2">
+<h2 class="anchored" data-anchor-id="exam-policies">Exam Policies</h2>
+<p><strong>All exams will be open note.</strong> In addition, I will provide you with a sheet of paper covering the code syntax necessary for the exam. In the case of a missed midterm due to unanticipated emergency situations, the student will be allowed to put the weight of the midterm on the final exam. Do not take this class if you already know you cannot make one of the scheduled exams.</p>
+<section id="midterm-exam" class="level3">
+<h3 class="anchored" data-anchor-id="midterm-exam">Midterm Exam</h3>
+<p>The midterm exam will be held <strong>in-class on XXXXXXXX</strong>.</p>
+</section>
+<section id="final-exam" class="level3">
+<h3 class="anchored" data-anchor-id="final-exam">Final Exam</h3>
+<p>Final exam is scheduled for <strong>XXXXXXXX</strong>.</p>
+</section>
+</section>
+<section id="undergraduate-student-workload" class="level2">
+<h2 class="anchored" data-anchor-id="undergraduate-student-workload">Undergraduate Student Workload</h2>
+<p>For those enrolled in 410. This course will require approximately 12 hours of work per week with most of that work (about 9 hours) occurring outside of class. A typical week will include 3 hours of in-class time, 1–2 hours of reading and preparation, and 7–8 hours of work on problem sets.</p>
+</section>
+<section id="graduate-student-workload" class="level2">
+<h2 class="anchored" data-anchor-id="graduate-student-workload">Graduate Student Workload</h2>
+<p>For those enrolled in 510. This course will require approximately 16 hours of work per week. You will be expected to complete all the material required for the undergraduate version of the course. In addition, each problem set will contain additional problems to be completed by graduate students. Expect to spend an additional 2 hours a week on these problems. At the end of the quarter, I will provide you with a list of standard economic models which we have not covered in class. You will be expected to develop and implement a computational strategy to approximate the equilibria of one of those models. Graduate students will not be required to provide any instruction for the course.</p>
+</section>
+<section id="academic-disruption-due-to-campus-emergency" class="level2">
+<h2 class="anchored" data-anchor-id="academic-disruption-due-to-campus-emergency">Academic Disruption due to Campus Emergency</h2>
+<p>In the event of a campus emergency that disrupts academic activities, course requirements, deadlines, and grading percentages are subject to change. Information about changes in this course will be communicated as soon as possible by email, and on Canvas. If we are not able to meet face-to-face, students should immediately log onto Canvas and read any announcements and/or access alternative assignments. Students are also expected to continue coursework as outlined in this syllabus or other instructions on Canvas.</p>
+</section>
+<section id="access-and-accommodations" class="level2">
+<h2 class="anchored" data-anchor-id="access-and-accommodations">Access and Accommodations</h2>
+<p>The University of Oregon and I are dedicated to fostering inclusive, equitable, and accessible learning environments for all students. The Accessible Education Center (AEC) assists students with disabilities in reducing barriers in the educational experience. You may be eligible for accommodations for a variety of disabilities – apparent disabilities, such as a mobility or physical disability, or non apparent disabilities, such as chronic illnesses or psychological disabilities. If you have or think you have a disability and experience academic barriers, please contact the Accessible Education Center (Location: 360 Oregon Hall; 541-346-1155; uoaec@uoregon.edu) to discuss appropriate accommodations or support. The details of your disability will be kept confidential with the AEC and you are not expected to share this information with others. However, I invite you to discuss any approved accommodations or access needs at any time with me.</p>
+</section>
+<section id="academic-misconduct" class="level2">
+<h2 class="anchored" data-anchor-id="academic-misconduct">Academic Misconduct</h2>
+<p>The University Student Conduct Code (available at <a href="https://conduct.uoregon.edu">conduct.uoregon.edu</a>) defines academic misconduct. Students are prohibited from committing or attempting to commit any act that constitutes academic misconduct. By way of example, students should not give or receive (or attempt to give or receive) unauthorized help on assignments or examinations without express permission from the instructor. Students should properly acknowledge and document all sources of information (e.g.&nbsp;quotations, paraphrases, ideas) and use only the sources and resources authorized by the instructor. If there is any question about whether an act constitutes academic misconduct, it is the students’ obligation to clarify the question with the instructor before committing or attempting to commit the act. Additional information about a common form of academic misconduct, plagiarism, is available at <a href="https://researchguides.uoregon.edu/citing-plagiarism">https://researchguides.uoregon.edu/citing-plagiarism</a>.</p>
+</section>
+<section id="inclement-weather" class="level2">
+<h2 class="anchored" data-anchor-id="inclement-weather">Inclement Weather</h2>
+<p>It is generally expected that class will meet unless the University is officially closed for inclement weather. If it becomes necessary to cancel class while the University remains open, this will be announced on Canvas and by email. Updates on inclement weather and closure are also communicated in other ways described here: <a href="https://hr.uoregon.edu/content/inclement-weather-immediate-updates">https://hr.uoregon.edu/content/inclement-weather-immediate-updates</a></p>
+</section>
+<section id="reporting-obligations" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-obligations">Reporting Obligations</h2>
+<p>I am an assisting employee. For information about my reporting obligations as an employee, please see Employee Reporting Obligations on the Office of Investigations and Civil Rights Compliance (OICRC) website. Students experiencing sex or gender-based discrimination, harassment or violence should call the 24-7 hotline 541-346-SAFE [7244] or visit <a href="https://safe.uoregon.edu">safe.uoregon.edu</a> for help. Students experiencing all forms of prohibited discrimination or harassment may contact the Dean of Students Office at 541-346-3216 or the non-confidential Title IX Coordinator/OICRC at 541-346-3123. Additional resources are available at <a href="https://investigations.uoregon.edu/how-get-support">investigations.uoregon.edu/how-get-support</a>. I am also a mandatory reporter of child abuse. Please find more information at Mandatory Reporting of Child Abuse and Neglect.</p>
+</section>
+<section id="mental-health-and-wellness" class="level2">
+<h2 class="anchored" data-anchor-id="mental-health-and-wellness">Mental Health and Wellness</h2>
+<p>Life at college can be very complicated. Students often feel overwhelmed or stressed, experience anxiety or depression, struggle with relationships, or just need help navigating challenges in their life. If you’re facing such challenges, you don’t need to handle them on your own – there’s help and support on campus.</p>
+<p>As your instructor if I believe you may need additional support, I will express my concerns, the reasons for them, and refer you to resources that might be helpful. It is not my intention to know the details of what might be bothering you, but simply to let you know I care and that help is available. Getting help is a courageous thing to do – for yourself and those you care about.</p>
+<p>University Health Services help students cope with difficult emotions and life stressors. If you need general resources on coping with stress or want to talk with another student who has been in the same place as you, visit the Duck Nest (located in the EMU on the ground floor) and get help from one of the specially trained Peer Wellness Advocates. Find out more at <a href="https://health.uoregon.edu/ducknest">health.uoregon.edu/ducknest</a>.</p>
+<p>University Counseling Services (UCS) has a team of dedicated staff members to support you with your concerns, many of whom can provide identity-based support. All clinical services are free and confidential. Find out more at <a href="https://counseling.uoregon.edu">counseling.uoregon.edu</a> or by calling 541-346-3227 (anytime UCS is closed, the After-Hours Support and Crisis Line is available by calling this same number).</p>
+</section>
+<section id="basic-needs" class="level2">
+<h2 class="anchored" data-anchor-id="basic-needs">Basic Needs</h2>
+<p>Any student who has difficulty affording groceries or accessing sufficient food to eat every day, or who lacks a safe and stable place to live and believes this may affect their performance in the course is urged to contact the Dean of Students Office (346-3216, 164 Oregon Hall) for support.</p>
+<p>This UO webpage includes resources for food, housing, healthcare, childcare, transportation, technology, finances, and legal support: <a href="https://blogs.uoregon.edu/basicneeds/food/">https://blogs.uoregon.edu/basicneeds/food/</a></p>
+</section>
+<section id="accommodation-for-religious-observances" class="level2">
+<h2 class="anchored" data-anchor-id="accommodation-for-religious-observances">Accommodation for Religious Observances</h2>
+<p>The university makes reasonable accommodations, upon request, for students who are unable to attend a class for religious obligations or observance reasons, in accordance with the university discrimination policy which says “Any student who, because of religious beliefs, is unable to attend classes on a particular day shall be excused from attendance requirements and from any examination or other assignment on that day. The student shall make up the examination or other assignment missed because of the absence.” To request accommodations for this course for religious observance, visit the Office of the Registrar’s website (<a href="https://registrar.uoregon.edu/calendars/religious-observances">https://registrar.uoregon.edu/calendars/religious-observances</a>) and complete and submit to the instructor the “Student Religious Accommodation Request” form prior to the end of the second week of the term.</p>
+</section>
+<section id="outline-of-course-material" class="level2">
+<h2 class="anchored" data-anchor-id="outline-of-course-material">Outline of Course Material</h2>
+<p>The following is a tentative schedule of lectures and may be subject to change. For reading assignments on Quant Econ visit <a href="https://julia.quantecon.org/intro.html">https://julia.quantecon.org/intro.html</a>. See Canvas modules for additional details.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 32%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Week</th>
+<th>Content</th>
+<th>Assignments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td><strong>Julia Basics and Linear Algebra</strong></td>
+<td>Assignment 1 Due on TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Julia Basics (Canvas), Linear Algebra (Canvas), Julia Essentials (Quant Econ)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td><strong>Finite State Markov Chains</strong></td>
+<td>Assignment 2 Due on TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Markov Chains (Canvas), Finite Markov Chains (Quant Econ)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td><strong>McCall Search Model (Introducing Bellman Equations)</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: McCall Search Model (Canvas), Job Search I (Quant Econ)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td><strong>McCall Search Model (continued)</strong></td>
+<td>Assignment 3 Due on TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Job Search II (Quant Econ)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td><strong>Rust (1987) Optimal Stopping</strong></td>
+<td><strong>Midterm – In Class TBD</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Rust 1987 (Canvas)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td><strong>Rust (1987) Optimal Stopping (continued)</strong></td>
+<td>Assignment 4 Due on TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Rust 1987 (Canvas)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td><strong>Kydland &amp; Prescott (1982): Time Consistency</strong></td>
+<td><strong>510 Students:</strong> Select project by TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Kydland Prescott 1982 (Canvas)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td><strong>Kydland &amp; Prescott (1982) (continued)</strong></td>
+<td>Assignment 5 Due on TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Kydland Prescott 1982 (Canvas)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9</td>
+<td><strong>Sovereign Default</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Sovereign Default (Canvas)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">10</td>
+<td><strong>Sovereign Default (continued)</strong></td>
+<td>Assignment 6 Due on TBD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td>Readings: Sovereign Default (Canvas)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>510 Students:</strong> Final project will be due on the last day of finals week.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

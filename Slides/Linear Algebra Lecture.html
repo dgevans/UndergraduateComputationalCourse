@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="Linear Algebra Lecture_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Linear Algebra Lecture_files/libs/quarto-html/tabby.min.js"></script>
+<script src="Linear Algebra Lecture_files/libs/quarto-html/popper.min.js"></script>
+<script src="Linear Algebra Lecture_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="Linear Algebra Lecture_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Linear Algebra Lecture_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="Linear Algebra Lecture_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
+
+  <meta name="author" content="David Evans">
+  <meta name="dcterms.date" content="2026-02-06">
+  <title>Linear Algebra</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Linear Algebra Lecture_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="Linear Algebra Lecture_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="Linear Algebra Lecture_files/libs/revealjs/dist/theme/quarto-915a90914fbb7c2cfe254e56cdee8186.css">
+  <link href="Linear Algebra Lecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="Linear Algebra Lecture_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-color="#154733" class="quarto-title-block center">
+  <h1 class="title">Linear Algebra</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+David Evans 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-02-06</p>
+</section>
+<section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
+
+</section>
+<section id="motivation" class="title-slide slide level2 center">
+<h2>Motivation</h2>
+
+</section>
+<section id="systems-of-linear-equations" class="slide level3">
+<h3>Systems of Linear Equations</h3>
+<ul>
+<li>One of the most commonly used branches of mathematics in economics</li>
+<li>Many applied problems require solutions to systems of linear equations</li>
+</ul>
+<p><span class="math display">\[
+\begin{split}\begin{array}{c}
+    y_1 = a x_1 + b x_2 \\
+    y_2 = c x_1 + d x_2
+\end{array}\end{split}
+\]</span></p>
+<div class="fragment">
+<ul>
+<li>Or, more generally</li>
+</ul>
+<p><span class="math display">\[
+\begin{split}\begin{array}{c}
+    y_1 = a_{11} x_1 + a_{12} x_2 + \cdots + a_{1k} x_k \\
+    \vdots  \\
+    y_n = a_{n1} x_1 + a_{n2} x_2 + \cdots + a_{nk} x_k
+\end{array}\end{split}
+\]</span></p>
+<ul>
+<li>Objective: solve for <span class="math inline">\(x_1,\ldots, x_k\)</span> given <span class="math inline">\(a_{ij}\)</span> and <span class="math inline">\(y_1,\ldots,y_n\)</span></li>
+</ul>
+</div>
+</section>
+<section id="questions-well-answer" class="slide level3">
+<h3>Questions We’ll Answer</h3>
+<ul>
+<li>Does a solution actually exist?</li>
+<li>Are there in fact many solutions, and if so how should we interpret them?</li>
+<li>If no solution exists, is there a “best” approximate solution?</li>
+<li>If a solution exists, how should we compute it?</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>This Lecture</strong></p>
+</div>
+<div class="callout-content">
+<p>We will show how to use Julia to solve these problems numerically.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="vectors" class="title-slide slide level1 center">
+<h1>Vectors</h1>
+
+</section>
+<section id="definition" class="title-slide slide level2 center">
+<h2>Definition</h2>
+
+</section>
+<section id="vectors-1" class="slide level3">
+<h3>Vectors</h3>
+<ul>
+<li>A vector of length <span class="math inline">\(n\)</span> is just a sequence of <span class="math inline">\(n\)</span> numbers which we write as</li>
+</ul>
+<p><span class="math display">\[
+x = \left(\begin{matrix} x_1\\\vdots\\ x_n\end{matrix}\right)
+\]</span></p>
+<ul>
+<li>The set of all <span class="math inline">\(n\)</span>-vectors is denoted by <span class="math inline">\(\mathbb{R}^n\)</span></li>
+<li>For example, <span class="math inline">\(\mathbb{R}^2\)</span> is the plane, and a vector in <span class="math inline">\(\mathbb{R}^2\)</span> is just a point on the plane</li>
+</ul>
+
+<img data-src="vectors_plane.png" class="r-stretch"></section>
+<section id="vectors-in-julia" class="slide level3">
+<h3>Vectors in Julia</h3>
+<ul>
+<li>Julia is built with vectors and matrices as fundamental building blocks</li>
+</ul>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href=""></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href=""></a>x <span class="op">=</span> [<span class="fl">1</span>., <span class="fl">2</span>.]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.0
+ 2.0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>There are multiple ways of constructing arrays:</li>
+</ul>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href=""></a>x <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span>)           <span class="co"># R^3 filled with zeros</span></span>
+<span id="cb4-2"><a href=""></a><span class="fu">println</span>(<span class="st">"x = </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb4-3"><a href=""></a>y <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">4</span>)            <span class="co"># R^4 filled with ones</span></span>
+<span id="cb4-4"><a href=""></a><span class="fu">println</span>(<span class="st">"y = </span><span class="sc">$</span>y<span class="st">"</span>)</span>
+<span id="cb4-5"><a href=""></a>z <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">LinRange</span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">6</span>))  <span class="co"># R^6 evenly spaced between 0,1</span></span>
+<span id="cb4-6"><a href=""></a><span class="fu">println</span>(<span class="st">"z = </span><span class="sc">$</span>z<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x = [0.0, 0.0, 0.0]
+y = [1.0, 1.0, 1.0, 1.0]
+z = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="editing-vectors" class="slide level3">
+<h3>Editing Vectors</h3>
+<ul>
+<li>Once an array is created we can edit elements using <code>[]</code></li>
+</ul>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href=""></a>x[<span class="fl">1</span>] <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb6-2"><a href=""></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 1.0
+ 0.0
+ 0.0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>Using <code>:</code> you can access multiple elements at once</li>
+</ul>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href=""></a><span class="fu">println</span>(x[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[0.0, 0.0]</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="assigning-to-slices" class="slide level3">
+<h3>Assigning to Slices</h3>
+<ul>
+<li>Assigning to slices requires <code>.=</code> (dot means “do for each element”)</li>
+</ul>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href=""></a>x[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>] <span class="op">=</span> <span class="fl">3</span>, <span class="fl">4</span>  <span class="co"># produces error</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>ArgumentError: indexed assignment with a single value to possibly many locations is not supported; perhaps use broadcasting `.=` instead?
+Stacktrace:
+ [1] <span class="ansi-bold">setindex_shape_check</span><span class="ansi-bold">(</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, ::Int64<span class="ansi-bold">)</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">indices.jl:276</span>
+ [2] <span class="ansi-bold">_unsafe_setindex!</span><span class="ansi-bold">(</span>::IndexLinear, <span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">x</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1017</span>
+ [3] <span class="ansi-bold">_setindex!</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1008</span><span class="ansi-bright-black-fg"> [inlined]</span>
+ [4] <span class="ansi-bold">setindex!</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">v</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">abstractarray.jl:1443</span>
+ [5] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/University of Oregon Dropbox/David Evans/University of Oregon/Courses/Spring 2026/EC 410/Lectures/Julia/Linear Algebra/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">Linear Algebra Lecture.qmd:145</span></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href=""></a>x[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>] <span class="op">.=</span> <span class="fl">3</span>, <span class="fl">4</span>  <span class="co"># assigns element-wise</span></span>
+<span id="cb11-2"><a href=""></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 1.0
+ 3.0
+ 4.0</code></pre>
+</div>
+</div>
+</div>
+</section>
+
+<section id="vector-operations" class="title-slide slide level2 center">
+<h2>Vector Operations</h2>
+
+</section>
+<section id="vector-addition" class="slide level3">
+<h3>Vector Addition</h3>
+<ul>
+<li>When we add two vectors we add them element by element</li>
+</ul>
+<p><span class="math display">\[
+\begin{split}x + y
+=
+\left[
+\begin{array}{c}
+    x_1 \\
+    x_2 \\
+    \vdots \\
+    x_n
+\end{array}
+\right]
++
+\left[
+\begin{array}{c}
+     y_1 \\
+     y_2 \\
+    \vdots \\
+     y_n
+\end{array}
+\right]
+:=
+\left[
+\begin{array}{c}
+    x_1 + y_1 \\
+    x_2 + y_2 \\
+    \vdots \\
+    x_n + y_n
+\end{array}
+\right]\end{split}
+\]</span></p>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href=""></a>x <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">3</span>)</span>
+<span id="cb13-2"><a href=""></a>y <span class="op">=</span> [<span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>]</span>
+<span id="cb13-3"><a href=""></a>x <span class="op">+</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 3.0
+ 5.0
+ 7.0</code></pre>
+</div>
+</div>
+</section>
+<section id="scalar-multiplication" class="slide level3">
+<h3>Scalar Multiplication</h3>
+<ul>
+<li>Scalar multiplication takes a scalar <span class="math inline">\(\gamma\)</span> and a vector <span class="math inline">\(x\)</span> and produces</li>
+</ul>
+<p><span class="math display">\[
+\begin{split}\gamma x
+:=
+\left[
+\begin{array}{c}
+    \gamma x_1 \\
+    \gamma x_2 \\
+    \vdots \\
+    \gamma x_n
+\end{array}
+\right]\end{split}
+\]</span></p>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href=""></a><span class="fl">4</span><span class="op">*</span>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 4.0
+ 4.0
+ 4.0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><img data-src="matrix_operations.png"></p>
+</div>
+</section>
+<section id="element-wise-multiplication" class="slide level3">
+<h3>Element-wise Multiplication</h3>
+<ul>
+<li>Can also multiply <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> element-wise with <code>.*</code> notation</li>
+</ul>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href=""></a><span class="fu">println</span>(x, y)  <span class="co"># recall what x and y are</span></span>
+<span id="cb17-2"><a href=""></a>xy <span class="op">=</span> x <span class="op">.*</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1.0, 1.0, 1.0][2, 4, 6]</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 2.0
+ 4.0
+ 6.0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>The Dot Operator</strong></p>
+</div>
+<div class="callout-content">
+<p>In Julia, prefixing an operator with <code>.</code> applies it element-wise. This works with any function or operator!</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="inner-products-and-norms" class="slide level3">
+<h3>Inner Products and Norms</h3>
+<ul>
+<li>The inner product of two vectors <span class="math inline">\(x, y \in \mathbb{R}^n\)</span> is defined as</li>
+</ul>
+<p><span class="math display">\[
+x' y := \sum_{i=1}^n x_i y_i
+\]</span></p>
+<ul>
+<li>Two vectors are <strong>orthogonal</strong> if their inner product is zero</li>
+<li>The <strong>norm</strong> of a vector <span class="math inline">\(x\)</span> represents its “length”:</li>
+</ul>
+<p><span class="math display">\[
+\| x \| := \sqrt{x' x} := \left( \sum_{i=1}^n x_i^2 \right)^{1/2}
+\]</span></p>
+</section>
+<section id="inner-products-in-julia" class="slide level3">
+<h3>Inner Products in Julia</h3>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href=""></a><span class="co"># Two ways of doing inner product</span></span>
+<span id="cb20-2"><a href=""></a><span class="fu">println</span>(<span class="fu">sum</span>(x <span class="op">.*</span> y))   <span class="co"># sums over x.*y</span></span>
+<span id="cb20-3"><a href=""></a><span class="fu">println</span>(<span class="fu">dot</span>(x, y))     <span class="co"># directly computes dot product</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>12.0
+12.0</code></pre>
+</div>
+</div>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href=""></a><span class="co"># Two ways of computing the norm</span></span>
+<span id="cb22-2"><a href=""></a><span class="fu">println</span>(<span class="fu">sqrt</span>(<span class="fu">dot</span>(x, x)))</span>
+<span id="cb22-3"><a href=""></a><span class="fu">println</span>(<span class="fu">norm</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.7320508075688772
+1.7320508075688772</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href=""></a><span class="co"># Example of orthogonal vectors</span></span>
+<span id="cb24-2"><a href=""></a>z <span class="op">=</span> [<span class="op">-</span><span class="fl">1</span>., <span class="fl">2</span>., <span class="op">-</span><span class="fl">1</span>]</span>
+<span id="cb24-3"><a href=""></a><span class="fu">println</span>(<span class="fu">dot</span>(x, z))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="spanning-and-linear-independence" class="title-slide slide level1 center">
+<h1>Spanning and Linear Independence</h1>
+
+</section>
+<section id="linear-combinations" class="title-slide slide level2 center">
+<h2>Linear Combinations</h2>
+
+</section>
+<section id="spanning" class="slide level3">
+<h3>Spanning</h3>
+<ul>
+<li>Given vectors <span class="math inline">\(A = \{a_1,\ldots,a_k\}\subset \mathbb{R}^n\)</span>, what new vectors can we create using linear operations?</li>
+<li><span class="math inline">\(y \in \mathbb{R}^n\)</span> is a <strong>linear combination</strong> of <span class="math inline">\(A\)</span> if</li>
+</ul>
+<p><span class="math display">\[
+    y = \beta_1 a_1 + \beta_2 a_2 + \ldots + \beta_k a_k \text{  for some scalars $\beta_1,\ldots,\beta_k$}
+\]</span></p>
+<ul>
+<li>The set of linear combinations of <span class="math inline">\(A\)</span> is called the <strong>span</strong> of <span class="math inline">\(A\)</span></li>
+</ul>
+<div class="fragment">
+<p><img data-src="linear_combinations.png" style="width:60.0%"></p>
+</div>
+</section>
+<section id="spanning-examples" class="slide level3">
+<h3>Spanning Examples</h3>
+<ul>
+<li>If <span class="math inline">\(A\)</span> contains only 1 vector <span class="math inline">\(a_1 \in \mathbb{R}^n\)</span>, its span is the line through <span class="math inline">\(a_1\)</span> and the origin</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>The canonical basis vectors <span class="math inline">\(e_1, e_2, \ldots, e_n\)</span> in <span class="math inline">\(\mathbb{R}^n\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+    e_1 = \left[\begin{matrix}1\\0\\\vdots\\0\end{matrix}\right],\quad
+    e_2 = \left[\begin{matrix}0\\1\\\vdots\\0\end{matrix}\right],\quad\ldots,\quad
+    e_n = \left[\begin{matrix}0\\0\\\vdots\\1\end{matrix}\right]
+\]</span></p>
+</div>
+</section>
+<section id="the-canonical-basis-spans-mathbbrn" class="slide level3">
+<h3>The Canonical Basis Spans <span class="math inline">\(\mathbb{R}^n\)</span></h3>
+<ul>
+<li>The span of <span class="math inline">\(\{e_1, e_2, \ldots, e_n\}\)</span> is all of <span class="math inline">\(\mathbb{R}^n\)</span> because for any <span class="math inline">\(x \in \mathbb{R}^n\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+    x = x_1 e_1 + x_2 e_2 + \ldots + x_n e_n
+\]</span></p>
+</section>
+<section id="spanning-a-counterexample" class="slide level3">
+<h3>Spanning: A Counterexample</h3>
+<ul>
+<li>Let <span class="math inline">\(A_0 = \{e_1, e_2, e_1 + e_2\} \subset \mathbb{R}^3\)</span>
+<ul>
+<li>If <span class="math inline">\(y = (y_1, y_2, y_3)\)</span> is a linear combination of these vectors then <span class="math inline">\(y_3 = 0\)</span></li>
+<li><span class="math inline">\(A_0\)</span> fails to span all of <span class="math inline">\(\mathbb{R}^3\)</span></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Key Insight</strong></p>
+</div>
+<div class="callout-content">
+<p>Adding more vectors doesn’t always increase the span — the new vector must point in a “genuinely new direction.”</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="linear-independence" class="title-slide slide level2 center">
+<h2>Linear Independence</h2>
+
+</section>
+<section id="linear-independence-1" class="slide level3">
+<h3>Linear Independence</h3>
+<ul>
+<li><span class="math inline">\(A = \{a_1, \ldots, a_k\} \subset \mathbb{R}^n\)</span> is <strong>linearly dependent</strong> if a strict subset has the same span</li>
+<li><span class="math inline">\(A\)</span> is <strong>linearly independent</strong> if no such subset exists</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Since <span class="math inline">\(\mathbb{R}^n\)</span> can be spanned by <span class="math inline">\(n\)</span> vectors, any subset with <span class="math inline">\(m &gt; n\)</span> elements must be linearly dependent</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Equivalent definitions:
+<ol type="1">
+<li>No vector in <span class="math inline">\(A\)</span> can be formed as a linear combination of the others</li>
+<li>If <span class="math inline">\(\beta_1 a_1 + \ldots + \beta_k a_k = 0\)</span> then <span class="math inline">\(\beta_1 = \cdots = \beta_k = 0\)</span></li>
+</ol></li>
+</ul>
+</div>
+</section>
+<section id="unique-representations" class="slide level3">
+<h3>Unique Representations</h3>
+<ul>
+<li>Linearly independent vectors give <strong>unique</strong> representations in their span</li>
+<li>If <span class="math inline">\(A = \{a_1, \ldots, a_k\}\)</span> is linearly independent and</li>
+</ul>
+<p><span class="math display">\[
+y = \beta_1 a_1 + \ldots + \beta_k a_k = \gamma_1 a_1 + \ldots + \gamma_k a_k
+\]</span></p>
+<div class="fragment">
+<ul>
+<li>Subtracting:</li>
+</ul>
+<p><span class="math display">\[
+(\beta_1 - \gamma_1) a_1 + \cdots + (\beta_k - \gamma_k) a_k = 0
+\]</span></p>
+<ul>
+<li>By linear independence: <span class="math inline">\(\gamma_i = \beta_i\)</span> for all <span class="math inline">\(i\)</span></li>
+</ul>
+</div>
+</section>
+</section>
+<section>
+<section id="matrices" class="title-slide slide level1 center">
+<h1>Matrices</h1>
+
+</section>
+<section id="definition-1" class="title-slide slide level2 center">
+<h2>Definition</h2>
+
+</section>
+<section id="matrices-1" class="slide level3">
+<h3>Matrices</h3>
+<ul>
+<li>An <span class="math inline">\(n \times k\)</span> matrix is a rectangular array with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(k\)</span> columns</li>
+</ul>
+<p><span class="math display">\[
+\begin{split}A =
+\left[
+\begin{array}{cccc}
+    a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1k} \\
+    a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2k} \\
+    \vdots &amp; \vdots &amp; \vdots \\
+    a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nk}
+\end{array}
+\right]\end{split}
+\]</span></p>
+<div class="fragment">
+<ul>
+<li>Can also view <span class="math inline">\(A\)</span> as a list of <span class="math inline">\(k\)</span> column vectors in <span class="math inline">\(\mathbb{R}^n\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+    A = \left[\begin{matrix}a_1 &amp; a_2 &amp; \cdots &amp; a_k\end{matrix}\right]
+    \quad\text{where}\quad
+    a_i = \left[\begin{matrix} a_{1i}\\ a_{2i} \\\vdots \\  a_{ni}\end{matrix}\right]
+\]</span></p>
+</div>
+</section>
+<section id="matrix-properties" class="slide level3">
+<h3>Matrix Properties</h3>
+<ul>
+<li><strong>Row vector</strong>: <span class="math inline">\(n = 1\)</span>; <strong>Column vector</strong>: <span class="math inline">\(k = 1\)</span>; <strong>Square</strong>: <span class="math inline">\(n = k\)</span></li>
+<li>The <strong>transpose</strong> <span class="math inline">\(A'\)</span> (or <span class="math inline">\(A^T\)</span>) is formed by swapping rows and columns (<span class="math inline">\(a_{ij} \to a_{ji}\)</span>)</li>
+</ul>
+<p><span class="math display">\[
+\begin{split}A =
+\left[
+\begin{array}{ccc}
+    a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1k} \\
+    \vdots &amp; \vdots &amp;  \vdots \\
+    a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nk}
+\end{array}
+\right]
+\quad
+A' =
+\left[
+\begin{array}{ccc}
+    a_{11} &amp; a_{21} &amp; \cdots &amp; a_{n1} \\
+    \vdots &amp; \vdots &amp;  \vdots \\
+    a_{1k} &amp; a_{2k} &amp; \cdots &amp; a_{nk}
+\end{array}
+\right]\end{split}
+\]</span></p>
+<ul>
+<li>If <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times k\)</span> then <span class="math inline">\(A'\)</span> is <span class="math inline">\(k \times n\)</span></li>
+</ul>
+</section>
+<section id="transpose-in-julia" class="slide level3">
+<h3>Transpose in Julia</h3>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span> <span class="fl">3</span>;</span>
+<span id="cb26-2"><a href=""></a>     <span class="fl">4</span> <span class="fl">5</span> <span class="fl">6</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×3 Matrix{Int64}:
+ 1  2  3
+ 4  5  6</code></pre>
+</div>
+</div>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href=""></a>A<span class="op">'</span>  <span class="co"># transpose is natural in Julia</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×2 adjoint(::Matrix{Int64}) with eltype Int64:
+ 1  4
+ 2  5
+ 3  6</code></pre>
+</div>
+</div>
+</section>
+
+<section id="special-matrices" class="title-slide slide level2 center">
+<h2>Special Matrices</h2>
+
+</section>
+<section id="symmetric-matrices" class="slide level3">
+<h3>Symmetric Matrices</h3>
+<ul>
+<li>For square matrices, if <span class="math inline">\(A = A'\)</span> then <span class="math inline">\(A\)</span> is called <strong>symmetric</strong></li>
+</ul>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">2</span> <span class="fl">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 2  1</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href=""></a>A<span class="op">'</span>  <span class="co"># same as A!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 adjoint(::Matrix{Int64}) with eltype Int64:
+ 1  2
+ 2  1</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>The <strong>principal diagonal</strong> elements are <span class="math inline">\(a_{ii}\)</span> for <span class="math inline">\(i = 1, \ldots, n\)</span></li>
+</ul>
+<div id="38" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>;</span>
+<span id="cb34-2"><a href=""></a>     <span class="fl">3</span> <span class="fl">4</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 3  4</code></pre>
+</div>
+</div>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href=""></a><span class="fu">diag</span>(A)  <span class="co"># grabs diagonal of A</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Int64}:
+ 1
+ 4</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="diagonal-matrices" class="slide level3">
+<h3>Diagonal Matrices</h3>
+<ul>
+<li><span class="math inline">\(A\)</span> is <strong>diagonal</strong> if the only non-zero entries are on the principal diagonal</li>
+</ul>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href=""></a><span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])  <span class="co"># puts 1,2,3 on the diagonal</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Int64}:
+ 1  0  0
+ 0  2  0
+ 0  0  3</code></pre>
+</div>
+</div>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href=""></a><span class="fu">diagm</span>(<span class="fl">1</span> <span class="op">=&gt;</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])  <span class="co"># shift up by 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4×4 Matrix{Int64}:
+ 0  1  0  0
+ 0  0  2  0
+ 0  0  0  3
+ 0  0  0  0</code></pre>
+</div>
+</div>
+</section>
+<section id="the-identity-matrix" class="slide level3">
+<h3>The Identity Matrix</h3>
+<ul>
+<li>The <strong>identity matrix</strong> <span class="math inline">\(I\)</span> has ones on the diagonal:</li>
+</ul>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href=""></a><span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 1.0  0.0  0.0
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0</code></pre>
+</div>
+</div>
+<p><span class="math display">\[
+    I = \left[\begin{matrix}e_1 &amp; e_2 &amp; \cdots &amp; e_n\end{matrix}\right]
+\]</span></p>
+</section>
+
+<section id="matrix-operations" class="title-slide slide level2 center">
+<h2>Matrix Operations</h2>
+
+</section>
+<section id="addition-and-scalar-multiplication" class="slide level3">
+<h3>Addition and Scalar Multiplication</h3>
+<ul>
+<li>Both carry over directly from vector definitions</li>
+</ul>
+<p><span class="math display">\[
+\gamma A := \left[
+\begin{array}{ccc}
+    \gamma a_{11} &amp; \cdots &amp; \gamma a_{1k} \\
+    \vdots &amp; \vdots &amp;  \vdots \\
+    \gamma a_{n1} &amp; \cdots &amp; \gamma a_{nk}
+\end{array}
+\right]
+\]</span></p>
+<ul>
+<li>For <span class="math inline">\(A + B\)</span> both matrices must be <span class="math inline">\(n \times k\)</span></li>
+</ul>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]</span>
+<span id="cb44-2"><a href=""></a>B <span class="op">=</span> <span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">2</span>))</span>
+<span id="cb44-3"><a href=""></a><span class="fl">2</span><span class="op">*</span>A</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 2  4
+ 6  8</code></pre>
+</div>
+</div>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href=""></a>A <span class="op">+</span> B</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 2.0  2.0
+ 3.0  5.0</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-multiplication" class="slide level3">
+<h3>Matrix Multiplication</h3>
+<ul>
+<li>The <span class="math inline">\(i, j\)</span>-th element of <span class="math inline">\(AB\)</span> is the inner product of row <span class="math inline">\(i\)</span> of <span class="math inline">\(A\)</span> and column <span class="math inline">\(j\)</span> of <span class="math inline">\(B\)</span></li>
+</ul>
+
+<img data-src="systems_diagram.png" class="r-stretch"><ul>
+<li><span class="math inline">\(A\)</span> must be <span class="math inline">\(n \times k\)</span> and <span class="math inline">\(B\)</span> must be <span class="math inline">\(k \times m\)</span></li>
+<li>In general <span class="math inline">\(AB \neq BA\)</span></li>
+</ul>
+</section>
+<section id="matrix-vector-multiplication" class="slide level3">
+<h3>Matrix-Vector Multiplication</h3>
+<ul>
+<li>Multiplying <span class="math inline">\(n \times k\)</span> matrix <span class="math inline">\(A\)</span> with <span class="math inline">\(k \times 1\)</span> vector <span class="math inline">\(x\)</span> gives <span class="math inline">\(n \times 1\)</span> vector:</li>
+</ul>
+<p><span class="math display">\[
+Ax =
+\left[
+\begin{array}{c}
+    a_{11} x_1 + \cdots + a_{1k} x_k \\
+    \vdots \\
+    a_{n1} x_1 + \cdots + a_{nk} x_k
+\end{array}
+\right]
+\]</span></p>
+</section>
+<section id="matrix-vector-multiplication-as-linear-combination" class="slide level3">
+<h3>Matrix-Vector Multiplication as Linear Combination</h3>
+<ul>
+<li>If <span class="math inline">\(a_1, \ldots, a_k\)</span> are the columns of <span class="math inline">\(A\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+    Ax = x_1 a_1 + x_2 a_2 + \ldots + x_k a_k
+\]</span></p>
+<ul>
+<li>Thus <span class="math inline">\(Ax\)</span> is in the <strong>span</strong> of <span class="math inline">\(A\)</span></li>
+<li>Identity matrices have the property: <span class="math inline">\(IA = A = AI\)</span></li>
+</ul>
+</section>
+<section id="matrix-multiplication-in-julia" class="slide level3">
+<h3>Matrix Multiplication in Julia</h3>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 3  4</code></pre>
+</div>
+</div>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href=""></a>I2 <span class="op">=</span> <span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  0.0
+ 0.0  1.0</code></pre>
+</div>
+</div>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href=""></a>A <span class="op">*</span> I2   <span class="co"># should just give A</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  2.0
+ 3.0  4.0</code></pre>
+</div>
+</div>
+</section>
+<section id="element-wise-vs.-matrix-multiplication" class="slide level3">
+<h3>Element-wise vs.&nbsp;Matrix Multiplication</h3>
+<ul>
+<li>Element-wise multiplication via <code>.*</code></li>
+</ul>
+<div id="58" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href=""></a>A <span class="op">.*</span> I2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  0.0
+ 0.0  4.0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>Julia has a built-in variable <code>I</code> for the identity matrix</li>
+</ul>
+<div id="60" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href=""></a>A <span class="op">*</span> I</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 3  4</code></pre>
+</div>
+</div>
+</div>
+</section>
+
+<section id="broadcasting" class="title-slide slide level2 center">
+<h2>Broadcasting</h2>
+
+</section>
+<section id="broadcasting-1" class="slide level3">
+<h3>Broadcasting</h3>
+<ul>
+<li>Broadcasting replicates operations across dimensions using <code>.</code> notation</li>
+<li>Allows you to, for instance, add a vector to each column of a matrix</li>
+</ul>
+<div id="62" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href=""></a>A <span class="op">=</span> <span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  0.0
+ 0.0  1.0</code></pre>
+</div>
+</div>
+<div id="64" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href=""></a>b <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Int64}:
+ 1
+ 2</code></pre>
+</div>
+</div>
+<div id="66" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href=""></a>A <span class="op">.+</span> b   <span class="co"># adds b to each column of A</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 2.0  1.0
+ 2.0  3.0</code></pre>
+</div>
+</div>
+</section>
+<section id="broadcasting-rules" class="slide level3">
+<h3>Broadcasting Rules</h3>
+<ul>
+<li>Julia compares array shapes element-wise, starting from trailing dimensions</li>
+<li>Two dimensions are compatible when:
+<ol type="1">
+<li>They are equal, or</li>
+<li>One of them has length 1</li>
+</ol></li>
+</ul>
+<div class="fragment">
+<p>Can these arrays be broadcast together?</p>
+<p><code>A      (4d array):  8 x 1 x 6 x 1</code> <code>B      (3d array):      7 x 1 x 5</code> <code>Result (4d array):  8 x 7 x 6 x 5</code></p>
+</div>
+<div class="fragment">
+<p>What about these?</p>
+<p><code>A      (2d array):      2 x 1</code> <code>B      (3d array):  8 x 4 x 3</code></p>
+<p>No — the second dimensions do not match.</p>
+</div>
+</section>
+</section>
+<section>
+<section id="solving-systems-of-equations" class="title-slide slide level1 center">
+<h1>Solving Systems of Equations</h1>
+
+</section>
+<section id="formulation" class="title-slide slide level2 center">
+<h2>Formulation</h2>
+
+</section>
+<section id="systems-as-matrix-equations" class="slide level3">
+<h3>Systems as Matrix Equations</h3>
+<ul>
+<li>Our original system can be written as <span class="math inline">\(y = Ax\)</span></li>
+</ul>
+<p><span class="math display">\[
+\begin{split}\begin{array}{c}
+    y_1 = a_{11} x_1 + a_{12} x_2 + \cdots + a_{1k} x_k \\
+    \vdots  \\
+    y_n = a_{n1} x_1 + a_{n2} x_2 + \cdots + a_{nk} x_k
+\end{array}\end{split}
+\]</span></p>
+<div class="fragment">
+<ul>
+<li>Since <span class="math inline">\(Ax = x_1 a_1 + \ldots + x_k a_k\)</span>, the solution requires <span class="math inline">\(y\)</span> to be in the span of <span class="math inline">\(A\)</span></li>
+<li>If the columns of <span class="math inline">\(A\)</span> are linearly independent and span <span class="math inline">\(\mathbb{R}^n\)</span>, a <strong>unique</strong> solution exists</li>
+<li>We say <span class="math inline">\(A\)</span> has <strong>full column rank</strong></li>
+</ul>
+</div>
+</section>
+
+<section id="regular-case" class="title-slide slide level2 center">
+<h2>Regular Case</h2>
+
+</section>
+<section id="the-regular-case" class="slide level3">
+<h3>The Regular Case</h3>
+<ul>
+<li>When <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times n\)</span> with linearly independent columns:
+<ul>
+<li><span class="math inline">\(y = Ax\)</span> has a solution for every <span class="math inline">\(y\)</span>, and this solution is unique</li>
+</ul></li>
+<li>Define <span class="math inline">\(g(y)\)</span> as the solution: <span class="math inline">\(y = Ag(y)\)</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\(g(y)\)</span> is a linear function:</li>
+</ul>
+<p><span class="math display">\[
+g(\alpha w + \beta z) = \alpha g(w) + \beta g(z)
+\]</span></p>
+<ul>
+<li>Any linear function can be represented by a matrix, so there exists <span class="math inline">\(A^{-1}\)</span> such that <span class="math inline">\(g(y) = A^{-1}y\)</span></li>
+</ul>
+</div>
+</section>
+<section id="the-inverse-matrix" class="slide level3">
+<h3>The Inverse Matrix</h3>
+<ul>
+<li>If <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times n\)</span> with full column rank, there exists <span class="math inline">\(A^{-1}\)</span> such that</li>
+</ul>
+<p><span class="math display">\[
+    I = A^{-1}A = A A^{-1}
+\]</span></p>
+<ul>
+<li>Pre-multiplying <span class="math inline">\(y = Ax\)</span> by <span class="math inline">\(A^{-1}\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+    A^{-1} y = A^{-1} A x = x
+\]</span></p>
+<div class="fragment">
+<ul>
+<li><strong>Determinant test</strong>: if <span class="math inline">\(\det(A) \neq 0\)</span> then <span class="math inline">\(A\)</span> is invertible</li>
+<li>If <span class="math inline">\(\det(A) = 0\)</span> then the columns are linearly dependent and no inverse exists</li>
+</ul>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Key Result</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math inline">\(x = A^{-1}y\)</span> is the solution to <span class="math inline">\(y = Ax\)</span> when <span class="math inline">\(A\)</span> is square and invertible.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="solving-in-julia-the-inverse" class="slide level3">
+<h3>Solving in Julia: The Inverse</h3>
+<div id="68" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]</span>
+<span id="cb64-2"><a href=""></a>y <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">2</span>)</span>
+<span id="cb64-3"><a href=""></a><span class="fu">det</span>(A)   <span class="co"># check det(A) ≠ 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>-2.0</code></pre>
+</div>
+</div>
+<div id="70" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href=""></a>A_inv <span class="op">=</span> <span class="fu">inv</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ -2.0   1.0
+  1.5  -0.5</code></pre>
+</div>
+</div>
+<div id="72" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href=""></a>x <span class="op">=</span> A_inv <span class="op">*</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -0.9999999999999998
+  0.9999999999999999</code></pre>
+</div>
+</div>
+<div id="74" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href=""></a>A <span class="op">*</span> x   <span class="co"># verify: should give y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.0
+ 1.0000000000000004</code></pre>
+</div>
+</div>
+</section>
+<section id="solving-in-julia-the-backslash-operator" class="slide level3">
+<h3>Solving in Julia: The Backslash Operator</h3>
+<ul>
+<li>Can also use <code>A\y</code> (backslash) to solve directly</li>
+</ul>
+<div id="76" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb72-1"><a href=""></a>x <span class="op">=</span> A <span class="op">\</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -1.0
+  1.0</code></pre>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Best Practice</strong></p>
+</div>
+<div class="callout-content">
+<p>Prefer <code>A\y</code> over <code>inv(A)*y</code> — it is more numerically stable and efficient.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="over-determined-systems" class="title-slide slide level2 center">
+<h2>Over-determined Systems</h2>
+
+</section>
+<section id="over-determined-systems-1" class="slide level3">
+<h3>Over-determined Systems</h3>
+<ul>
+<li>When <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times k\)</span> with <span class="math inline">\(n &gt; k\)</span> (more equations than unknowns)</li>
+<li>This case arises frequently in <strong>least-squares regression</strong></li>
+<li>The span of <span class="math inline">\(A\)</span> is unlikely to contain an arbitrary <span class="math inline">\(y \in \mathbb{R}^n\)</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Instead, find <span class="math inline">\(x\)</span> that minimizes <span class="math inline">\(\| y - Ax \|\)</span></li>
+<li>The solution is <span class="math inline">\(\hat{x} = (A'A)^{-1}A'y\)</span> when <span class="math inline">\(A\)</span> has full column rank</li>
+<li>Julia provides the pseudo-inverse via <code>pinv</code></li>
+</ul>
+</div>
+</section>
+<section id="least-squares-example" class="slide level3">
+<h3>Least-Squares Example</h3>
+<p>Fit a line <span class="math inline">\(y = mx + c\)</span> through noisy data:</p>
+<div id="78" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb74-1"><a href=""></a>x <span class="op">=</span> [<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>]</span>
+<span id="cb74-2"><a href=""></a>y <span class="op">=</span> [<span class="op">-</span><span class="fl">1</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span>, <span class="fl">2.1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4-element Vector{Float64}:
+ -1.0
+  0.2
+  0.9
+  2.1</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Rewrite as <span class="math inline">\(y = Ap\)</span> where <span class="math inline">\(A = [x \;\; 1]\)</span> and <span class="math inline">\(p = [m \;\; c]\)</span>:</p>
+<div id="80" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb76-1"><a href=""></a>A <span class="op">=</span> [x <span class="fu">ones</span>(<span class="fu">length</span>(x))]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4×2 Matrix{Float64}:
+ 0.0  1.0
+ 1.0  1.0
+ 2.0  1.0
+ 3.0  1.0</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="least-squares-solution" class="slide level3">
+<h3>Least-Squares Solution</h3>
+<div id="82" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb78-1"><a href=""></a>m, c <span class="op">=</span> <span class="fu">pinv</span>(A) <span class="op">*</span> y</span>
+<span id="cb78-2"><a href=""></a><span class="fu">print</span>(m, c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.0000000000000002-0.9499999999999998</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Matches our formula <span class="math inline">\((A'A)^{-1}A'y\)</span>:</p>
+<div id="84" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb80-1"><a href=""></a>(A<span class="op">'</span> <span class="op">*</span> A) <span class="op">\</span> A<span class="op">'</span> <span class="op">*</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+  0.9999999999999998
+ -0.9499999999999996</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-the-fit" class="slide level3">
+<h3>Plotting the Fit</h3>
+<div id="86" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb82-1"><a href=""></a><span class="im">using</span> <span class="bu">Plots</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="88" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb83-1"><a href=""></a><span class="fu">scatter</span>(x, y, label<span class="op">=</span><span class="st">"Original data"</span>, markersize<span class="op">=</span><span class="fl">10</span>)</span>
+<span id="cb83-2"><a href=""></a><span class="fu">plot!</span>(x, m<span class="op">*</span>x <span class="op">.+</span> c, color<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"Fitted line"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="data:image/png;base64,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+/r169etW3eneTw9PQsLb+T7snf/Fy9enJWVlZKS4urqumjRoj179ty0V05OzvPPP5+SktKkSZOioiJvb2/e7wYAQGGpqTJ3rsTHywsvyIkTUr260gNVoPJBtnnz5t98803Zlxa6YYOt6du+8eE/fympd5urRasd3T7i4V5WmEGj0fTs2TMiImLAgAEisnz58qSkpLVr195pex8fn7CwsAULFkycODE1NTU+Pv6RRx6p8CxXrlypW7euu7t7UVHRmjVryuk3uP/++9etW9evXz+tVrthwwZfX18RuXz5cr169VxdXa9fv75u3bomTZqIiL+//6VLl0pLS9VqdU5Ojlqtvuuuu0Rk1apVpFgAAJSkL4VNS5MxYyQ2Vqx1bUAVVT7I1qxZ0yzXudqX6a+P3fvEi/vd3yytdY/h8+7nknpd/mbk04usMMO99977ySefjBkzZsyYMUVFRbVr1/7mm2/q169/65bu7u76S4fXrFnz/PPPL1y4MDg4uF+/ftWqVRMRV1fXcj7B8PTTT993332dO3cuKCgICws7c+aMiKjVand395u2fPXVVx9//PGgoCBXV9d77733ypUrIvL888/37dv3hx9+yMvL69SpU15enoi0b9++Q4cOLVu2rF+//nfffTd48OA2bdrcfffd9957b9mlEQAAwHp0OvniC5k5U65flwkTZNgwMbGaU1kq67RWGYqIiDDXh71yc3PLAtDAgQM1Gk2fPn2qftjy5efnv/jGjMQ/C/+o173Yt65H1rkGfyY+GlRvzluvWvmTrRkZGa6urjVr1jR+F61WGxgY+OGHHxpTeabT6c6fP1+rVq1bw+utLl++7Ovra3hhQ2lp6YULF2rXrl3OR4syMzNVKlWFl8b26dNnxowZXbt2rXAMlE/fWsCHvQDjGb7QAA6luFg2bpToaPH3l0mT5NFHxRzvrtvTh72ck7e397qYGTk5OT/8+NOFK783rndX1y7R1rl9xU3K73Y1tH79+m3btjVo0GD37t2dO3c2srhXpVLVq1fPyFOU1YGVUavVFe7uJB8TBADAhuTlyYoVMn++BAXJypViz+tEBNlK8vPze+jB/kpPYawhQ4Y0a9YsIyPjmWeeqXRrLwAAsG85ObJ6tcydK/fdJ19+KW3bKj1QVVm8exWWlpOTk5qaWv427u7uXbt2jYiIuFOKLSws/O677256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">
+</div>
+</div>
+</section>
+
+<section id="under-determined-systems" class="title-slide slide level2 center">
+<h2>Under-determined Systems</h2>
+
+</section>
+<section id="under-determined-systems-1" class="slide level3">
+<h3>Under-determined Systems</h3>
+<ul>
+<li>If <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times k\)</span> with <span class="math inline">\(n &lt; k\)</span>: fewer equations than unknowns</li>
+<li>Expect either no solutions or <strong>infinitely many</strong> solutions</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>The <strong>kernel</strong> <span class="math inline">\(\ker(A)\)</span> is the set of all <span class="math inline">\(x\)</span> such that <span class="math inline">\(Ax = 0\)</span></li>
+<li>If <span class="math inline">\(x\)</span> solves <span class="math inline">\(y = Ax\)</span> and <span class="math inline">\(\hat{x} \in \ker(A)\)</span>, then <span class="math inline">\(x + \hat{x}\)</span> is also a solution:</li>
+</ul>
+<p><span class="math display">\[
+A(x + \hat{x}) = Ax + A\hat{x} = Ax + 0 = y
+\]</span></p>
+</div>
+<div class="fragment">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Caution</strong></p>
+</div>
+<div class="callout-content">
+<p>Under-determined systems have infinitely many solutions. Methods like <code>pinv</code> return the solution with smallest norm <span class="math inline">\(\|x\|\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="eigenvalues-and-eigenvectors" class="title-slide slide level1 center">
+<h1>Eigenvalues and Eigenvectors</h1>
+
+</section>
+<section id="definition-2" class="title-slide slide level2 center">
+<h2>Definition</h2>
+
+</section>
+<section id="eigenvectors-and-eigenvalues" class="slide level3">
+<h3>Eigenvectors and Eigenvalues</h3>
+<ul>
+<li>For an <span class="math inline">\(n \times n\)</span> matrix <span class="math inline">\(A\)</span>, we want to find scalar <span class="math inline">\(\lambda\)</span> and vector <span class="math inline">\(v \in \mathbb{R}^n\)</span> such that</li>
+</ul>
+<p><span class="math display">\[
+Av = \lambda v
+\]</span></p>
+<ul>
+<li>The operation <span class="math inline">\(Av\)</span> returns a <strong>scalar multiple</strong> of <span class="math inline">\(v\)</span></li>
+</ul>
+<div class="fragment">
+<p><img data-src="eigenvectors.png"></p>
+</div>
+</section>
+<section id="finding-eigenvalues" class="slide level3">
+<h3>Finding Eigenvalues</h3>
+<ul>
+<li>Rearranging: <span class="math inline">\(0 = Av - \lambda v = (A - \lambda I)v\)</span></li>
+<li>An eigenvalue exists when the columns of <span class="math inline">\(A - \lambda I\)</span> are linearly dependent</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>We search for <span class="math inline">\(\lambda\)</span> such that <span class="math inline">\(\det(A - \lambda I) = 0\)</span></li>
+<li><span class="math inline">\(\det(A - \lambda I)\)</span> is a polynomial of degree <span class="math inline">\(n\)</span>; its roots are the eigenvalues</li>
+</ul>
+</div>
+</section>
+<section id="eigenvalue-properties" class="slide level3">
+<h3>Eigenvalue Properties</h3>
+<p>Nice facts about the eigenvalues of a square matrix <span class="math inline">\(A\)</span>:</p>
+<ol type="1">
+<li>The <strong>determinant</strong> of <span class="math inline">\(A\)</span> equals the product of its eigenvalues</li>
+<li>The <strong>trace</strong> of <span class="math inline">\(A\)</span> (sum of diagonal elements) equals the sum of its eigenvalues</li>
+<li>If <span class="math inline">\(A\)</span> is <strong>symmetric</strong>, all eigenvalues are real</li>
+<li>If <span class="math inline">\(A\)</span> is invertible with eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_n\)</span>, then <span class="math inline">\(A^{-1}\)</span> has eigenvalues <span class="math inline">\(1/\lambda_1, \ldots, 1/\lambda_n\)</span></li>
+</ol>
+</section>
+<section id="eigenvalues-in-julia" class="slide level3">
+<h3>Eigenvalues in Julia</h3>
+<div id="90" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb84-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">2</span> <span class="fl">1</span>];</span>
+<span id="cb84-2"><a href=""></a>evals, evecs <span class="op">=</span> <span class="fu">eigen</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Eigen{Float64, Float64, Matrix{Float64}, Vector{Float64}}
+values:
+2-element Vector{Float64}:
+ -1.0
+  3.0
+vectors:
+2×2 Matrix{Float64}:
+ -0.707107  0.707107
+  0.707107  0.707107</code></pre>
+</div>
+</div>
+<div id="92" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb86-1"><a href=""></a>evals   <span class="co"># eigenvalues</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -1.0
+  3.0</code></pre>
+</div>
+</div>
+<div id="94" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb88-1"><a href=""></a>evecs   <span class="co"># eigenvectors (columns)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ -0.707107  0.707107
+  0.707107  0.707107</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Reading the Output</strong></p>
+</div>
+<div class="callout-content">
+<p>The columns of <code>evecs</code> are the eigenvectors corresponding to the eigenvalues in <code>evals</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="summary" class="title-slide slide level1 center">
+<h1>Summary</h1>
+
+</section>
+<section id="key-takeaways" class="slide level3">
+<h3>Key Takeaways</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Concepts</strong></p>
+<ul>
+<li>Vectors and vector spaces</li>
+<li>Spanning and linear independence</li>
+<li>Matrix operations and multiplication</li>
+<li>Inverse matrices and determinants</li>
+<li>Eigenvalues and eigenvectors</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Julia Tools</strong></p>
+<ul>
+<li><code>LinearAlgebra</code> package</li>
+<li><code>dot</code>, <code>norm</code>, <code>det</code></li>
+<li><code>inv(A)</code>, <code>A\y</code></li>
+<li><code>pinv(A)</code> for least-squares</li>
+<li><code>eigen(A)</code> for eigenvalues</li>
+<li><code>.*</code>, <code>.+</code> for broadcasting</li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Remember</strong></p>
+</div>
+<div class="callout-content">
+<p>Use <code>A\y</code> instead of <code>inv(A)*y</code> for solving systems — it’s faster and more stable!</p>
+</div>
+</div>
+</div>
+
+</div>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>EC 410 | University of Oregon</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="Linear Algebra Lecture_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

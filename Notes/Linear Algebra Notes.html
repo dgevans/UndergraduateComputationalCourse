@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Evans">
+<meta name="dcterms.date" content="2026-02-06">
+
+<title>Linear Algebra in Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="Linear Algebra Notes_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Linear Algebra Notes_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Linear Algebra Notes_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Linear Algebra Notes_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="Linear Algebra Notes_files/libs/quarto-html/popper.min.js"></script>
+<script src="Linear Algebra Notes_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Linear Algebra Notes_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Linear Algebra Notes_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Linear Algebra Notes_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Linear Algebra Notes_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Linear Algebra Notes_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Linear Algebra Notes_files/libs/bootstrap/bootstrap-a5be5c2b86aab4cd02b109e9a469e1ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors"><span class="header-section-number">2</span> Vectors</a>
+  <ul class="collapse">
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition"><span class="header-section-number">2.1</span> Definition</a></li>
+  <li><a href="#vectors-in-julia" id="toc-vectors-in-julia" class="nav-link" data-scroll-target="#vectors-in-julia"><span class="header-section-number">2.2</span> Vectors in Julia</a>
+  <ul class="collapse">
+  <li><a href="#editing-vectors" id="toc-editing-vectors" class="nav-link" data-scroll-target="#editing-vectors"><span class="header-section-number">2.2.1</span> Editing Vectors</a></li>
+  <li><a href="#assigning-to-slices" id="toc-assigning-to-slices" class="nav-link" data-scroll-target="#assigning-to-slices"><span class="header-section-number">2.2.2</span> Assigning to Slices</a></li>
+  </ul></li>
+  <li><a href="#vector-operations" id="toc-vector-operations" class="nav-link" data-scroll-target="#vector-operations"><span class="header-section-number">2.3</span> Vector Operations</a>
+  <ul class="collapse">
+  <li><a href="#addition" id="toc-addition" class="nav-link" data-scroll-target="#addition"><span class="header-section-number">2.3.1</span> Addition</a></li>
+  <li><a href="#scalar-multiplication" id="toc-scalar-multiplication" class="nav-link" data-scroll-target="#scalar-multiplication"><span class="header-section-number">2.3.2</span> Scalar Multiplication</a></li>
+  <li><a href="#element-wise-multiplication" id="toc-element-wise-multiplication" class="nav-link" data-scroll-target="#element-wise-multiplication"><span class="header-section-number">2.3.3</span> Element-wise Multiplication</a></li>
+  <li><a href="#inner-products-and-norms" id="toc-inner-products-and-norms" class="nav-link" data-scroll-target="#inner-products-and-norms"><span class="header-section-number">2.3.4</span> Inner Products and Norms</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#spanning-and-linear-independence" id="toc-spanning-and-linear-independence" class="nav-link" data-scroll-target="#spanning-and-linear-independence"><span class="header-section-number">3</span> Spanning and Linear Independence</a>
+  <ul class="collapse">
+  <li><a href="#linear-combinations-and-span" id="toc-linear-combinations-and-span" class="nav-link" data-scroll-target="#linear-combinations-and-span"><span class="header-section-number">3.1</span> Linear Combinations and Span</a>
+  <ul class="collapse">
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">3.1.1</span> Examples</a></li>
+  <li><a href="#a-counterexample" id="toc-a-counterexample" class="nav-link" data-scroll-target="#a-counterexample"><span class="header-section-number">3.1.2</span> A Counterexample</a></li>
+  </ul></li>
+  <li><a href="#linear-independence" id="toc-linear-independence" class="nav-link" data-scroll-target="#linear-independence"><span class="header-section-number">3.2</span> Linear Independence</a>
+  <ul class="collapse">
+  <li><a href="#unique-representations" id="toc-unique-representations" class="nav-link" data-scroll-target="#unique-representations"><span class="header-section-number">3.2.1</span> Unique Representations</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#matrices" id="toc-matrices" class="nav-link" data-scroll-target="#matrices"><span class="header-section-number">4</span> Matrices</a>
+  <ul class="collapse">
+  <li><a href="#definition-and-basic-properties" id="toc-definition-and-basic-properties" class="nav-link" data-scroll-target="#definition-and-basic-properties"><span class="header-section-number">4.1</span> Definition and Basic Properties</a>
+  <ul class="collapse">
+  <li><a href="#matrices-and-transpose-in-julia" id="toc-matrices-and-transpose-in-julia" class="nav-link" data-scroll-target="#matrices-and-transpose-in-julia"><span class="header-section-number">4.1.1</span> Matrices and Transpose in Julia</a></li>
+  </ul></li>
+  <li><a href="#special-matrices" id="toc-special-matrices" class="nav-link" data-scroll-target="#special-matrices"><span class="header-section-number">4.2</span> Special Matrices</a>
+  <ul class="collapse">
+  <li><a href="#symmetric-matrices" id="toc-symmetric-matrices" class="nav-link" data-scroll-target="#symmetric-matrices"><span class="header-section-number">4.2.1</span> Symmetric Matrices</a></li>
+  <li><a href="#diagonal-matrices" id="toc-diagonal-matrices" class="nav-link" data-scroll-target="#diagonal-matrices"><span class="header-section-number">4.2.2</span> Diagonal Matrices</a></li>
+  <li><a href="#the-identity-matrix" id="toc-the-identity-matrix" class="nav-link" data-scroll-target="#the-identity-matrix"><span class="header-section-number">4.2.3</span> The Identity Matrix</a></li>
+  </ul></li>
+  <li><a href="#matrix-operations" id="toc-matrix-operations" class="nav-link" data-scroll-target="#matrix-operations"><span class="header-section-number">4.3</span> Matrix Operations</a>
+  <ul class="collapse">
+  <li><a href="#addition-and-scalar-multiplication" id="toc-addition-and-scalar-multiplication" class="nav-link" data-scroll-target="#addition-and-scalar-multiplication"><span class="header-section-number">4.3.1</span> Addition and Scalar Multiplication</a></li>
+  <li><a href="#matrix-multiplication" id="toc-matrix-multiplication" class="nav-link" data-scroll-target="#matrix-multiplication"><span class="header-section-number">4.3.2</span> Matrix Multiplication</a></li>
+  <li><a href="#matrix-vector-multiplication" id="toc-matrix-vector-multiplication" class="nav-link" data-scroll-target="#matrix-vector-multiplication"><span class="header-section-number">4.3.3</span> Matrix-Vector Multiplication</a></li>
+  <li><a href="#matrix-multiplication-in-julia" id="toc-matrix-multiplication-in-julia" class="nav-link" data-scroll-target="#matrix-multiplication-in-julia"><span class="header-section-number">4.3.4</span> Matrix Multiplication in Julia</a></li>
+  <li><a href="#element-wise-vs.-matrix-multiplication" id="toc-element-wise-vs.-matrix-multiplication" class="nav-link" data-scroll-target="#element-wise-vs.-matrix-multiplication"><span class="header-section-number">4.3.5</span> Element-wise vs.&nbsp;Matrix Multiplication</a></li>
+  </ul></li>
+  <li><a href="#broadcasting" id="toc-broadcasting" class="nav-link" data-scroll-target="#broadcasting"><span class="header-section-number">4.4</span> Broadcasting</a></li>
+  </ul></li>
+  <li><a href="#solving-systems-of-equations" id="toc-solving-systems-of-equations" class="nav-link" data-scroll-target="#solving-systems-of-equations"><span class="header-section-number">5</span> Solving Systems of Equations</a>
+  <ul class="collapse">
+  <li><a href="#matrix-formulation" id="toc-matrix-formulation" class="nav-link" data-scroll-target="#matrix-formulation"><span class="header-section-number">5.1</span> Matrix Formulation</a></li>
+  <li><a href="#the-regular-square-case" id="toc-the-regular-square-case" class="nav-link" data-scroll-target="#the-regular-square-case"><span class="header-section-number">5.2</span> The Regular (Square) Case</a>
+  <ul class="collapse">
+  <li><a href="#solving-in-julia-the-inverse" id="toc-solving-in-julia-the-inverse" class="nav-link" data-scroll-target="#solving-in-julia-the-inverse"><span class="header-section-number">5.2.1</span> Solving in Julia: The Inverse</a></li>
+  <li><a href="#solving-in-julia-the-backslash-operator" id="toc-solving-in-julia-the-backslash-operator" class="nav-link" data-scroll-target="#solving-in-julia-the-backslash-operator"><span class="header-section-number">5.2.2</span> Solving in Julia: The Backslash Operator</a></li>
+  </ul></li>
+  <li><a href="#over-determined-systems" id="toc-over-determined-systems" class="nav-link" data-scroll-target="#over-determined-systems"><span class="header-section-number">5.3</span> Over-determined Systems</a>
+  <ul class="collapse">
+  <li><a href="#example-fitting-a-line" id="toc-example-fitting-a-line" class="nav-link" data-scroll-target="#example-fitting-a-line"><span class="header-section-number">5.3.1</span> Example: Fitting a Line</a></li>
+  <li><a href="#plotting-the-fit" id="toc-plotting-the-fit" class="nav-link" data-scroll-target="#plotting-the-fit"><span class="header-section-number">5.3.2</span> Plotting the Fit</a></li>
+  </ul></li>
+  <li><a href="#under-determined-systems" id="toc-under-determined-systems" class="nav-link" data-scroll-target="#under-determined-systems"><span class="header-section-number">5.4</span> Under-determined Systems</a></li>
+  </ul></li>
+  <li><a href="#eigenvalues-and-eigenvectors" id="toc-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-and-eigenvectors"><span class="header-section-number">6</span> Eigenvalues and Eigenvectors</a>
+  <ul class="collapse">
+  <li><a href="#definition-1" id="toc-definition-1" class="nav-link" data-scroll-target="#definition-1"><span class="header-section-number">6.1</span> Definition</a></li>
+  <li><a href="#finding-eigenvalues" id="toc-finding-eigenvalues" class="nav-link" data-scroll-target="#finding-eigenvalues"><span class="header-section-number">6.2</span> Finding Eigenvalues</a></li>
+  <li><a href="#properties-of-eigenvalues" id="toc-properties-of-eigenvalues" class="nav-link" data-scroll-target="#properties-of-eigenvalues"><span class="header-section-number">6.3</span> Properties of Eigenvalues</a></li>
+  <li><a href="#eigenvalues-in-julia" id="toc-eigenvalues-in-julia" class="nav-link" data-scroll-target="#eigenvalues-in-julia"><span class="header-section-number">6.4</span> Eigenvalues in Julia</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">7</span> Summary</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Linear Algebra in Julia</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Evans </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 6, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>Linear algebra is one of the most commonly used branches of mathematics in economics. A remarkably wide range of applied problems—from solving supply-and-demand systems to estimating regression models to characterizing dynamic equilibria—ultimately reduce to operations on vectors and matrices. This set of notes introduces the core concepts of linear algebra and shows how to implement them in Julia using the <code>LinearAlgebra</code> standard library.</p>
+<p>Consider a system of two linear equations:</p>
+<p><span class="math display">\[
+\begin{array}{c}
+    y_1 = a x_1 + b x_2 \\
+    y_2 = c x_1 + d x_2
+\end{array}
+\]</span></p>
+<p>Or, more generally, a system of <span class="math inline">\(n\)</span> equations in <span class="math inline">\(k\)</span> unknowns:</p>
+<p><span class="math display">\[
+\begin{array}{c}
+    y_1 = a_{11} x_1 + a_{12} x_2 + \cdots + a_{1k} x_k \\
+    \vdots  \\
+    y_n = a_{n1} x_1 + a_{n2} x_2 + \cdots + a_{nk} x_k
+\end{array}
+\]</span></p>
+<p>The objective is to solve for <span class="math inline">\(x_1, \ldots, x_k\)</span> given the coefficients <span class="math inline">\(a_{ij}\)</span> and the values <span class="math inline">\(y_1, \ldots, y_n\)</span>. Along the way, we will need to answer several important questions:</p>
+<ul>
+<li>Does a solution actually exist?</li>
+<li>Are there many solutions, and if so how should we interpret them?</li>
+<li>If no exact solution exists, is there a “best” approximate solution?</li>
+<li>If a solution exists, how should we compute it efficiently?</li>
+</ul>
+<p>These notes will show how to use Julia to answer each of these questions numerically.</p>
+</section>
+<section id="vectors" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Vectors</h1>
+<section id="definition" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="definition"><span class="header-section-number">2.1</span> Definition</h2>
+<p>A <strong>vector</strong> of length <span class="math inline">\(n\)</span> is simply a sequence of <span class="math inline">\(n\)</span> numbers, which we write as a column:</p>
+<p><span class="math display">\[
+x = \left(\begin{matrix} x_1\\\vdots\\ x_n\end{matrix}\right)
+\]</span></p>
+<p>The set of all <span class="math inline">\(n\)</span>-vectors is denoted <span class="math inline">\(\mathbb{R}^n\)</span>. For example, <span class="math inline">\(\mathbb{R}^2\)</span> is the plane, and a vector in <span class="math inline">\(\mathbb{R}^2\)</span> is just a point on that plane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="vectors_plane.png" class="img-fluid figure-img"></p>
+<figcaption>Vectors in the plane</figcaption>
+</figure>
+</div>
+</section>
+<section id="vectors-in-julia" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="vectors-in-julia"><span class="header-section-number">2.2</span> Vectors in Julia</h2>
+<p>Julia is built with vectors and matrices as fundamental building blocks, making it a natural language for linear algebra. We begin by loading the <code>LinearAlgebra</code> standard library, which provides many of the functions we will use:</p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A simple vector can be created with square brackets:</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>., <span class="fl">2</span>.]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.0
+ 2.0</code></pre>
+</div>
+</div>
+<p>Julia provides several convenience functions for constructing common vectors:</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span>)           <span class="co"># A vector in R^3 filled with zeros</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"x = </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">4</span>)            <span class="co"># A vector in R^4 filled with ones</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"y = </span><span class="sc">$</span>y<span class="st">"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">LinRange</span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">6</span>))  <span class="co"># 6 evenly spaced values between 0 and 1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"z = </span><span class="sc">$</span>z<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x = [0.0, 0.0, 0.0]
+y = [1.0, 1.0, 1.0, 1.0]
+z = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]</code></pre>
+</div>
+</div>
+<p>The <code>zeros</code> and <code>ones</code> functions are especially common in numerical work. You will often initialize a vector of zeros and then fill in computed values, or use a vector of ones to construct a design matrix for regression (as we will see later in these notes).</p>
+<section id="editing-vectors" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="editing-vectors"><span class="header-section-number">2.2.1</span> Editing Vectors</h3>
+<p>Once a vector is created, you can edit individual elements using square-bracket indexing:</p>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x[<span class="fl">1</span>] <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 1.0
+ 0.0
+ 0.0</code></pre>
+</div>
+</div>
+<p>You can also access multiple elements at once using slice notation:</p>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(x[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[0.0, 0.0]</code></pre>
+</div>
+</div>
+</section>
+<section id="assigning-to-slices" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="assigning-to-slices"><span class="header-section-number">2.2.2</span> Assigning to Slices</h3>
+<p>When assigning values to a slice of a vector, you must use <code>.=</code> (the “dot-equals” operator) rather than plain <code>=</code>. The dot tells Julia to perform the assignment element-wise:</p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>] <span class="op">=</span> <span class="fl">3</span>, <span class="fl">4</span>  <span class="co"># This produces an error</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>ArgumentError: indexed assignment with a single value to possibly many locations is not supported; perhaps use broadcasting `.=` instead?
+Stacktrace:
+ [1] <span class="ansi-bold">setindex_shape_check</span><span class="ansi-bold">(</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, ::Int64<span class="ansi-bold">)</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">indices.jl:276</span>
+ [2] <span class="ansi-bold">_unsafe_setindex!</span><span class="ansi-bold">(</span>::IndexLinear, <span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">x</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1017</span>
+ [3] <span class="ansi-bold">_setindex!</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1008</span><span class="ansi-bright-black-fg"> [inlined]</span>
+ [4] <span class="ansi-bold">setindex!</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">v</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">abstractarray.jl:1443</span>
+ [5] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/University of Oregon Dropbox/David Evans/University of Oregon/Courses/Spring 2019/EC 410/Lectures/Julia/Linear Algebra/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">Linear Algebra Notes.qmd:123</span></pre>
+</div>
+</div>
+</div>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>] <span class="op">.=</span> <span class="fl">3</span>, <span class="fl">4</span>  <span class="co"># This works: assigns element-wise</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 1.0
+ 3.0
+ 4.0</code></pre>
+</div>
+</div>
+<p>This is our first encounter with Julia’s <strong>dot syntax</strong> for element-wise operations, which we will see much more of below.</p>
+</section>
+</section>
+<section id="vector-operations" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="vector-operations"><span class="header-section-number">2.3</span> Vector Operations</h2>
+<section id="addition" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="addition"><span class="header-section-number">2.3.1</span> Addition</h3>
+<p>When we add two vectors, we add them element by element:</p>
+<p><span class="math display">\[
+x + y
+=
+\left[
+\begin{array}{c}
+    x_1 \\
+    x_2 \\
+    \vdots \\
+    x_n
+\end{array}
+\right]
++
+\left[
+\begin{array}{c}
+     y_1 \\
+     y_2 \\
+    \vdots \\
+     y_n
+\end{array}
+\right]
+:=
+\left[
+\begin{array}{c}
+    x_1 + y_1 \\
+    x_2 + y_2 \\
+    \vdots \\
+    x_n + y_n
+\end{array}
+\right]
+\]</span></p>
+<p>Both vectors must have the same length for addition to be defined.</p>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">3</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">+</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 3.0
+ 5.0
+ 7.0</code></pre>
+</div>
+</div>
+</section>
+<section id="scalar-multiplication" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="scalar-multiplication"><span class="header-section-number">2.3.2</span> Scalar Multiplication</h3>
+<p><strong>Scalar multiplication</strong> takes a scalar (a single number) <span class="math inline">\(\gamma\)</span> and a vector <span class="math inline">\(x\)</span>, and multiplies every element by <span class="math inline">\(\gamma\)</span>:</p>
+<p><span class="math display">\[
+\gamma x
+:=
+\left[
+\begin{array}{c}
+    \gamma x_1 \\
+    \gamma x_2 \\
+    \vdots \\
+    \gamma x_n
+\end{array}
+\right]
+\]</span></p>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fl">4</span><span class="op">*</span>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 4.0
+ 4.0
+ 4.0</code></pre>
+</div>
+</div>
+<p>Geometrically, scalar multiplication stretches or shrinks a vector (and flips its direction if <span class="math inline">\(\gamma &lt; 0\)</span>). Together with addition, these two operations define the structure of a <strong>vector space</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="matrix_operations.png" class="img-fluid figure-img"></p>
+<figcaption>Vector addition and scalar multiplication</figcaption>
+</figure>
+</div>
+</section>
+<section id="element-wise-multiplication" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="element-wise-multiplication"><span class="header-section-number">2.3.3</span> Element-wise Multiplication</h3>
+<p>In addition to scalar multiplication, we can multiply two vectors <strong>element by element</strong> using the <code>.*</code> operator:</p>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(x, y)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>xy <span class="op">=</span> x <span class="op">.*</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1.0, 1.0, 1.0][2, 4, 6]</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 2.0
+ 4.0
+ 6.0</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The Dot Operator
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In Julia, prefixing any operator with <code>.</code> applies it element-wise. This works with any function or operator: <code>.+</code>, <code>.-</code>, <code>.*</code>, <code>./</code>, <code>.^</code>, and even <code>f.(x)</code> for any function <code>f</code>. This is called <strong>broadcasting</strong> and is one of Julia’s most powerful features for numerical computing.</p>
+</div>
+</div>
+</section>
+<section id="inner-products-and-norms" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="inner-products-and-norms"><span class="header-section-number">2.3.4</span> Inner Products and Norms</h3>
+<p>The <strong>inner product</strong> (or dot product) of two vectors <span class="math inline">\(x, y \in \mathbb{R}^n\)</span> is defined as:</p>
+<p><span class="math display">\[
+x' y := \sum_{i=1}^n x_i y_i
+\]</span></p>
+<p>The inner product measures how “aligned” two vectors are. Two vectors are <strong>orthogonal</strong> (perpendicular) if their inner product is zero.</p>
+<p>The <strong>norm</strong> of a vector <span class="math inline">\(x\)</span> represents its “length” or magnitude:</p>
+<p><span class="math display">\[
+\| x \| := \sqrt{x' x} := \left( \sum_{i=1}^n x_i^2 \right)^{1/2}
+\]</span></p>
+<p>This is the Euclidean distance from the origin to the point <span class="math inline">\(x\)</span>. Norms are important in optimization and statistics: minimizing <span class="math inline">\(\|y - Ax\|\)</span> is the basis of least-squares regression.</p>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Two ways to compute the inner product</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">sum</span>(x <span class="op">.*</span> y))   <span class="co"># Manual: element-wise multiply, then sum</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">dot</span>(x, y))     <span class="co"># Built-in function from LinearAlgebra</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>12.0
+12.0</code></pre>
+</div>
+</div>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Two ways to compute the norm</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">sqrt</span>(<span class="fu">dot</span>(x, x)))   <span class="co"># Manual: sqrt of inner product with itself</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">norm</span>(x))            <span class="co"># Built-in function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.7320508075688772
+1.7320508075688772</code></pre>
+</div>
+</div>
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># An example of orthogonal vectors</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> [<span class="op">-</span><span class="fl">1</span>., <span class="fl">2</span>., <span class="op">-</span><span class="fl">1</span>]</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">dot</span>(x, z))    <span class="co"># Zero: x and z are orthogonal</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="spanning-and-linear-independence" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Spanning and Linear Independence</h1>
+<section id="linear-combinations-and-span" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="linear-combinations-and-span"><span class="header-section-number">3.1</span> Linear Combinations and Span</h2>
+<p>Given a set of vectors <span class="math inline">\(A = \{a_1, \ldots, a_k\} \subset \mathbb{R}^n\)</span>, a natural question is: what new vectors can we create by combining these using addition and scalar multiplication? A vector <span class="math inline">\(y \in \mathbb{R}^n\)</span> is a <strong>linear combination</strong> of <span class="math inline">\(A\)</span> if there exist scalars <span class="math inline">\(\beta_1, \ldots, \beta_k\)</span> such that:</p>
+<p><span class="math display">\[
+    y = \beta_1 a_1 + \beta_2 a_2 + \ldots + \beta_k a_k
+\]</span></p>
+<p>The set of all vectors that can be expressed as linear combinations of <span class="math inline">\(A\)</span> is called the <strong>span</strong> of <span class="math inline">\(A\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="linear_combinations.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Linear combinations of two vectors span a plane</figcaption>
+</figure>
+</div>
+<p>The concept of span tells us what part of <span class="math inline">\(\mathbb{R}^n\)</span> is “reachable” from a given set of vectors.</p>
+<section id="examples" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="examples"><span class="header-section-number">3.1.1</span> Examples</h3>
+<p>If <span class="math inline">\(A\)</span> contains only a single vector <span class="math inline">\(a_1 \in \mathbb{R}^n\)</span>, then its span is the line through <span class="math inline">\(a_1\)</span> and the origin—all scalar multiples <span class="math inline">\(\beta a_1\)</span>.</p>
+<p>A more important example is the <strong>canonical basis</strong> for <span class="math inline">\(\mathbb{R}^n\)</span>. These are the <span class="math inline">\(n\)</span> vectors:</p>
+<p><span class="math display">\[
+    e_1 = \left[\begin{matrix}1\\0\\\vdots\\0\end{matrix}\right],\quad
+    e_2 = \left[\begin{matrix}0\\1\\\vdots\\0\end{matrix}\right],\quad\ldots,\quad
+    e_n = \left[\begin{matrix}0\\0\\\vdots\\1\end{matrix}\right]
+\]</span></p>
+<p>The span of <span class="math inline">\(\{e_1, e_2, \ldots, e_n\}\)</span> is all of <span class="math inline">\(\mathbb{R}^n\)</span>, because for any vector <span class="math inline">\(x \in \mathbb{R}^n\)</span> we can write:</p>
+<p><span class="math display">\[
+    x = x_1 e_1 + x_2 e_2 + \ldots + x_n e_n
+\]</span></p>
+<p>That is, any vector is a linear combination of the canonical basis vectors, with the components of <span class="math inline">\(x\)</span> serving as the coefficients.</p>
+</section>
+<section id="a-counterexample" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="a-counterexample"><span class="header-section-number">3.1.2</span> A Counterexample</h3>
+<p>Not every collection of <span class="math inline">\(n\)</span> vectors spans <span class="math inline">\(\mathbb{R}^n\)</span>. Consider <span class="math inline">\(A_0 = \{e_1, e_2, e_1 + e_2\} \subset \mathbb{R}^3\)</span>. If <span class="math inline">\(y = (y_1, y_2, y_3)\)</span> is a linear combination of these vectors, then the third component must satisfy <span class="math inline">\(y_3 = 0\)</span>. So <span class="math inline">\(A_0\)</span> fails to span all of <span class="math inline">\(\mathbb{R}^3\)</span>—it only reaches the plane where the third coordinate is zero.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Key Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Adding more vectors to a set does not always increase the span. The new vector must point in a “genuinely new direction”—one that is not already reachable as a linear combination of the existing vectors.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="linear-independence" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="linear-independence"><span class="header-section-number">3.2</span> Linear Independence</h2>
+<p>The counterexample above motivates the concept of <strong>linear independence</strong>. A set of vectors <span class="math inline">\(A = \{a_1, \ldots, a_k\} \subset \mathbb{R}^n\)</span> is <strong>linearly dependent</strong> if some strict subset of <span class="math inline">\(A\)</span> has the same span as <span class="math inline">\(A\)</span> itself. Equivalently, at least one vector in the set can be written as a linear combination of the others—it is “redundant.” The set <span class="math inline">\(A\)</span> is <strong>linearly independent</strong> if no such redundancy exists.</p>
+<p>There are several equivalent ways to define linear independence:</p>
+<ol type="1">
+<li>No vector in <span class="math inline">\(A\)</span> can be formed as a linear combination of the others.</li>
+<li>The only solution to <span class="math inline">\(\beta_1 a_1 + \ldots + \beta_k a_k = 0\)</span> is <span class="math inline">\(\beta_1 = \cdots = \beta_k = 0\)</span>.</li>
+</ol>
+<p>An important consequence: since <span class="math inline">\(\mathbb{R}^n\)</span> can be spanned by <span class="math inline">\(n\)</span> vectors (the canonical basis), any set of more than <span class="math inline">\(n\)</span> vectors in <span class="math inline">\(\mathbb{R}^n\)</span> must be linearly dependent. There simply is not “room” for more than <span class="math inline">\(n\)</span> independent directions.</p>
+<section id="unique-representations" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="unique-representations"><span class="header-section-number">3.2.1</span> Unique Representations</h3>
+<p>A key property of linearly independent vectors is that they provide <strong>unique representations</strong> of every vector in their span. Suppose <span class="math inline">\(A = \{a_1, \ldots, a_k\}\)</span> is linearly independent and some vector <span class="math inline">\(y\)</span> can be written as:</p>
+<p><span class="math display">\[
+y = \beta_1 a_1 + \ldots + \beta_k a_k = \gamma_1 a_1 + \ldots + \gamma_k a_k
+\]</span></p>
+<p>Subtracting one expression from the other gives:</p>
+<p><span class="math display">\[
+(\beta_1 - \gamma_1) a_1 + \cdots + (\beta_k - \gamma_k) a_k = 0
+\]</span></p>
+<p>By linear independence, the only way this sum can equal zero is if every coefficient is zero, which means <span class="math inline">\(\gamma_i = \beta_i\)</span> for all <span class="math inline">\(i\)</span>. In other words, the representation is unique.</p>
+<p>This property is essential in regression analysis: when we write <span class="math inline">\(y = X\beta + \varepsilon\)</span> and the columns of <span class="math inline">\(X\)</span> are linearly independent, there is a unique coefficient vector <span class="math inline">\(\beta\)</span> that provides the best linear fit.</p>
+</section>
+</section>
+</section>
+<section id="matrices" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Matrices</h1>
+<section id="definition-and-basic-properties" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="definition-and-basic-properties"><span class="header-section-number">4.1</span> Definition and Basic Properties</h2>
+<p>An <span class="math inline">\(n \times k\)</span> <strong>matrix</strong> is a rectangular array of numbers with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(k\)</span> columns:</p>
+<p><span class="math display">\[
+A =
+\left[
+\begin{array}{cccc}
+    a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1k} \\
+    a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2k} \\
+    \vdots &amp; \vdots &amp; &amp; \vdots \\
+    a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nk}
+\end{array}
+\right]
+\]</span></p>
+<p>We can also view <span class="math inline">\(A\)</span> as a collection of <span class="math inline">\(k\)</span> column vectors in <span class="math inline">\(\mathbb{R}^n\)</span>:</p>
+<p><span class="math display">\[
+    A = \left[\begin{matrix}a_1 &amp; a_2 &amp; \cdots &amp; a_k\end{matrix}\right]
+    \quad\text{where}\quad
+    a_i = \left[\begin{matrix} a_{1i}\\ a_{2i} \\\vdots \\  a_{ni}\end{matrix}\right]
+\]</span></p>
+<p>This “columns as vectors” perspective turns out to be extremely useful. It connects matrices to the concepts of span and linear independence we just discussed: the column space of <span class="math inline">\(A\)</span> is exactly the span of its column vectors.</p>
+<p>Some terminology:</p>
+<ul>
+<li>A matrix with <span class="math inline">\(n = 1\)</span> is a <strong>row vector</strong>; a matrix with <span class="math inline">\(k = 1\)</span> is a <strong>column vector</strong>.</li>
+<li>A matrix with <span class="math inline">\(n = k\)</span> is <strong>square</strong>.</li>
+<li>The <strong>transpose</strong> <span class="math inline">\(A'\)</span> (also written <span class="math inline">\(A^T\)</span>) is formed by swapping rows and columns: the element at position <span class="math inline">\((i,j)\)</span> in <span class="math inline">\(A\)</span> moves to position <span class="math inline">\((j,i)\)</span> in <span class="math inline">\(A'\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+A =
+\left[
+\begin{array}{cccc}
+    a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1k} \\
+    \vdots &amp; \vdots &amp;  &amp; \vdots \\
+    a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nk}
+\end{array}
+\right]
+\quad
+A' =
+\left[
+\begin{array}{cccc}
+    a_{11} &amp; a_{21} &amp; \cdots &amp; a_{n1} \\
+    \vdots &amp; \vdots &amp;  &amp; \vdots \\
+    a_{1k} &amp; a_{2k} &amp; \cdots &amp; a_{nk}
+\end{array}
+\right]
+\]</span></p>
+<p>If <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times k\)</span>, then <span class="math inline">\(A'\)</span> is <span class="math inline">\(k \times n\)</span>.</p>
+<section id="matrices-and-transpose-in-julia" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="matrices-and-transpose-in-julia"><span class="header-section-number">4.1.1</span> Matrices and Transpose in Julia</h3>
+<p>In Julia, matrices are created by separating elements with spaces (within a row) and semicolons (between rows):</p>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span> <span class="fl">3</span>;</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">4</span> <span class="fl">5</span> <span class="fl">6</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×3 Matrix{Int64}:
+ 1  2  3
+ 4  5  6</code></pre>
+</div>
+</div>
+<p>The transpose is written naturally with an apostrophe:</p>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>A<span class="op">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×2 adjoint(::Matrix{Int64}) with eltype Int64:
+ 1  4
+ 2  5
+ 3  6</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="special-matrices" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="special-matrices"><span class="header-section-number">4.2</span> Special Matrices</h2>
+<p>Several kinds of matrices come up so often that they have special names.</p>
+<section id="symmetric-matrices" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="symmetric-matrices"><span class="header-section-number">4.2.1</span> Symmetric Matrices</h3>
+<p>A square matrix is <strong>symmetric</strong> if <span class="math inline">\(A = A'\)</span>—that is, <span class="math inline">\(a_{ij} = a_{ji}\)</span> for all <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. Symmetric matrices arise naturally in economics: variance-covariance matrices, Hessian matrices of utility functions, and input-output matrices are all symmetric (or can be made so).</p>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">2</span> <span class="fl">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 2  1</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>A<span class="op">'</span>    <span class="co"># Same as A</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 adjoint(::Matrix{Int64}) with eltype Int64:
+ 1  2
+ 2  1</code></pre>
+</div>
+</div>
+</section>
+<section id="diagonal-matrices" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="diagonal-matrices"><span class="header-section-number">4.2.2</span> Diagonal Matrices</h3>
+<p>A matrix is <strong>diagonal</strong> if the only nonzero entries lie on the <strong>principal diagonal</strong> (positions where the row index equals the column index: <span class="math inline">\(a_{11}, a_{22}, \ldots\)</span>). The <code>diag</code> function extracts the diagonal of a matrix, and <code>diagm</code> constructs a diagonal matrix:</p>
+<div id="38" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>;</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">3</span> <span class="fl">4</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 3  4</code></pre>
+</div>
+</div>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(A)    <span class="co"># Extract the diagonal elements</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Int64}:
+ 1
+ 4</code></pre>
+</div>
+</div>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])    <span class="co"># Create a 3×3 diagonal matrix</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Int64}:
+ 1  0  0
+ 0  2  0
+ 0  0  3</code></pre>
+</div>
+</div>
+<p>The <code>0 =&gt;</code> syntax specifies which diagonal to place the values on. The main diagonal is <code>0</code>; <code>1</code> is one above, <code>-1</code> is one below:</p>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diagm</span>(<span class="fl">1</span> <span class="op">=&gt;</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])    <span class="co"># Values on the first super-diagonal</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4×4 Matrix{Int64}:
+ 0  1  0  0
+ 0  0  2  0
+ 0  0  0  3
+ 0  0  0  0</code></pre>
+</div>
+</div>
+</section>
+<section id="the-identity-matrix" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="the-identity-matrix"><span class="header-section-number">4.2.3</span> The Identity Matrix</h3>
+<p>The most important diagonal matrix is the <strong>identity matrix</strong> <span class="math inline">\(I\)</span>, which has ones on the diagonal and zeros everywhere else:</p>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 1.0  0.0  0.0
+ 0.0  1.0  0.0
+ 0.0  0.0  1.0</code></pre>
+</div>
+</div>
+<p>The identity matrix can also be written in terms of the canonical basis vectors:</p>
+<p><span class="math display">\[
+    I = \left[\begin{matrix}e_1 &amp; e_2 &amp; \cdots &amp; e_n\end{matrix}\right]
+\]</span></p>
+<p>The defining property of the identity matrix is that <span class="math inline">\(IA = A = AI\)</span> for any conformable matrix <span class="math inline">\(A\)</span>—it is the matrix equivalent of multiplying by 1.</p>
+</section>
+</section>
+<section id="matrix-operations" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="matrix-operations"><span class="header-section-number">4.3</span> Matrix Operations</h2>
+<section id="addition-and-scalar-multiplication" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="addition-and-scalar-multiplication"><span class="header-section-number">4.3.1</span> Addition and Scalar Multiplication</h3>
+<p>Matrix addition and scalar multiplication work exactly as you would expect from vectors—element by element. For addition, both matrices must have the same dimensions (<span class="math inline">\(n \times k\)</span>). For scalar multiplication, every element is multiplied by the scalar <span class="math inline">\(\gamma\)</span>:</p>
+<p><span class="math display">\[
+\gamma A := \left[
+\begin{array}{ccc}
+    \gamma a_{11} &amp; \cdots &amp; \gamma a_{1k} \\
+    \vdots &amp; &amp; \vdots \\
+    \gamma a_{n1} &amp; \cdots &amp; \gamma a_{nk}
+\end{array}
+\right]
+\]</span></p>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">2</span>))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fl">2</span><span class="op">*</span>A</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 2  4
+ 6  8</code></pre>
+</div>
+</div>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">+</span> B</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 2.0  2.0
+ 3.0  5.0</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-multiplication" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="matrix-multiplication"><span class="header-section-number">4.3.2</span> Matrix Multiplication</h3>
+<p>Matrix multiplication is the central operation of linear algebra, and it is <em>not</em> element-wise. The <span class="math inline">\((i, j)\)</span>-th element of the product <span class="math inline">\(AB\)</span> is the inner product of row <span class="math inline">\(i\)</span> of <span class="math inline">\(A\)</span> with column <span class="math inline">\(j\)</span> of <span class="math inline">\(B\)</span>:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="systems_diagram.png" class="img-fluid figure-img"></p>
+<figcaption>How matrix multiplication works: row <span class="math inline">\(i\)</span> of <span class="math inline">\(A\)</span> dotted with column <span class="math inline">\(j\)</span> of <span class="math inline">\(B\)</span></figcaption>
+</figure>
+</div>
+<p>For the product <span class="math inline">\(AB\)</span> to be defined, <span class="math inline">\(A\)</span> must be <span class="math inline">\(n \times k\)</span> and <span class="math inline">\(B\)</span> must be <span class="math inline">\(k \times m\)</span> (the “inner dimensions” must match). The result is an <span class="math inline">\(n \times m\)</span> matrix.</p>
+<p>An important fact: in general, <span class="math inline">\(AB \neq BA\)</span>. Matrix multiplication is <strong>not commutative</strong>. (This is analogous to why Julia uses <code>*</code> for string concatenation—both are non-commutative operations.)</p>
+</section>
+<section id="matrix-vector-multiplication" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="matrix-vector-multiplication"><span class="header-section-number">4.3.3</span> Matrix-Vector Multiplication</h3>
+<p>A special case of matrix multiplication arises when we multiply an <span class="math inline">\(n \times k\)</span> matrix <span class="math inline">\(A\)</span> by a <span class="math inline">\(k \times 1\)</span> vector <span class="math inline">\(x\)</span>, producing an <span class="math inline">\(n \times 1\)</span> vector:</p>
+<p><span class="math display">\[
+Ax =
+\left[
+\begin{array}{c}
+    a_{11} x_1 + \cdots + a_{1k} x_k \\
+    \vdots \\
+    a_{n1} x_1 + \cdots + a_{nk} x_k
+\end{array}
+\right]
+\]</span></p>
+<p>There is a beautiful alternative way to read this. If <span class="math inline">\(a_1, \ldots, a_k\)</span> are the columns of <span class="math inline">\(A\)</span>, then:</p>
+<p><span class="math display">\[
+    Ax = x_1 a_1 + x_2 a_2 + \ldots + x_k a_k
+\]</span></p>
+<p>In other words, <span class="math inline">\(Ax\)</span> is a <strong>linear combination</strong> of the columns of <span class="math inline">\(A\)</span>, with the entries of <span class="math inline">\(x\)</span> as weights. This means <span class="math inline">\(Ax\)</span> always lies in the <strong>span</strong> (or column space) of <span class="math inline">\(A\)</span>. This perspective is the key to understanding when systems of equations have solutions.</p>
+</section>
+<section id="matrix-multiplication-in-julia" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="matrix-multiplication-in-julia"><span class="header-section-number">4.3.4</span> Matrix Multiplication in Julia</h3>
+<p>In Julia, matrix multiplication uses the <code>*</code> operator:</p>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 3  4</code></pre>
+</div>
+</div>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>I2 <span class="op">=</span> <span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  0.0
+ 0.0  1.0</code></pre>
+</div>
+</div>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">*</span> I2    <span class="co"># Multiplying by the identity returns A</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  2.0
+ 3.0  4.0</code></pre>
+</div>
+</div>
+</section>
+<section id="element-wise-vs.-matrix-multiplication" class="level3" data-number="4.3.5">
+<h3 data-number="4.3.5" class="anchored" data-anchor-id="element-wise-vs.-matrix-multiplication"><span class="header-section-number">4.3.5</span> Element-wise vs.&nbsp;Matrix Multiplication</h3>
+<p>It is crucial to distinguish between matrix multiplication (<code>*</code>) and element-wise multiplication (<code>.*</code>):</p>
+<div id="58" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">.*</span> I2    <span class="co"># Element-wise: very different from A * I2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  0.0
+ 0.0  4.0</code></pre>
+</div>
+</div>
+<p>Julia also provides a built-in identity matrix object <code>I</code> that automatically conforms to the correct size:</p>
+<div id="60" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">*</span> I    <span class="co"># No need to construct an explicit identity matrix</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Int64}:
+ 1  2
+ 3  4</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="broadcasting" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="broadcasting"><span class="header-section-number">4.4</span> Broadcasting</h2>
+<p><strong>Broadcasting</strong> is Julia’s mechanism for applying operations across arrays of different shapes. It replicates smaller arrays to match the dimensions of larger ones, all without actually creating copies in memory. The syntax uses the dot prefix (<code>.</code>).</p>
+<div id="62" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fu">diagm</span>(<span class="fl">0</span> <span class="op">=&gt;</span> <span class="fu">ones</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 1.0  0.0
+ 0.0  1.0</code></pre>
+</div>
+</div>
+<div id="64" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Int64}:
+ 1
+ 2</code></pre>
+</div>
+</div>
+<div id="66" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">.+</span> b    <span class="co"># Adds b to each column of A</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ 2.0  1.0
+ 2.0  3.0</code></pre>
+</div>
+</div>
+<p>Broadcasting follows a simple set of rules. Julia compares array shapes element-wise, starting from the trailing (rightmost) dimensions. Two dimensions are compatible when:</p>
+<ol type="1">
+<li>They are equal, or</li>
+<li>One of them has length 1.</li>
+</ol>
+<p>For example, consider arrays with the following shapes:</p>
+<pre><code>A      (4d array):  8 × 1 × 6 × 1
+B      (3d array):      7 × 1 × 5
+Result (4d array):  8 × 7 × 6 × 5</code></pre>
+<p>These are compatible because each pair of dimensions either matches or one is 1. But the following pair is <em>not</em> compatible:</p>
+<pre><code>A      (2d array):      2 × 1
+B      (3d array):  8 × 4 × 3</code></pre>
+<p>The second dimensions (2 and 4) are neither equal nor 1, so broadcasting fails. Understanding these rules will save you from cryptic dimension-mismatch errors.</p>
+</section>
+</section>
+<section id="solving-systems-of-equations" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Solving Systems of Equations</h1>
+<section id="matrix-formulation" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="matrix-formulation"><span class="header-section-number">5.1</span> Matrix Formulation</h2>
+<p>With vectors and matrices in hand, we can now express our original system of equations compactly. The system:</p>
+<p><span class="math display">\[
+\begin{array}{c}
+    y_1 = a_{11} x_1 + a_{12} x_2 + \cdots + a_{1k} x_k \\
+    \vdots  \\
+    y_n = a_{n1} x_1 + a_{n2} x_2 + \cdots + a_{nk} x_k
+\end{array}
+\]</span></p>
+<p>can be written as a single matrix equation: <span class="math inline">\(y = Ax\)</span>.</p>
+<p>Since <span class="math inline">\(Ax = x_1 a_1 + \ldots + x_k a_k\)</span> is a linear combination of the columns of <span class="math inline">\(A\)</span>, the equation <span class="math inline">\(y = Ax\)</span> has a solution only if <span class="math inline">\(y\)</span> lies in the span (column space) of <span class="math inline">\(A\)</span>. If the columns of <span class="math inline">\(A\)</span> are linearly independent and span all of <span class="math inline">\(\mathbb{R}^n\)</span>, then a unique solution exists for every <span class="math inline">\(y\)</span>. In this case we say <span class="math inline">\(A\)</span> has <strong>full column rank</strong>.</p>
+<p>The nature of the solution depends on the shape of <span class="math inline">\(A\)</span>:</p>
+<ul>
+<li><strong>Square case</strong> (<span class="math inline">\(n = k\)</span>, full rank): exactly one solution.</li>
+<li><strong>Over-determined</strong> (<span class="math inline">\(n &gt; k\)</span>): more equations than unknowns; typically no exact solution, but a best approximation exists.</li>
+<li><strong>Under-determined</strong> (<span class="math inline">\(n &lt; k\)</span>): fewer equations than unknowns; infinitely many solutions.</li>
+</ul>
+<p>Let us examine each case.</p>
+</section>
+<section id="the-regular-square-case" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="the-regular-square-case"><span class="header-section-number">5.2</span> The Regular (Square) Case</h2>
+<p>When <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times n\)</span> with linearly independent columns, the equation <span class="math inline">\(y = Ax\)</span> has a solution for every <span class="math inline">\(y \in \mathbb{R}^n\)</span>, and this solution is unique. Define <span class="math inline">\(g(y)\)</span> as the function that maps each <span class="math inline">\(y\)</span> to its solution: <span class="math inline">\(y = Ag(y)\)</span>.</p>
+<p>This function <span class="math inline">\(g\)</span> turns out to be linear:</p>
+<p><span class="math display">\[
+g(\alpha w + \beta z) = \alpha g(w) + \beta g(z)
+\]</span></p>
+<p>Since any linear function from <span class="math inline">\(\mathbb{R}^n\)</span> to <span class="math inline">\(\mathbb{R}^n\)</span> can be represented by a matrix, there exists a matrix <span class="math inline">\(A^{-1}\)</span> such that <span class="math inline">\(g(y) = A^{-1} y\)</span>. This matrix is called the <strong>inverse</strong> of <span class="math inline">\(A\)</span>, and it satisfies:</p>
+<p><span class="math display">\[
+    I = A^{-1}A = A A^{-1}
+\]</span></p>
+<p>To solve <span class="math inline">\(y = Ax\)</span>, we simply pre-multiply both sides by <span class="math inline">\(A^{-1}\)</span>:</p>
+<p><span class="math display">\[
+    A^{-1} y = A^{-1} A x = Ix = x
+\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Key Result
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When <span class="math inline">\(A\)</span> is square and invertible, the solution to <span class="math inline">\(y = Ax\)</span> is <span class="math inline">\(x = A^{-1}y\)</span>.</p>
+</div>
+</div>
+<p>Not every square matrix has an inverse. The <strong>determinant</strong> provides a test: if <span class="math inline">\(\det(A) \neq 0\)</span>, then <span class="math inline">\(A\)</span> is invertible (its columns are linearly independent). If <span class="math inline">\(\det(A) = 0\)</span>, the columns are linearly dependent, and no inverse exists.</p>
+<section id="solving-in-julia-the-inverse" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="solving-in-julia-the-inverse"><span class="header-section-number">5.2.1</span> Solving in Julia: The Inverse</h3>
+<div id="68" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">2</span>)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">det</span>(A)    <span class="co"># Check that det(A) ≠ 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>-2.0</code></pre>
+</div>
+</div>
+<div id="70" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>A_inv <span class="op">=</span> <span class="fu">inv</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ -2.0   1.0
+  1.5  -0.5</code></pre>
+</div>
+</div>
+<div id="72" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> A_inv <span class="op">*</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -0.9999999999999998
+  0.9999999999999999</code></pre>
+</div>
+</div>
+<div id="74" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">*</span> x    <span class="co"># Verify: should return y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.0
+ 1.0000000000000004</code></pre>
+</div>
+</div>
+</section>
+<section id="solving-in-julia-the-backslash-operator" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="solving-in-julia-the-backslash-operator"><span class="header-section-number">5.2.2</span> Solving in Julia: The Backslash Operator</h3>
+<p>Julia provides the backslash operator <code>\</code> as a more efficient and numerically stable way to solve <span class="math inline">\(Ax = y\)</span>:</p>
+<div id="76" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> A <span class="op">\</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -1.0
+  1.0</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Best Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Prefer <code>A \ y</code> over <code>inv(A) * y</code> for solving systems. The backslash operator is more numerically stable (less sensitive to rounding errors) and more efficient (it avoids explicitly computing the inverse, which is an expensive operation). Computing the full inverse and then multiplying is rarely necessary in practice.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="over-determined-systems" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="over-determined-systems"><span class="header-section-number">5.3</span> Over-determined Systems</h2>
+<p>When <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times k\)</span> with <span class="math inline">\(n &gt; k\)</span>—more equations than unknowns—the system is <strong>over-determined</strong>. This is the case that arises in <strong>least-squares regression</strong>: we have more data points than parameters, and we want to find the parameter vector that provides the best fit.</p>
+<p>In general, an arbitrary <span class="math inline">\(y \in \mathbb{R}^n\)</span> will not lie in the span of <span class="math inline">\(A\)</span> (which is at most <span class="math inline">\(k\)</span>-dimensional in an <span class="math inline">\(n\)</span>-dimensional space), so no exact solution exists. Instead, we look for the <span class="math inline">\(x\)</span> that minimizes the distance between <span class="math inline">\(y\)</span> and <span class="math inline">\(Ax\)</span>:</p>
+<p><span class="math display">\[
+\hat{x} = \arg\min_x \| y - Ax \|
+\]</span></p>
+<p>When <span class="math inline">\(A\)</span> has full column rank, the solution is given by the <strong>normal equations</strong>:</p>
+<p><span class="math display">\[
+\hat{x} = (A'A)^{-1}A'y
+\]</span></p>
+<p>This is precisely the OLS (Ordinary Least Squares) estimator from econometrics. The matrix <span class="math inline">\((A'A)^{-1}A'\)</span> is called the <strong>pseudo-inverse</strong> of <span class="math inline">\(A\)</span>, and Julia provides it via the <code>pinv</code> function.</p>
+<section id="example-fitting-a-line" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="example-fitting-a-line"><span class="header-section-number">5.3.1</span> Example: Fitting a Line</h3>
+<p>Suppose we want to fit a line <span class="math inline">\(y = mx + c\)</span> through some noisy data:</p>
+<div id="78" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>]</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="op">-</span><span class="fl">1</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span>, <span class="fl">2.1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4-element Vector{Float64}:
+ -1.0
+  0.2
+  0.9
+  2.1</code></pre>
+</div>
+</div>
+<p>We rewrite this as a matrix equation <span class="math inline">\(y = Ap\)</span> where <span class="math inline">\(A = [x \;\; \mathbf{1}]\)</span> is the design matrix and <span class="math inline">\(p = [m \;\; c]'\)</span> is the parameter vector:</p>
+<div id="80" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [x <span class="fu">ones</span>(<span class="fu">length</span>(x))]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4×2 Matrix{Float64}:
+ 0.0  1.0
+ 1.0  1.0
+ 2.0  1.0
+ 3.0  1.0</code></pre>
+</div>
+</div>
+<p>The least-squares solution is:</p>
+<div id="82" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>m, c <span class="op">=</span> <span class="fu">pinv</span>(A) <span class="op">*</span> y</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(m, c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.0000000000000002-0.9499999999999998</code></pre>
+</div>
+</div>
+<p>We can verify this matches the normal equations formula <span class="math inline">\((A'A)^{-1}A'y\)</span>:</p>
+<div id="84" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>(A<span class="op">'</span> <span class="op">*</span> A) <span class="op">\</span> A<span class="op">'</span> <span class="op">*</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+  0.9999999999999998
+ -0.9499999999999996</code></pre>
+</div>
+</div>
+</section>
+<section id="plotting-the-fit" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="plotting-the-fit"><span class="header-section-number">5.3.2</span> Plotting the Fit</h3>
+<div id="86" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="88" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(x, y, label<span class="op">=</span><span class="st">"Original data"</span>, markersize<span class="op">=</span><span class="fl">10</span>)</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(x, m<span class="op">*</span>x <span class="op">.+</span> c, color<span class="op">=:</span>red, label<span class="op">=</span><span class="st">"Fitted line"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="data:image/png;base64,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">
+</div>
+</div>
+<p>This is the essence of linear regression: find the line (or hyperplane) that minimizes the sum of squared residuals. The tools we have built up—vectors, matrices, inner products, norms, and the pseudo-inverse—provide both the mathematical foundation and the computational machinery.</p>
+</section>
+</section>
+<section id="under-determined-systems" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="under-determined-systems"><span class="header-section-number">5.4</span> Under-determined Systems</h2>
+<p>When <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times k\)</span> with <span class="math inline">\(n &lt; k\)</span>—fewer equations than unknowns—the system is <strong>under-determined</strong>. In this case, we expect either no solutions (if <span class="math inline">\(y\)</span> is not in the column space of <span class="math inline">\(A\)</span>) or infinitely many solutions.</p>
+<p>To understand why there are infinitely many solutions, consider the <strong>kernel</strong> (or null space) of <span class="math inline">\(A\)</span>: the set of all vectors <span class="math inline">\(\hat{x}\)</span> such that <span class="math inline">\(A\hat{x} = 0\)</span>. If <span class="math inline">\(x\)</span> is any solution to <span class="math inline">\(y = Ax\)</span> and <span class="math inline">\(\hat{x}\)</span> is in the kernel, then <span class="math inline">\(x + \hat{x}\)</span> is also a solution:</p>
+<p><span class="math display">\[
+A(x + \hat{x}) = Ax + A\hat{x} = y + 0 = y
+\]</span></p>
+<p>So we can add any kernel element to a known solution and get another valid solution. When the system is under-determined, the kernel is nontrivial (it contains nonzero vectors), giving us infinitely many solutions.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Under-determined systems have infinitely many solutions. Methods like <code>pinv</code> return the <strong>minimum-norm</strong> solution—the solution with the smallest <span class="math inline">\(\|x\|\)</span>. Depending on the problem, this may or may not be the most economically meaningful solution. In structural estimation, additional restrictions (theory, moment conditions, etc.) are typically imposed to pin down a unique solution.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="eigenvalues-and-eigenvectors" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Eigenvalues and Eigenvectors</h1>
+<section id="definition-1" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="definition-1"><span class="header-section-number">6.1</span> Definition</h2>
+<p>For a square <span class="math inline">\(n \times n\)</span> matrix <span class="math inline">\(A\)</span>, we are interested in finding scalar <span class="math inline">\(\lambda\)</span> and nonzero vector <span class="math inline">\(v \in \mathbb{R}^n\)</span> such that:</p>
+<p><span class="math display">\[
+Av = \lambda v
+\]</span></p>
+<p>When this equation holds, <span class="math inline">\(v\)</span> is called an <strong>eigenvector</strong> of <span class="math inline">\(A\)</span> and <span class="math inline">\(\lambda\)</span> is the corresponding <strong>eigenvalue</strong>. The operation <span class="math inline">\(Av\)</span> simply scales <span class="math inline">\(v\)</span> by <span class="math inline">\(\lambda\)</span>—the matrix acts like scalar multiplication along the direction of <span class="math inline">\(v\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="eigenvectors.png" class="img-fluid figure-img"></p>
+<figcaption>An eigenvector <span class="math inline">\(v\)</span> is only scaled (not rotated) when multiplied by <span class="math inline">\(A\)</span></figcaption>
+</figure>
+</div>
+<p>Eigenvalues and eigenvectors are fundamental in economics. They determine the stability of dynamic systems (e.g., whether a Solow model converges to its steady state), characterize principal components in data analysis, and play a central role in spectral methods for solving dynamic programming problems.</p>
+</section>
+<section id="finding-eigenvalues" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="finding-eigenvalues"><span class="header-section-number">6.2</span> Finding Eigenvalues</h2>
+<p>To find eigenvalues, we rearrange <span class="math inline">\(Av = \lambda v\)</span> as:</p>
+<p><span class="math display">\[
+0 = Av - \lambda v = (A - \lambda I)v
+\]</span></p>
+<p>For this equation to have a nonzero solution <span class="math inline">\(v\)</span>, the matrix <span class="math inline">\(A - \lambda I\)</span> must have linearly dependent columns. This happens precisely when:</p>
+<p><span class="math display">\[
+\det(A - \lambda I) = 0
+\]</span></p>
+<p>The expression <span class="math inline">\(\det(A - \lambda I)\)</span> is a polynomial of degree <span class="math inline">\(n\)</span> in <span class="math inline">\(\lambda\)</span>, called the <strong>characteristic polynomial</strong>. Its roots are the eigenvalues.</p>
+</section>
+<section id="properties-of-eigenvalues" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="properties-of-eigenvalues"><span class="header-section-number">6.3</span> Properties of Eigenvalues</h2>
+<p>Several useful facts connect eigenvalues to other matrix properties:</p>
+<ol type="1">
+<li>The <strong>determinant</strong> of <span class="math inline">\(A\)</span> equals the product of its eigenvalues: <span class="math inline">\(\det(A) = \lambda_1 \cdot \lambda_2 \cdots \lambda_n\)</span>.</li>
+<li>The <strong>trace</strong> of <span class="math inline">\(A\)</span> (sum of diagonal elements) equals the sum of its eigenvalues: <span class="math inline">\(\text{tr}(A) = \lambda_1 + \lambda_2 + \cdots + \lambda_n\)</span>.</li>
+<li>If <span class="math inline">\(A\)</span> is <strong>symmetric</strong>, all eigenvalues are real (not complex).</li>
+<li>If <span class="math inline">\(A\)</span> is invertible with eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_n\)</span>, then <span class="math inline">\(A^{-1}\)</span> has eigenvalues <span class="math inline">\(1/\lambda_1, \ldots, 1/\lambda_n\)</span>.</li>
+</ol>
+<p>Property 1 gives us another way to check invertibility: <span class="math inline">\(A\)</span> is invertible if and only if none of its eigenvalues are zero. Property 3 is especially useful because symmetric matrices arise so often in economics (variance-covariance matrices, Hessians of symmetric loss functions, etc.).</p>
+</section>
+<section id="eigenvalues-in-julia" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="eigenvalues-in-julia"><span class="header-section-number">6.4</span> Eigenvalues in Julia</h2>
+<p>Julia makes eigenvalue computation straightforward with the <code>eigen</code> function:</p>
+<div id="90" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">2</span> <span class="fl">1</span>];</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>evals, evecs <span class="op">=</span> <span class="fu">eigen</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Eigen{Float64, Float64, Matrix{Float64}, Vector{Float64}}
+values:
+2-element Vector{Float64}:
+ -1.0
+  3.0
+vectors:
+2×2 Matrix{Float64}:
+ -0.707107  0.707107
+  0.707107  0.707107</code></pre>
+</div>
+</div>
+<div id="92" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>evals    <span class="co"># The eigenvalues</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -1.0
+  3.0</code></pre>
+</div>
+</div>
+<div id="94" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>evecs    <span class="co"># The eigenvectors (as columns)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ -0.707107  0.707107
+  0.707107  0.707107</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Reading the Output
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The columns of <code>evecs</code> are the eigenvectors, and they correspond to the eigenvalues in <code>evals</code> in the same order. So the first column of <code>evecs</code> is the eigenvector for <code>evals[1]</code>, and so on.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Summary</h1>
+<p>These notes covered the essential linear algebra concepts needed for computational economics:</p>
+<p><strong>Vectors</strong> are ordered sequences of numbers that live in <span class="math inline">\(\mathbb{R}^n\)</span>. We can add them, scale them, compute their inner products, and measure their lengths with norms.</p>
+<p><strong>Spanning and linear independence</strong> tell us about the structure of vector spaces. The span of a set of vectors is the set of all their linear combinations. Linearly independent vectors provide unique representations—a property essential for regression and identification.</p>
+<p><strong>Matrices</strong> generalize vectors to two dimensions. They represent linear transformations and systems of equations. Key operations include transpose, addition, scalar multiplication, and matrix multiplication (which is <em>not</em> element-wise and <em>not</em> commutative).</p>
+<p><strong>Solving systems</strong> depends on the shape of the matrix:</p>
+<ul>
+<li><strong>Square, invertible</strong> (<span class="math inline">\(n = n\)</span>): unique solution via <span class="math inline">\(x = A^{-1}y\)</span> or <code>A \ y</code>.</li>
+<li><strong>Over-determined</strong> (<span class="math inline">\(n &gt; k\)</span>): least-squares solution via <span class="math inline">\(\hat{x} = (A'A)^{-1}A'y\)</span> or <code>pinv(A) * y</code>.</li>
+<li><strong>Under-determined</strong> (<span class="math inline">\(n &lt; k\)</span>): infinitely many solutions; <code>pinv</code> returns the minimum-norm solution.</li>
+</ul>
+<p><strong>Eigenvalues and eigenvectors</strong> reveal the intrinsic structure of square matrices. They determine stability of dynamic systems and are connected to determinants and traces.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Key Julia Tools
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>dot(x, y)</code></td>
+<td>Inner product</td>
+</tr>
+<tr class="even">
+<td><code>norm(x)</code></td>
+<td>Vector norm</td>
+</tr>
+<tr class="odd">
+<td><code>det(A)</code></td>
+<td>Determinant</td>
+</tr>
+<tr class="even">
+<td><code>inv(A)</code></td>
+<td>Matrix inverse</td>
+</tr>
+<tr class="odd">
+<td><code>A \ y</code></td>
+<td>Solve <span class="math inline">\(Ax = y\)</span> (preferred)</td>
+</tr>
+<tr class="even">
+<td><code>pinv(A)</code></td>
+<td>Pseudo-inverse (for least-squares)</td>
+</tr>
+<tr class="odd">
+<td><code>eigen(A)</code></td>
+<td>Eigenvalues and eigenvectors</td>
+</tr>
+<tr class="even">
+<td><code>diag(A)</code>, <code>diagm(...)</code></td>
+<td>Extract/create diagonal matrices</td>
+</tr>
+<tr class="odd">
+<td><code>.*</code>, <code>.+</code>, etc.</td>
+<td>Element-wise (broadcast) operations</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
