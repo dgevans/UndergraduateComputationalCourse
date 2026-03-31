@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Evans">
-<meta name="dcterms.date" content="2026-03-30">
+<meta name="dcterms.date" content="2026-03-31">
 
 <title>Getting Started: Installing Julia and VS Code</title>
 <style>
@@ -134,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 30, 2026</p>
+      <p class="date">March 31, 2026</p>
     </div>
   </div>
   
@@ -149,29 +149,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This guide will walk you through installing everything you need for this course: the Julia programming language, the VS Code editor, and two VS Code extensions for writing and running Julia code.</p>
 <section id="installing-julia" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Installing Julia</h1>
+<p>The recommended way to install Julia is through the terminal using <a href="https://julialang.org/downloads/">juliaup</a>, Julia’s official version manager. See the <a href="https://julialang.org/downloads/">Julia downloads page</a> for more details.</p>
 <section id="mac" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="mac"><span class="header-section-number">1.1</span> Mac</h2>
 <ol type="1">
-<li>Go to <a href="https://julialang.org/downloads/">https://julialang.org/downloads/</a>.</li>
-<li>Under <strong>Current Stable Release</strong>, click the <strong>macOS</strong> installer link:
-<ul>
-<li>If you have an Apple Silicon Mac (M1, M2, M3, or M4), download the <strong>Apple Silicon</strong> <code>.dmg</code> file.</li>
-<li>If you have an older Intel Mac, download the <strong>Intel</strong> <code>.dmg</code> file.</li>
-<li>If you’re unsure, click the Apple menu () in the top-left corner of your screen, then <strong>About This Mac</strong>. If it says “Apple M1” (or M2, M3, M4) under <strong>Chip</strong>, use Apple Silicon. If it says “Intel” under <strong>Processor</strong>, use Intel.</li>
-</ul></li>
-<li>Open the downloaded <code>.dmg</code> file and drag the <strong>Julia</strong> app into your <strong>Applications</strong> folder.</li>
-<li>Open <strong>Julia</strong> from your Applications folder (or search for it with Spotlight: ⌘ + Space, type “Julia”). A terminal window should appear with the Julia prompt: <code>julia&gt;</code>. Type <code>1 + 1</code> and press Enter to confirm it works.</li>
+<li><p>Open a terminal (search for “Terminal” with Spotlight: ⌘ + Space).</p></li>
+<li><p>Run the following command:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Follow the on-screen prompts. The installer will set up <strong>juliaup</strong> (Julia’s version manager) and install the latest stable version of Julia.</p></li>
+<li><p>Close and reopen your terminal so the new PATH settings take effect.</p></li>
+<li><p>Type <code>julia</code> and press Enter. The Julia prompt <code>julia&gt;</code> should appear. Type <code>1 + 1</code> and press Enter to confirm it works.</p></li>
 </ol>
 </section>
 <section id="windows" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="windows"><span class="header-section-number">1.2</span> Windows</h2>
 <ol type="1">
-<li>Go to <a href="https://julialang.org/downloads/">https://julialang.org/downloads/</a>.</li>
-<li>Under <strong>Current Stable Release</strong>, click the <strong>Windows</strong> installer link (the <strong>64-bit (installer)</strong> <code>.exe</code> file).</li>
-<li>Run the downloaded <code>.exe</code> installer.</li>
-<li><strong>Important:</strong> On the installation options screen, check the box that says <strong>“Add Julia to PATH”</strong>. This allows VS Code to find Julia automatically.</li>
-<li>Click through the rest of the installer with the default settings.</li>
-<li>Once installed, open Julia by searching for it in the Start menu. A terminal window should appear with the Julia prompt: <code>julia&gt;</code>. Type <code>1 + 1</code> and press Enter to confirm it works.</li>
+<li><p>Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> (search for either in the Start menu).</p></li>
+<li><p>Run the following command:</p>
+<pre><code>winget install --name Julia --id 9NJNWW8PVKMN -e -s msstore</code></pre></li>
+<li><p>Follow the on-screen prompts. This installs <strong>juliaup</strong> (Julia’s version manager) and the latest stable version of Julia, and adds it to your PATH automatically.</p></li>
+<li><p>Close and reopen your terminal so the new PATH settings take effect.</p></li>
+<li><p>Type <code>julia</code> and press Enter. The Julia prompt <code>julia&gt;</code> should appear. Type <code>1 + 1</code> and press Enter to confirm it works.</p></li>
 </ol>
 </section>
 </section>
@@ -182,7 +180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Go to <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>.</li>
 <li>Click the large <strong>Download for macOS</strong> button.</li>
-<li>Open the downloaded <code>.zip</code> file. It will extract to a <strong>Visual Studio Code</strong> application.</li>
+<li>Open the downloaded <code>.dmg</code> file.</li>
 <li>Drag <strong>Visual Studio Code</strong> into your <strong>Applications</strong> folder.</li>
 <li>Open VS Code from your Applications folder.</li>
 </ol>
@@ -218,8 +216,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Search for <code>Julia: Executable Path</code>.</li>
 <li>Set it to the path where Julia is installed:
 <ul>
-<li><strong>Mac:</strong> <code>/Applications/Julia-1.11.app/Contents/Resources/julia/bin/julia</code> (adjust the version number if needed)</li>
-<li><strong>Windows:</strong> <code>C:\Users\YourUsername\AppData\Local\Programs\Julia-1.11.4\bin\julia.exe</code> (adjust the version number and username)</li>
+<li><strong>Mac:</strong> <code>/Applications/Julia-1.12.app/Contents/Resources/julia/bin/julia</code> (adjust the version number if needed)</li>
+<li><strong>Windows:</strong> <code>C:\Users\YourUsername\AppData\Local\Programs\Julia-1.12.0\bin\julia.exe</code> (adjust the version number and username)</li>
 </ul></li>
 </ul></li>
 </ol>
@@ -228,7 +226,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>Create a new file in VS Code (<code>Ctrl+N</code> / <code>⌘+N</code>) and save it as <code>test.jl</code>.</p></li>
 <li><p>Type the following:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Hello, EC 410!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Hello, EC 410!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Press <code>Ctrl+Enter</code> (Windows) or <code>⌘+Enter</code> (Mac) to run the line. The Julia REPL should open at the bottom of VS Code and print <code>Hello, EC 410!</code>.</p></li>
 </ol>
 </section>
