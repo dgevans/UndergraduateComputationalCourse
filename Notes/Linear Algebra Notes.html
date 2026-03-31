@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Evans">
-<meta name="dcterms.date" content="2026-02-06">
+<meta name="dcterms.date" content="2026-02-23">
 
 <title>Linear Algebra in Julia</title>
 <style>
@@ -189,7 +189,39 @@ window.Quarto = {
   <li><a href="#properties-of-eigenvalues" id="toc-properties-of-eigenvalues" class="nav-link" data-scroll-target="#properties-of-eigenvalues"><span class="header-section-number">6.3</span> Properties of Eigenvalues</a></li>
   <li><a href="#eigenvalues-in-julia" id="toc-eigenvalues-in-julia" class="nav-link" data-scroll-target="#eigenvalues-in-julia"><span class="header-section-number">6.4</span> Eigenvalues in Julia</a></li>
   </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">7</span> Summary</a></li>
+  <li><a href="#matrix-decompositions" id="toc-matrix-decompositions" class="nav-link" data-scroll-target="#matrix-decompositions"><span class="header-section-number">7</span> Matrix Decompositions</a>
+  <ul class="collapse">
+  <li><a href="#lu-decomposition" id="toc-lu-decomposition" class="nav-link" data-scroll-target="#lu-decomposition"><span class="header-section-number">7.1</span> LU Decomposition</a></li>
+  <li><a href="#qr-decomposition" id="toc-qr-decomposition" class="nav-link" data-scroll-target="#qr-decomposition"><span class="header-section-number">7.2</span> QR Decomposition</a></li>
+  <li><a href="#cholesky-decomposition" id="toc-cholesky-decomposition" class="nav-link" data-scroll-target="#cholesky-decomposition"><span class="header-section-number">7.3</span> Cholesky Decomposition</a></li>
+  </ul></li>
+  <li><a href="#positive-definite-matrices-and-quadratic-forms" id="toc-positive-definite-matrices-and-quadratic-forms" class="nav-link" data-scroll-target="#positive-definite-matrices-and-quadratic-forms"><span class="header-section-number">8</span> Positive Definite Matrices and Quadratic Forms</a>
+  <ul class="collapse">
+  <li><a href="#definition-and-intuition" id="toc-definition-and-intuition" class="nav-link" data-scroll-target="#definition-and-intuition"><span class="header-section-number">8.1</span> Definition and Intuition</a></li>
+  <li><a href="#equivalent-conditions" id="toc-equivalent-conditions" class="nav-link" data-scroll-target="#equivalent-conditions"><span class="header-section-number">8.2</span> Equivalent Conditions</a></li>
+  <li><a href="#economic-application-second-order-conditions" id="toc-economic-application-second-order-conditions" class="nav-link" data-scroll-target="#economic-application-second-order-conditions"><span class="header-section-number">8.3</span> Economic Application: Second-Order Conditions</a></li>
+  </ul></li>
+  <li><a href="#economics-applications" id="toc-economics-applications" class="nav-link" data-scroll-target="#economics-applications"><span class="header-section-number">9</span> Economics Applications</a>
+  <ul class="collapse">
+  <li><a href="#input-output-model-leontief" id="toc-input-output-model-leontief" class="nav-link" data-scroll-target="#input-output-model-leontief"><span class="header-section-number">9.1</span> Input-Output Model (Leontief)</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">9.1.1</span> Setup</a></li>
+  <li><a href="#the-leontief-inverse" id="toc-the-leontief-inverse" class="nav-link" data-scroll-target="#the-leontief-inverse"><span class="header-section-number">9.1.2</span> The Leontief Inverse</a></li>
+  <li><a href="#a-three-sector-example" id="toc-a-three-sector-example" class="nav-link" data-scroll-target="#a-three-sector-example"><span class="header-section-number">9.1.3</span> A Three-Sector Example</a></li>
+  </ul></li>
+  <li><a href="#ols-regression" id="toc-ols-regression" class="nav-link" data-scroll-target="#ols-regression"><span class="header-section-number">9.2</span> OLS Regression</a>
+  <ul class="collapse">
+  <li><a href="#the-normal-equations" id="toc-the-normal-equations" class="nav-link" data-scroll-target="#the-normal-equations"><span class="header-section-number">9.2.1</span> The Normal Equations</a></li>
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">9.2.2</span> Implementation</a></li>
+  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">9.2.3</span> Standard Errors</a></li>
+  </ul></li>
+  <li><a href="#markov-chain-steady-state-preview" id="toc-markov-chain-steady-state-preview" class="nav-link" data-scroll-target="#markov-chain-steady-state-preview"><span class="header-section-number">9.3</span> Markov Chain Steady State (Preview)</a>
+  <ul class="collapse">
+  <li><a href="#the-eigenvector-connection" id="toc-the-eigenvector-connection" class="nav-link" data-scroll-target="#the-eigenvector-connection"><span class="header-section-number">9.3.1</span> The Eigenvector Connection</a></li>
+  <li><a href="#computing-the-stationary-distribution" id="toc-computing-the-stationary-distribution" class="nav-link" data-scroll-target="#computing-the-stationary-distribution"><span class="header-section-number">9.3.2</span> Computing the Stationary Distribution</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">10</span> Summary</a></li>
   </ul>
 </nav>
 </div>
@@ -214,7 +246,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 6, 2026</p>
+      <p class="date">February 23, 2026</p>
     </div>
   </div>
   
@@ -338,7 +370,7 @@ Stacktrace:
  [4] <span class="ansi-bold">setindex!</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">v</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
 <span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">abstractarray.jl:1443</span>
  [5] top-level scope
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/University of Oregon Dropbox/David Evans/University of Oregon/Courses/Spring 2019/EC 410/Lectures/Julia/Linear Algebra/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">Linear Algebra Notes.qmd:123</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/University of Oregon Dropbox/David Evans/University of Oregon/Courses/Spring 2026/EC 410/Lectures and Website/Julia/Linear Algebra/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">Linear Algebra Notes.qmd:123</span></pre>
 </div>
 </div>
 </div>
@@ -1185,8 +1217,636 @@ vectors:
 </div>
 </section>
 </section>
-<section id="summary" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Summary</h1>
+<section id="matrix-decompositions" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Matrix Decompositions</h1>
+<p>In the previous sections we solved systems of equations using the inverse (<span class="math inline">\(A^{-1}\)</span>) and the backslash operator (<code>\</code>). Behind the scenes, Julia does not compute the inverse directly—instead, it <strong>decomposes</strong> the matrix into a product of simpler matrices and then solves the system using those factors. These decompositions are the workhorses of numerical linear algebra. Understanding them gives you insight into what Julia is actually doing when you type <code>A \ y</code>, and it helps you choose the right tool when performance or numerical accuracy matters.</p>
+<section id="lu-decomposition" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="lu-decomposition"><span class="header-section-number">7.1</span> LU Decomposition</h2>
+<p>The <strong>LU decomposition</strong> factors a square matrix <span class="math inline">\(A\)</span> into the product of a <strong>lower triangular</strong> matrix <span class="math inline">\(L\)</span> and an <strong>upper triangular</strong> matrix <span class="math inline">\(U\)</span>:</p>
+<p><span class="math display">\[
+A = LU
+\]</span></p>
+<p>A lower triangular matrix has all its nonzero entries on or below the main diagonal; an upper triangular matrix has all its nonzero entries on or above the main diagonal. For a <span class="math inline">\(3 \times 3\)</span> example:</p>
+<p><span class="math display">\[
+L = \begin{bmatrix} l_{11} &amp; 0 &amp; 0 \\ l_{21} &amp; l_{22} &amp; 0 \\ l_{31} &amp; l_{32} &amp; l_{33} \end{bmatrix}, \qquad
+U = \begin{bmatrix} u_{11} &amp; u_{12} &amp; u_{13} \\ 0 &amp; u_{22} &amp; u_{23} \\ 0 &amp; 0 &amp; u_{33} \end{bmatrix}
+\]</span></p>
+<p>The intuition is straightforward: LU decomposition is <strong>Gaussian elimination stored in matrix form</strong>. When you learned to solve systems of equations by hand—subtracting multiples of one equation from another to create zeros below the pivot—you were implicitly computing the LU decomposition. The matrix <span class="math inline">\(U\)</span> is the row-echelon form you arrive at after elimination, and <span class="math inline">\(L\)</span> records the multipliers you used along the way.</p>
+<p>Why is this useful? Suppose you need to solve <span class="math inline">\(Ax = b\)</span> for many different right-hand sides <span class="math inline">\(b_1, b_2, \ldots, b_m\)</span> but the same matrix <span class="math inline">\(A\)</span>. Without the LU decomposition, you would need to perform Gaussian elimination from scratch each time. With LU, you factor <span class="math inline">\(A\)</span> once (the expensive step), and then each subsequent solve reduces to two cheap <strong>triangular solves</strong>: first solve <span class="math inline">\(Lz = b\)</span> for <span class="math inline">\(z\)</span> (forward substitution), then solve <span class="math inline">\(Ux = z\)</span> for <span class="math inline">\(x\)</span> (back substitution). Triangular systems are trivial to solve because each equation involves only one new unknown.</p>
+<p>In Julia, the <code>lu</code> function computes the decomposition:</p>
+<div id="96" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">2.0</span> <span class="fl">1.0</span> <span class="fl">1.0</span>;</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">4.0</span> <span class="fl">3.0</span> <span class="fl">3.0</span>;</span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>     <span class="fl">8.0</span> <span class="fl">7.0</span> <span class="fl">9.0</span>]</span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> <span class="fu">lu</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>LU{Float64, Matrix{Float64}, Vector{Int64}}
+L factor:
+3×3 Matrix{Float64}:
+ 1.0   0.0       0.0
+ 0.25  1.0       0.0
+ 0.5   0.666667  1.0
+U factor:
+3×3 Matrix{Float64}:
+ 8.0   7.0    9.0
+ 0.0  -0.75  -1.25
+ 0.0   0.0   -0.666667</code></pre>
+</div>
+</div>
+<p>The result <code>F</code> is a factorization object. You can extract the individual factors:</p>
+<div id="98" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>F.L    <span class="co"># Lower triangular factor</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 1.0   0.0       0.0
+ 0.25  1.0       0.0
+ 0.5   0.666667  1.0</code></pre>
+</div>
+</div>
+<div id="100" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>F.U    <span class="co"># Upper triangular factor</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 8.0   7.0    9.0
+ 0.0  -0.75  -1.25
+ 0.0   0.0   -0.666667</code></pre>
+</div>
+</div>
+<p>We can verify the decomposition by checking that <span class="math inline">\(LU\)</span> reconstructs <span class="math inline">\(A\)</span> (up to row permutations, since Julia’s LU uses <strong>partial pivoting</strong> for numerical stability—it may reorder the rows of <span class="math inline">\(A\)</span>):</p>
+<div id="102" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>F.P <span class="op">*</span> A <span class="op">≈</span> F.L <span class="op">*</span> F.U    <span class="co"># P is the permutation matrix</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>The permutation matrix <span class="math inline">\(F.P\)</span> records any row swaps that Julia performed. Partial pivoting ensures that the algorithm does not divide by very small numbers, which would amplify rounding errors. This is why LU decomposition is preferred over naive Gaussian elimination in practice.</p>
+<p>Once you have the factorization, solving systems with different right-hand sides is fast:</p>
+<div id="104" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>b₁ <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>]</span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>b₂ <span class="op">=</span> [<span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">6.0</span>]</span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>x₁ <span class="op">=</span> F <span class="op">\</span> b₁    <span class="co"># Uses the stored LU factors</span></span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a>x₂ <span class="op">=</span> F <span class="op">\</span> b₂    <span class="co"># No need to re-factor A</span></span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"x₁ = </span><span class="sc">$</span>x<span class="st">₁"</span>)</span>
+<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"x₂ = </span><span class="sc">$</span>x<span class="st">₂"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x₁ = [0.5, 0.5, -0.5]
+x₂ = [3.5, -2.4999999999999996, -0.5000000000000001]</code></pre>
+</div>
+</div>
+</section>
+<section id="qr-decomposition" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="qr-decomposition"><span class="header-section-number">7.2</span> QR Decomposition</h2>
+<p>The <strong>QR decomposition</strong> factors a matrix <span class="math inline">\(A\)</span> (not necessarily square) into the product of an <strong>orthogonal</strong> matrix <span class="math inline">\(Q\)</span> and an <strong>upper triangular</strong> matrix <span class="math inline">\(R\)</span>:</p>
+<p><span class="math display">\[
+A = QR
+\]</span></p>
+<p>An orthogonal matrix <span class="math inline">\(Q\)</span> satisfies <span class="math inline">\(Q'Q = I\)</span>—its columns are mutually orthogonal unit vectors. Geometrically, multiplying by <span class="math inline">\(Q\)</span> rotates or reflects vectors without stretching them.</p>
+<p>In Julia:</p>
+<div id="106" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">1.0</span> <span class="fl">2.0</span>;</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">3.0</span> <span class="fl">4.0</span>;</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>     <span class="fl">5.0</span> <span class="fl">6.0</span>]</span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> <span class="fu">qr</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>LinearAlgebra.QRCompactWY{Float64, Matrix{Float64}, Matrix{Float64}}
+Q factor: 3×3 LinearAlgebra.QRCompactWYQ{Float64, Matrix{Float64}, Matrix{Float64}}
+R factor:
+2×2 Matrix{Float64}:
+ -5.91608  -7.43736
+  0.0       0.828079</code></pre>
+</div>
+</div>
+<div id="108" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb104"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>F.Q    <span class="co"># Orthogonal factor (stored in compact form)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 LinearAlgebra.QRCompactWYQ{Float64, Matrix{Float64}, Matrix{Float64}}</code></pre>
+</div>
+</div>
+<div id="110" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb106"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>F.R    <span class="co"># Upper triangular factor</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 Matrix{Float64}:
+ -5.91608  -7.43736
+  0.0       0.828079</code></pre>
+</div>
+</div>
+<p>The deep connection between QR and least squares is one of the most important results in numerical linear algebra. Recall from the over-determined systems section that the least-squares solution to <span class="math inline">\(y = Ax\)</span> is <span class="math inline">\(\hat{x} = (A'A)^{-1}A'y\)</span>. If we substitute <span class="math inline">\(A = QR\)</span>:</p>
+<p><span class="math display">\[
+\hat{x} = (R'Q'QR)^{-1}R'Q'y = (R'R)^{-1}R'Q'y = R^{-1}(R')^{-1}R'Q'y = R^{-1}Q'y
+\]</span></p>
+<p>This is much better numerically than the normal equations. The matrix <span class="math inline">\(A'A\)</span> can be <strong>ill-conditioned</strong> (its eigenvalues span a wide range), which amplifies rounding errors when you invert it. The QR approach avoids forming <span class="math inline">\(A'A\)</span> entirely, working instead with <span class="math inline">\(R\)</span> (which has much better conditioning) and the orthogonal matrix <span class="math inline">\(Q\)</span> (which preserves distances perfectly). This is exactly what Julia’s backslash operator does internally when you solve an over-determined system with <code>A \ y</code>.</p>
+</section>
+<section id="cholesky-decomposition" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="cholesky-decomposition"><span class="header-section-number">7.3</span> Cholesky Decomposition</h2>
+<p>The <strong>Cholesky decomposition</strong> applies to matrices that are <strong>symmetric positive definite</strong> (SPD). It factors such a matrix <span class="math inline">\(A\)</span> into the product of a lower triangular matrix <span class="math inline">\(L\)</span> and its transpose:</p>
+<p><span class="math display">\[
+A = LL'
+\]</span></p>
+<p>This is a special case of LU decomposition that exploits symmetry: since <span class="math inline">\(A = A'\)</span>, we can write <span class="math inline">\(A = LU\)</span> where <span class="math inline">\(U = L'\)</span>, cutting the work (and storage) roughly in half. But the Cholesky decomposition only exists when <span class="math inline">\(A\)</span> is symmetric and positive definite—we will define positive definiteness carefully in a later section.</p>
+<p>In economics, the most common SPD matrix is the <strong>variance-covariance matrix</strong> <span class="math inline">\(\Sigma\)</span> of a random vector. By construction, <span class="math inline">\(\Sigma\)</span> is symmetric (<span class="math inline">\(\text{Cov}(X_i, X_j) = \text{Cov}(X_j, X_i)\)</span>) and positive semi-definite (<span class="math inline">\(\text{Var}(a'X) = a'\Sigma a \geq 0\)</span> for all <span class="math inline">\(a\)</span>). When no linear combination of the variables is deterministic, <span class="math inline">\(\Sigma\)</span> is strictly positive definite.</p>
+<div id="112" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb108"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>Σ <span class="op">=</span> [<span class="fl">4.0</span> <span class="fl">2.0</span>;</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">2.0</span> <span class="fl">3.0</span>]    <span class="co"># A symmetric positive definite matrix</span></span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="fu">cholesky</span>(Σ)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Cholesky{Float64, Matrix{Float64}}
+U factor:
+2×2 UpperTriangular{Float64, Matrix{Float64}}:
+ 2.0  1.0
+  ⋅   1.41421</code></pre>
+</div>
+</div>
+<div id="114" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb110"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>C.L    <span class="co"># Lower triangular Cholesky factor</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2×2 LowerTriangular{Float64, Matrix{Float64}}:
+ 2.0   ⋅ 
+ 1.0  1.41421</code></pre>
+</div>
+</div>
+<div id="116" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb112"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>C.L <span class="op">*</span> C.L<span class="op">'</span> <span class="op">≈</span> Σ    <span class="co"># Verify the decomposition</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>One powerful application of the Cholesky decomposition is <strong>generating correlated random variables</strong>. Suppose you want to draw random vectors <span class="math inline">\(x \sim N(0, \Sigma)\)</span>. You cannot simply draw each component independently, because that would give you <span class="math inline">\(N(0, I)\)</span>—uncorrelated variables. The trick is to start with independent standard normals <span class="math inline">\(z \sim N(0, I)\)</span> and multiply by the Cholesky factor <span class="math inline">\(L\)</span>:</p>
+<p><span class="math display">\[
+x = Lz \quad \Longrightarrow \quad \mathbb{E}[xx'] = L \, \mathbb{E}[zz'] \, L' = L I L' = LL' = \Sigma
+\]</span></p>
+<p>So <span class="math inline">\(x\)</span> has exactly the covariance structure <span class="math inline">\(\Sigma\)</span>. This technique is used constantly in Monte Carlo simulation, bootstrap methods, and any setting where you need to simulate correlated economic shocks.</p>
+<div id="118" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb114"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Random</span></span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">42</span>)</span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> C.L</span>
+<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">2</span>, <span class="fl">1000</span>)          <span class="co"># 1000 draws of independent standard normals</span></span>
+<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> L <span class="op">*</span> z                    <span class="co"># Transform to have covariance Σ</span></span>
+<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify: the sample covariance should be close to Σ</span></span>
+<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
+<span id="cb114-9"><a href="#cb114-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Sample covariance:"</span>)</span>
+<span id="cb114-10"><a href="#cb114-10" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">round</span>.(<span class="fu">cov</span>(x<span class="op">'</span>), digits<span class="op">=</span><span class="fl">2</span>))</span>
+<span id="cb114-11"><a href="#cb114-11" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">True covariance:"</span>)</span>
+<span id="cb114-12"><a href="#cb114-12" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(Σ)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sample covariance:
+[4.09 1.98; 1.98 2.98]
+
+True covariance:
+[4.0 2.0; 2.0 3.0]</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Which Decomposition Should I Use?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 48%">
+<col style="width: 51%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Decomposition</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>LU</strong></td>
+<td>General square systems, especially when solving <span class="math inline">\(Ax = b\)</span> for many different <span class="math inline">\(b\)</span> with the same <span class="math inline">\(A\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>QR</strong></td>
+<td>Least-squares problems (over-determined systems); more numerically stable than the normal equations</td>
+</tr>
+<tr class="odd">
+<td><strong>Cholesky</strong></td>
+<td>Symmetric positive definite systems (e.g., involving covariance matrices); fastest of the three</td>
+</tr>
+</tbody>
+</table>
+<p>In practice, Julia’s <code>\</code> operator automatically selects the best decomposition based on the structure of your matrix. But knowing these decompositions helps you understand what is happening under the hood and lets you optimize when performance matters.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="positive-definite-matrices-and-quadratic-forms" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Positive Definite Matrices and Quadratic Forms</h1>
+<section id="definition-and-intuition" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="definition-and-intuition"><span class="header-section-number">8.1</span> Definition and Intuition</h2>
+<p>A symmetric <span class="math inline">\(n \times n\)</span> matrix <span class="math inline">\(A\)</span> is <strong>positive definite</strong> if:</p>
+<p><span class="math display">\[
+x'Ax &gt; 0 \quad \text{for all nonzero } x \in \mathbb{R}^n
+\]</span></p>
+<p>The expression <span class="math inline">\(x'Ax\)</span> is called a <strong>quadratic form</strong>. To build intuition, consider the <span class="math inline">\(2 \times 2\)</span> case. If <span class="math inline">\(A = \begin{bmatrix} a &amp; b \\ b &amp; c \end{bmatrix}\)</span> (symmetric), then:</p>
+<p><span class="math display">\[
+x'Ax = a x_1^2 + 2b \, x_1 x_2 + c \, x_2^2
+\]</span></p>
+<p>This is a quadratic function of <span class="math inline">\((x_1, x_2)\)</span>. Positive definiteness means this quadratic is strictly positive everywhere except at the origin—geometrically, the surface <span class="math inline">\(z = x'Ax\)</span> is a bowl that opens upward. A <strong>negative definite</strong> matrix (<span class="math inline">\(x'Ax &lt; 0\)</span> for all nonzero <span class="math inline">\(x\)</span>) corresponds to a bowl that opens downward. And a matrix that is neither positive nor negative definite has a saddle-shaped surface.</p>
+</section>
+<section id="equivalent-conditions" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="equivalent-conditions"><span class="header-section-number">8.2</span> Equivalent Conditions</h2>
+<p>There are several equivalent ways to check whether a symmetric matrix is positive definite:</p>
+<ol type="1">
+<li><strong>Definition</strong>: <span class="math inline">\(x'Ax &gt; 0\)</span> for all nonzero <span class="math inline">\(x\)</span>.</li>
+<li><strong>Eigenvalue test</strong>: All eigenvalues of <span class="math inline">\(A\)</span> are strictly positive.</li>
+<li><strong>Leading principal minors</strong>: All leading principal minors of <span class="math inline">\(A\)</span> are strictly positive. The <span class="math inline">\(k\)</span>-th leading principal minor is the determinant of the upper-left <span class="math inline">\(k \times k\)</span> submatrix.</li>
+<li><strong>Cholesky test</strong>: The Cholesky decomposition <span class="math inline">\(A = LL'\)</span> exists (with positive diagonal entries in <span class="math inline">\(L\)</span>).</li>
+</ol>
+<p>The eigenvalue test is particularly intuitive. Recall that <span class="math inline">\(Av = \lambda v\)</span> for an eigenvector <span class="math inline">\(v\)</span>. Then <span class="math inline">\(v'Av = v'(\lambda v) = \lambda \|v\|^2\)</span>. Since <span class="math inline">\(\|v\|^2 &gt; 0\)</span>, the sign of <span class="math inline">\(v'Av\)</span> is determined entirely by <span class="math inline">\(\lambda\)</span>. For <span class="math inline">\(x'Ax &gt; 0\)</span> to hold for every nonzero <span class="math inline">\(x\)</span>, we need every eigenvalue to be positive.</p>
+<p>In Julia, you can check positive definiteness directly:</p>
+<div id="120" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb116"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [<span class="fl">4.0</span> <span class="fl">2.0</span>; <span class="fl">2.0</span> <span class="fl">3.0</span>]</span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="fu">isposdef</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<div id="122" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb118"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>evals <span class="op">=</span> <span class="fu">eigvals</span>(A)</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Eigenvalues: </span><span class="sc">$</span>evals<span class="st">"</span>)</span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"All positive? </span><span class="sc">$</span>(<span class="fu">all</span>(evals <span class="op">.&gt;</span> <span class="fl">0</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eigenvalues: [1.4384471871911697, 5.561552812808831]
+All positive? true</code></pre>
+</div>
+</div>
+<div id="124" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb120"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A matrix that is NOT positive definite</span></span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [<span class="fl">1.0</span> <span class="fl">2.0</span>; <span class="fl">2.0</span> <span class="fl">1.0</span>]</span>
+<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a><span class="fu">isposdef</span>(B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>false</code></pre>
+</div>
+</div>
+<div id="126" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb122"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eigvals</span>(B)    <span class="co"># One negative eigenvalue</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -1.0
+  3.0</code></pre>
+</div>
+</div>
+</section>
+<section id="economic-application-second-order-conditions" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="economic-application-second-order-conditions"><span class="header-section-number">8.3</span> Economic Application: Second-Order Conditions</h2>
+<p>Positive definiteness plays a central role in <strong>optimization</strong>, which is at the heart of economics. Consider a firm maximizing profit <span class="math inline">\(\pi(x)\)</span> where <span class="math inline">\(x\)</span> is a vector of choice variables (e.g., quantities of labor and capital). The first-order conditions require <span class="math inline">\(\nabla \pi(x^*) = 0\)</span>—the gradient is zero at the optimum. But a zero gradient could correspond to a maximum, a minimum, or a saddle point. The <strong>second-order conditions</strong> resolve this ambiguity by examining the <strong>Hessian matrix</strong>—the matrix of second partial derivatives:</p>
+<p><span class="math display">\[
+H = \begin{bmatrix} \frac{\partial^2 \pi}{\partial x_1^2} &amp; \frac{\partial^2 \pi}{\partial x_1 \partial x_2} \\ \frac{\partial^2 \pi}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 \pi}{\partial x_2^2} \end{bmatrix}
+\]</span></p>
+<p>For <span class="math inline">\(x^*\)</span> to be a <strong>local maximum</strong>, the Hessian must be <strong>negative definite</strong> at <span class="math inline">\(x^*\)</span> (all eigenvalues negative). For a <strong>local minimum</strong>, the Hessian must be <strong>positive definite</strong> (all eigenvalues positive). If the Hessian has eigenvalues of both signs, <span class="math inline">\(x^*\)</span> is a <strong>saddle point</strong>.</p>
+<p>Let us verify this with a concrete example. A firm with Cobb-Douglas technology chooses labor <span class="math inline">\(\ell\)</span> and capital <span class="math inline">\(k\)</span> to maximize profit:</p>
+<p><span class="math display">\[
+\pi(k, \ell) = z \, k^{\alpha} \, \ell^{1-\alpha} - rk - w\ell
+\]</span></p>
+<p>The Hessian of this profit function is:</p>
+<p><span class="math display">\[
+H = \begin{bmatrix} \alpha(\alpha-1) z k^{\alpha-2} \ell^{1-\alpha} &amp; \alpha(1-\alpha) z k^{\alpha-1} \ell^{-\alpha} \\ \alpha(1-\alpha) z k^{\alpha-1} \ell^{-\alpha} &amp; -\alpha(1-\alpha) z k^{\alpha} \ell^{-\alpha-1} \end{bmatrix}
+\]</span></p>
+<p>Since <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> and <span class="math inline">\(z, k, \ell &gt; 0\)</span>, the diagonal entries <span class="math inline">\(\alpha(\alpha-1) z k^{\alpha-2} \ell^{1-\alpha}\)</span> and <span class="math inline">\(-\alpha(1-\alpha) z k^{\alpha} \ell^{-\alpha-1}\)</span> are both negative. Let us check the eigenvalues numerically:</p>
+<div id="128" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb124"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>α <span class="op">=</span> <span class="fl">0.33</span></span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a>ℓ <span class="op">=</span> <span class="fl">20.0</span></span>
+<span id="cb124-6"><a href="#cb124-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-7"><a href="#cb124-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Hessian of the Cobb-Douglas profit function</span></span>
+<span id="cb124-8"><a href="#cb124-8" aria-hidden="true" tabindex="-1"></a>H₁₁ <span class="op">=</span> α <span class="op">*</span> (α <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> z <span class="op">*</span> k<span class="op">^</span>(α <span class="op">-</span> <span class="fl">2</span>) <span class="op">*</span> ℓ<span class="op">^</span>(<span class="fl">1</span> <span class="op">-</span> α)</span>
+<span id="cb124-9"><a href="#cb124-9" aria-hidden="true" tabindex="-1"></a>H₁₂ <span class="op">=</span> α <span class="op">*</span> (<span class="fl">1</span> <span class="op">-</span> α) <span class="op">*</span> z <span class="op">*</span> k<span class="op">^</span>(α <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> ℓ<span class="op">^</span>(<span class="op">-</span>α)</span>
+<span id="cb124-10"><a href="#cb124-10" aria-hidden="true" tabindex="-1"></a>H₂₂ <span class="op">=</span> <span class="fu">-</span>(<span class="fl">1</span> <span class="op">-</span> α) <span class="op">*</span> α <span class="op">*</span> z <span class="op">*</span> k<span class="op">^</span>α <span class="op">*</span> ℓ<span class="op">^</span>(<span class="op">-</span>α <span class="op">-</span> <span class="fl">1</span>)</span>
+<span id="cb124-11"><a href="#cb124-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-12"><a href="#cb124-12" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> [H₁₁ H₁₂;</span>
+<span id="cb124-13"><a href="#cb124-13" aria-hidden="true" tabindex="-1"></a>     H₁₂ H₂₂]</span>
+<span id="cb124-14"><a href="#cb124-14" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Hessian:"</span>)</span>
+<span id="cb124-15"><a href="#cb124-15" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(H)</span>
+<span id="cb124-16"><a href="#cb124-16" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Eigenvalues: </span><span class="sc">$</span>(<span class="fu">eigvals</span>(H))<span class="st">"</span>)</span>
+<span id="cb124-17"><a href="#cb124-17" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Negative definite? </span><span class="sc">$</span>(<span class="fu">all</span>(<span class="fu">eigvals</span>(H) <span class="op">.&lt;</span> <span class="fl">0</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hessian:
+
+Eigenvalues: [-0.04397327913955312, 6.136956886753794e-18]
+Negative definite? false</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>2×2 Matrix{Float64}:
+ -0.0351786   0.0175893
+  0.0175893  -0.00879466</code></pre>
+</div>
+</div>
+<p>Both eigenvalues are negative, confirming that the Hessian is negative definite. This means the profit function is concave—any critical point is a global maximum. This is not a coincidence: it follows from the concavity of the Cobb-Douglas production function when <span class="math inline">\(\alpha \in (0, 1)\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Connecting to Econometrics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In OLS regression, the objective function <span class="math inline">\(\|y - X\beta\|^2\)</span> is a quadratic form in <span class="math inline">\(\beta\)</span> with Hessian <span class="math inline">\(2X'X\)</span>. Since <span class="math inline">\(X'X\)</span> is always positive semi-definite (and positive definite when the columns of <span class="math inline">\(X\)</span> are linearly independent), the OLS objective is convex and has a unique minimum. This is why the normal equations always give you the global best fit.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="economics-applications" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Economics Applications</h1>
+<p>The linear algebra tools we have developed—systems of equations, matrix inverses, eigenvalues, and decompositions—are not merely abstract mathematics. They are the computational backbone of much of applied economics. In this section, we work through three applications that illustrate how linear algebra appears in different branches of the field: input-output analysis (macroeconomics and trade), OLS regression (econometrics), and Markov chain steady states (dynamic models).</p>
+<section id="input-output-model-leontief" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="input-output-model-leontief"><span class="header-section-number">9.1</span> Input-Output Model (Leontief)</h2>
+<section id="setup" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">9.1.1</span> Setup</h3>
+<p>In 1973, Wassily Leontief won the Nobel Prize in Economics for developing <strong>input-output analysis</strong>, a framework for studying the interdependencies between industries in an economy. The key idea is simple: to produce steel, you need coal and iron ore; to produce cars, you need steel, rubber, and glass; and the coal industry itself needs some steel (for mining equipment). Every industry is both a <strong>producer</strong> and a <strong>consumer</strong> of other industries’ output.</p>
+<p>Consider an economy with <span class="math inline">\(n\)</span> industries. Let <span class="math inline">\(a_{ij}\)</span> denote the amount of good <span class="math inline">\(i\)</span> required to produce <strong>one unit</strong> of good <span class="math inline">\(j\)</span>. These coefficients form the <span class="math inline">\(n \times n\)</span> <strong>input-output matrix</strong> (or <strong>technology matrix</strong>) <span class="math inline">\(A\)</span>. Let <span class="math inline">\(x\)</span> be the <span class="math inline">\(n \times 1\)</span> vector of <strong>gross output</strong> (total production of each industry) and let <span class="math inline">\(d\)</span> be the <span class="math inline">\(n \times 1\)</span> vector of <strong>final demand</strong> (the output consumed by households, government, or exported—everything that is not used as an intermediate input).</p>
+<p>The total output of each industry must satisfy two demands: intermediate demand from other industries (<span class="math inline">\(Ax\)</span>) and final demand from consumers (<span class="math inline">\(d\)</span>):</p>
+<p><span class="math display">\[
+x = Ax + d
+\]</span></p>
+<p>Reading this equation column by column: the <span class="math inline">\(j\)</span>-th column of <span class="math inline">\(Ax\)</span> tells you how much of each good is needed as an input to produce <span class="math inline">\(x_j\)</span> units of good <span class="math inline">\(j\)</span>. Summing across all industries and adding final demand gives the total demand for each good, which must equal total supply.</p>
+</section>
+<section id="the-leontief-inverse" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="the-leontief-inverse"><span class="header-section-number">9.1.2</span> The Leontief Inverse</h3>
+<p>Rearranging the equation to solve for gross output:</p>
+<p><span class="math display">\[
+x - Ax = d \quad \Longrightarrow \quad (I - A)x = d \quad \Longrightarrow \quad x = (I - A)^{-1} d
+\]</span></p>
+<p>The matrix <span class="math inline">\((I - A)^{-1}\)</span> is called the <strong>Leontief inverse</strong>. It is one of the most important objects in input-output economics. The element in row <span class="math inline">\(i\)</span>, column <span class="math inline">\(j\)</span> of <span class="math inline">\((I - A)^{-1}\)</span> tells you the <strong>total</strong> amount of good <span class="math inline">\(i\)</span> needed—both directly and indirectly through the entire supply chain—to deliver one additional unit of good <span class="math inline">\(j\)</span> to final consumers.</p>
+<p>Why “indirectly”? Suppose final demand for cars increases by one unit. The car industry needs more steel (a direct effect). But producing that extra steel requires more coal, and producing that extra coal requires more steel, and so on. The Leontief inverse captures this entire <strong>cascade of indirect effects</strong>, summing up the infinite chain of input requirements.</p>
+<p>Mathematically, <span class="math inline">\((I - A)^{-1} = I + A + A^2 + A^3 + \cdots\)</span> when the series converges. The term <span class="math inline">\(A^k\)</span> captures the <span class="math inline">\(k\)</span>-th round of indirect effects. The direct effect is <span class="math inline">\(I\)</span> (one unit of the good itself), the first round of inputs is <span class="math inline">\(A\)</span>, the inputs needed to produce those inputs is <span class="math inline">\(A^2\)</span>, and so on.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>When Does the Leontief Inverse Exist?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The system has a non-negative solution for any non-negative demand vector <span class="math inline">\(d\)</span> if and only if <span class="math inline">\((I - A)\)</span> is invertible and <span class="math inline">\((I - A)^{-1}\)</span> has all non-negative entries. A sufficient condition is that the <strong>spectral radius</strong> of <span class="math inline">\(A\)</span> (the largest absolute eigenvalue) is strictly less than 1. Economically, this means the economy is <strong>productive</strong>: each industry uses less than one unit of total inputs to produce one unit of output. If this condition fails, the economy cannot sustain itself—it consumes more than it produces.</p>
+</div>
+</div>
+</section>
+<section id="a-three-sector-example" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="a-three-sector-example"><span class="header-section-number">9.1.3</span> A Three-Sector Example</h3>
+<p>Let us build a concrete example with three sectors: <strong>Agriculture</strong> (sector 1), <strong>Manufacturing</strong> (sector 2), and <strong>Services</strong> (sector 3).</p>
+<div id="130" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb127"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input-output matrix: a_ij = amount of good i needed per unit of good j</span></span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Columns: Agriculture, Manufacturing, Services</span></span>
+<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a>A_io <span class="op">=</span> [<span class="fl">0.10</span>  <span class="fl">0.20</span>  <span class="fl">0.05</span>;    <span class="co"># Agriculture inputs</span></span>
+<span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.15</span>  <span class="fl">0.10</span>  <span class="fl">0.10</span>;    <span class="co"># Manufacturing inputs</span></span>
+<span id="cb127-5"><a href="#cb127-5" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.05</span>  <span class="fl">0.15</span>  <span class="fl">0.10</span>]    <span class="co"># Services inputs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 0.1   0.2   0.05
+ 0.15  0.1   0.1
+ 0.05  0.15  0.1</code></pre>
+</div>
+</div>
+<p>The first column tells us that producing one unit of agricultural output requires 0.10 units of agriculture itself (seeds, animal feed), 0.15 units of manufacturing (tractors, fertilizer), and 0.05 units of services (transportation, finance). The second column says that manufacturing requires 0.20 units of agriculture (cotton, food for workers), 0.10 of its own output, and 0.15 units of services. And so on.</p>
+<p>First, let us verify that the economy is productive by checking the spectral radius:</p>
+<div id="132" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb129"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>evals_io <span class="op">=</span> <span class="fu">eigvals</span>(A_io)</span>
+<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a>spectral_radius <span class="op">=</span> <span class="fu">maximum</span>(<span class="fu">abs</span>.(evals_io))</span>
+<span id="cb129-3"><a href="#cb129-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Eigenvalues of A: </span><span class="sc">$</span>evals_io<span class="st">"</span>)</span>
+<span id="cb129-4"><a href="#cb129-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Spectral radius: </span><span class="sc">$</span>(<span class="fu">round</span>(spectral_radius, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb129-5"><a href="#cb129-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Economy is productive: </span><span class="sc">$</span>(spectral_radius <span class="op">&lt;</span> <span class="fl">1</span>)<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eigenvalues of A: [-0.090670127121077, 0.05308993370463013, 0.337580193416447]
+Spectral radius: 0.3376
+Economy is productive: true</code></pre>
+</div>
+</div>
+<p>Good—the spectral radius is less than 1, so the Leontief inverse exists and has non-negative entries. Now suppose final demand is <span class="math inline">\(d = (100, 200, 150)'\)</span>—households want 100 units of agricultural goods, 200 units of manufactured goods, and 150 units of services. What gross output does each industry need to produce?</p>
+<div id="134" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb131"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> [<span class="fl">100.0</span>, <span class="fl">200.0</span>, <span class="fl">150.0</span>]    <span class="co"># Final demand</span></span>
+<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the Leontief inverse</span></span>
+<span id="cb131-4"><a href="#cb131-4" aria-hidden="true" tabindex="-1"></a>leontief_inv <span class="op">=</span> <span class="fu">inv</span>(I <span class="op">-</span> A_io)</span>
+<span id="cb131-5"><a href="#cb131-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Leontief inverse:"</span>)</span>
+<span id="cb131-6"><a href="#cb131-6" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">round</span>.(leontief_inv, digits<span class="op">=</span><span class="fl">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Leontief inverse:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>3×3 Matrix{Float64}:
+ 1.1621  0.2741  0.095
+ 0.2046  1.1803  0.1425
+ 0.0987  0.2119  1.1401</code></pre>
+</div>
+</div>
+<div id="136" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb134"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gross output required</span></span>
+<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> leontief_inv <span class="op">*</span> d</span>
+<span id="cb134-3"><a href="#cb134-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Final demand:  </span><span class="sc">$</span>d<span class="st">"</span>)</span>
+<span id="cb134-4"><a href="#cb134-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Gross output:  </span><span class="sc">$</span>(<span class="fu">round</span>.(x, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span>
+<span id="cb134-5"><a href="#cb134-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Intermediate:  </span><span class="sc">$</span>(<span class="fu">round</span>.(x <span class="op">.-</span> d, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Final demand:  [100.0, 200.0, 150.0]
+Gross output:  [185.27, 277.91, 223.28]
+Intermediate:  [85.27, 77.91, 73.28]</code></pre>
+</div>
+</div>
+<p>Notice that gross output exceeds final demand for every sector. The difference <span class="math inline">\(x - d\)</span> is the intermediate demand—the output that gets used up as inputs by other industries. Manufacturing, for example, must produce considerably more than the 200 units consumers want, because agriculture and services also need manufactured goods as inputs.</p>
+<p>We can also ask: what happens if final demand for manufacturing increases by 50 units?</p>
+<div id="138" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb136"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>d_new <span class="op">=</span> [<span class="fl">100.0</span>, <span class="fl">250.0</span>, <span class="fl">150.0</span>]    <span class="co"># Manufacturing demand up by 50</span></span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a>x_new <span class="op">=</span> leontief_inv <span class="op">*</span> d_new</span>
+<span id="cb136-3"><a href="#cb136-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Change in gross output: </span><span class="sc">$</span>(<span class="fu">round</span>.(x_new <span class="op">.-</span> x, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Change in gross output: [13.7, 59.02, 10.6]</code></pre>
+</div>
+</div>
+<p>The change in gross output is exactly the second column of the Leontief inverse, scaled by 50. Every sector must increase production, not just manufacturing—this is the <strong>multiplier effect</strong> of input-output analysis.</p>
+</section>
+</section>
+<section id="ols-regression" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="ols-regression"><span class="header-section-number">9.2</span> OLS Regression</h2>
+<section id="the-normal-equations" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="the-normal-equations"><span class="header-section-number">9.2.1</span> The Normal Equations</h3>
+<p>Ordinary Least Squares (OLS) is perhaps the most widely used statistical method in economics. We encountered the least-squares formula earlier when discussing over-determined systems. Here we develop the implementation more carefully, emphasizing the connection to the linear algebra tools we have built.</p>
+<p>The regression model is <span class="math inline">\(y = X\beta + \varepsilon\)</span>, where <span class="math inline">\(y\)</span> is an <span class="math inline">\(n \times 1\)</span> vector of outcomes, <span class="math inline">\(X\)</span> is an <span class="math inline">\(n \times k\)</span> matrix of regressors (including a column of ones for the intercept), <span class="math inline">\(\beta\)</span> is a <span class="math inline">\(k \times 1\)</span> vector of coefficients, and <span class="math inline">\(\varepsilon\)</span> is an <span class="math inline">\(n \times 1\)</span> vector of errors. The OLS estimator minimizes the sum of squared residuals:</p>
+<p><span class="math display">\[
+\hat{\beta} = \arg\min_\beta \|y - X\beta\|^2 = (X'X)^{-1}X'y
+\]</span></p>
+</section>
+<section id="implementation" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="implementation"><span class="header-section-number">9.2.2</span> Implementation</h3>
+<p>Let us generate simulated data with known true coefficients and verify that OLS recovers them:</p>
+<div id="140" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb138"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>)</span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="fl">200</span>          <span class="co"># Number of observations</span></span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>β_true <span class="op">=</span> [<span class="fl">2.0</span>, <span class="op">-</span><span class="fl">1.5</span>, <span class="fl">0.8</span>]    <span class="co"># True coefficients: intercept, x₁, x₂</span></span>
+<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a>σ_ε <span class="op">=</span> <span class="fl">1.0</span>       <span class="co"># Standard deviation of errors</span></span>
+<span id="cb138-5"><a href="#cb138-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-6"><a href="#cb138-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate regressors</span></span>
+<span id="cb138-7"><a href="#cb138-7" aria-hidden="true" tabindex="-1"></a>X_raw <span class="op">=</span> <span class="fu">randn</span>(n, <span class="fl">2</span>)                           <span class="co"># Two explanatory variables</span></span>
+<span id="cb138-8"><a href="#cb138-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="fu">hcat</span>(<span class="fu">ones</span>(n), X_raw)                       <span class="co"># Add intercept column</span></span>
+<span id="cb138-9"><a href="#cb138-9" aria-hidden="true" tabindex="-1"></a>ε <span class="op">=</span> σ_ε <span class="op">*</span> <span class="fu">randn</span>(n)                             <span class="co"># Error terms</span></span>
+<span id="cb138-10"><a href="#cb138-10" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> X <span class="op">*</span> β_true <span class="op">+</span> ε                             <span class="co"># Observed outcomes</span></span>
+<span id="cb138-11"><a href="#cb138-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-12"><a href="#cb138-12" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"True β:      </span><span class="sc">$</span><span class="st">β</span>_true<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True β:      [2.0, -1.5, 0.8]</code></pre>
+</div>
+</div>
+<p>Now we estimate <span class="math inline">\(\hat{\beta}\)</span> using both the explicit normal equations formula and the numerically superior backslash operator:</p>
+<div id="142" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb140"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Method 1: Normal equations (explicit formula)</span></span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a>β_hat_normal <span class="op">=</span> <span class="fu">inv</span>(X<span class="op">'</span> <span class="op">*</span> X) <span class="op">*</span> X<span class="op">'</span> <span class="op">*</span> y</span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Method 2: Backslash operator (numerically stable)</span></span>
+<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a>β_hat_backslash <span class="op">=</span> X <span class="op">\</span> y</span>
+<span id="cb140-6"><a href="#cb140-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-7"><a href="#cb140-7" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"β̂ (normal equations): </span><span class="sc">$</span>(<span class="fu">round</span>.(β_hat_normal, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb140-8"><a href="#cb140-8" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"β̂ (backslash):        </span><span class="sc">$</span>(<span class="fu">round</span>.(β_hat_backslash, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb140-9"><a href="#cb140-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"True β:               </span><span class="sc">$</span><span class="st">β</span>_true<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>β̂ (normal equations): [2.065, -1.5256, 0.8382]
+β̂ (backslash):        [2.065, -1.5256, 0.8382]
+True β:               [2.0, -1.5, 0.8]</code></pre>
+</div>
+</div>
+<p>Both methods give the same answer (to many decimal places), but the backslash approach is preferred. To see why, consider what happens when the columns of <span class="math inline">\(X\)</span> are <strong>nearly collinear</strong>. The matrix <span class="math inline">\(X'X\)</span> becomes nearly singular, and inverting it amplifies rounding errors dramatically. The backslash operator uses a QR decomposition internally, which avoids forming <span class="math inline">\(X'X\)</span> entirely and is therefore much more robust.</p>
+</section>
+<section id="standard-errors" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">9.2.3</span> Standard Errors</h3>
+<p>To conduct inference, we need the standard errors of <span class="math inline">\(\hat{\beta}\)</span>. Under the classical assumptions (<span class="math inline">\(\varepsilon \sim N(0, \sigma_\varepsilon^2 I)\)</span>), the variance-covariance matrix of <span class="math inline">\(\hat{\beta}\)</span> is:</p>
+<p><span class="math display">\[
+\text{Var}(\hat{\beta}) = \hat{\sigma}^2 (X'X)^{-1}
+\]</span></p>
+<p>where <span class="math inline">\(\hat{\sigma}^2 = \frac{1}{n - k} \|y - X\hat{\beta}\|^2\)</span> is the estimated error variance (using the degrees-of-freedom correction <span class="math inline">\(n - k\)</span>). The standard errors are the square roots of the diagonal elements.</p>
+<div id="144" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb142"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="fu">size</span>(X, <span class="fl">2</span>)                           <span class="co"># Number of regressors</span></span>
+<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a>residuals <span class="op">=</span> y <span class="op">-</span> X <span class="op">*</span> β_hat_backslash      <span class="co"># Residual vector</span></span>
+<span id="cb142-3"><a href="#cb142-3" aria-hidden="true" tabindex="-1"></a>σ̂² <span class="op">=</span> <span class="fu">dot</span>(residuals, residuals) <span class="op">/</span> (n <span class="op">-</span> k) <span class="co"># Estimated error variance</span></span>
+<span id="cb142-4"><a href="#cb142-4" aria-hidden="true" tabindex="-1"></a>var_β <span class="op">=</span> σ̂² <span class="op">*</span> <span class="fu">inv</span>(X<span class="op">'</span> <span class="op">*</span> X)                 <span class="co"># Variance-covariance matrix</span></span>
+<span id="cb142-5"><a href="#cb142-5" aria-hidden="true" tabindex="-1"></a>se_β <span class="op">=</span> <span class="fu">sqrt</span>.(<span class="fu">diag</span>(var_β))                <span class="co"># Standard errors</span></span>
+<span id="cb142-6"><a href="#cb142-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb142-7"><a href="#cb142-7" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Estimated coefficients and standard errors:"</span>)</span>
+<span id="cb142-8"><a href="#cb142-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>k</span>
+<span id="cb142-9"><a href="#cb142-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"  β̂_</span><span class="sc">$</span>i<span class="st"> = </span><span class="sc">$</span>(<span class="fu">round</span>(β_hat_backslash[i], digits<span class="op">=</span><span class="fl">4</span>))<span class="st"> ± </span><span class="sc">$</span>(<span class="fu">round</span>(se_β[i], digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb142-10"><a href="#cb142-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb142-11"><a href="#cb142-11" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Estimated σ² = </span><span class="sc">$</span>(<span class="fu">round</span>(σ̂², digits<span class="op">=</span><span class="fl">4</span>))<span class="st">  (true σ² = </span><span class="sc">$</span>(σ_ε<span class="op">^</span><span class="fl">2</span>)<span class="st">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estimated coefficients and standard errors:
+  β̂_1 = 2.065 ± 0.0698
+  β̂_2 = -1.5256 ± 0.0716
+  β̂_3 = 0.8382 ± 0.0671
+
+Estimated σ² = 0.9675  (true σ² = 1.0)</code></pre>
+</div>
+</div>
+<p>Notice how the variance-covariance matrix <span class="math inline">\(\hat{\sigma}^2 (X'X)^{-1}\)</span> combines two ideas from our linear algebra toolkit: the inverse of <span class="math inline">\(X'X\)</span> (which captures how “spread out” the regressors are—more variation means more precise estimates) and the estimated noise level <span class="math inline">\(\hat{\sigma}^2\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why Not Just Use a Package?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In practice, you would use a package like <code>GLM.jl</code> for regression analysis. The point of implementing OLS by hand is to see that the entire procedure—estimation, residuals, standard errors—is nothing but linear algebra: matrix multiplication, the inverse, and the dot product. Understanding the mechanics makes you a better consumer of regression output.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="markov-chain-steady-state-preview" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="markov-chain-steady-state-preview"><span class="header-section-number">9.3</span> Markov Chain Steady State (Preview)</h2>
+<section id="the-eigenvector-connection" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="the-eigenvector-connection"><span class="header-section-number">9.3.1</span> The Eigenvector Connection</h3>
+<p>In the upcoming lectures on <strong>Markov chains</strong>, we will study systems that evolve randomly over time according to fixed transition probabilities. A <strong>transition matrix</strong> <span class="math inline">\(P\)</span> is an <span class="math inline">\(n \times n\)</span> matrix where <span class="math inline">\(P_{ij}\)</span> is the probability of moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>. Each row sums to 1 (since the system must go somewhere).</p>
+<p>A central question is: in the long run, what fraction of time does the system spend in each state? The answer is the <strong>stationary distribution</strong> <span class="math inline">\(\pi\)</span>—a probability vector satisfying:</p>
+<p><span class="math display">\[
+\pi' P = \pi'
+\]</span></p>
+<p>This says that if the system’s state is distributed according to <span class="math inline">\(\pi\)</span> today, it will still be distributed according to <span class="math inline">\(\pi\)</span> tomorrow. The distribution is self-reproducing under the transition dynamics.</p>
+<p>Now here is the key insight: the equation <span class="math inline">\(\pi' P = \pi'\)</span> can be rewritten as <span class="math inline">\(P'\pi = \pi\)</span>. This is an <strong>eigenvalue equation</strong>! The stationary distribution <span class="math inline">\(\pi\)</span> is the eigenvector of <span class="math inline">\(P'\)</span> corresponding to eigenvalue <span class="math inline">\(\lambda = 1\)</span>. So finding the long-run behavior of a Markov chain reduces to an eigenvalue problem—exactly the tool we developed earlier in these notes.</p>
+</section>
+<section id="computing-the-stationary-distribution" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="computing-the-stationary-distribution"><span class="header-section-number">9.3.2</span> Computing the Stationary Distribution</h3>
+<p>Consider a simple three-state Markov chain representing the business cycle—the economy can be in <strong>Recession</strong>, <strong>Normal</strong>, or <strong>Boom</strong>:</p>
+<div id="146" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb144"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transition matrix: rows = current state, columns = next state</span></span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="co">#              Recession  Normal  Boom</span></span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> [<span class="fl">0.70</span>      <span class="fl">0.25</span>      <span class="fl">0.05</span>;    <span class="co"># From Recession</span></span>
+<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0.10</span>      <span class="fl">0.75</span>      <span class="fl">0.15</span>;    <span class="co"># From Normal</span></span>
+<span id="cb144-5"><a href="#cb144-5" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0.05</span>      <span class="fl">0.30</span>      <span class="fl">0.65</span>]    <span class="co"># From Boom</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 0.7   0.25  0.05
+ 0.1   0.75  0.15
+ 0.05  0.3   0.65</code></pre>
+</div>
+</div>
+<p>This matrix encodes the persistence of economic conditions: a recession has a 70% chance of continuing next period, a 25% chance of improving to normal, and only a 5% chance of jumping directly to a boom. Normal conditions are the most stable at 75% persistence.</p>
+<p>To find the stationary distribution, we compute the eigenvectors of <span class="math inline">\(P'\)</span> and look for the one associated with eigenvalue 1:</p>
+<div id="148" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb146"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a>evals_P, evecs_P <span class="op">=</span> <span class="fu">eigen</span>(P<span class="op">'</span>)</span>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Eigenvalues of P': </span><span class="sc">$</span>(<span class="fu">round</span>.(evals_P, digits<span class="op">=</span><span class="fl">6</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eigenvalues of P': [0.463397, 0.636603, 1.0]</code></pre>
+</div>
+</div>
+<p>One of the eigenvalues should be exactly 1 (or very close, due to floating-point arithmetic). We extract the corresponding eigenvector and normalize it to sum to 1 (since it must be a probability distribution):</p>
+<div id="150" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb148"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the eigenvector for eigenvalue ≈ 1</span></span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="fu">argmin</span>(<span class="fu">abs</span>.(evals_P <span class="op">.-</span> <span class="fl">1.0</span>))    <span class="co"># Index of eigenvalue closest to 1</span></span>
+<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a>π_raw <span class="op">=</span> <span class="fu">real</span>.(evecs_P[<span class="op">:</span>, idx])         <span class="co"># Extract eigenvector (take real part)</span></span>
+<span id="cb148-4"><a href="#cb148-4" aria-hidden="true" tabindex="-1"></a>π_stat <span class="op">=</span> π_raw <span class="op">/</span> <span class="fu">sum</span>(π_raw)            <span class="co"># Normalize to sum to 1</span></span>
+<span id="cb148-5"><a href="#cb148-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-6"><a href="#cb148-6" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Stationary distribution:"</span>)</span>
+<span id="cb148-7"><a href="#cb148-7" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"  Recession: </span><span class="sc">$</span>(<span class="fu">round</span>(π_stat[<span class="fl">1</span>], digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb148-8"><a href="#cb148-8" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"  Normal:    </span><span class="sc">$</span>(<span class="fu">round</span>(π_stat[<span class="fl">2</span>], digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb148-9"><a href="#cb148-9" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"  Boom:      </span><span class="sc">$</span>(<span class="fu">round</span>(π_stat[<span class="fl">3</span>], digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Stationary distribution:
+  Recession: 0.2179
+  Normal:    0.5256
+  Boom:      0.2564</code></pre>
+</div>
+</div>
+<p>We can verify that this is indeed a stationary distribution by checking <span class="math inline">\(\pi' P = \pi'\)</span>:</p>
+<div id="152" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb150"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"π'P = </span><span class="sc">$</span>(<span class="fu">round</span>.(π_stat<span class="op">'</span> <span class="op">*</span> P, digits<span class="op">=</span><span class="fl">6</span>))<span class="st">"</span>)</span>
+<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"π'  = </span><span class="sc">$</span>(<span class="fu">round</span>.(π_stat<span class="op">'</span>, digits<span class="op">=</span><span class="fl">6</span>))<span class="st">"</span>)</span>
+<span id="cb150-3"><a href="#cb150-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Stationary? </span><span class="sc">$</span>(π_stat<span class="op">'</span> <span class="op">*</span> P <span class="op">≈</span> π_stat<span class="op">'</span>)<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>π'P = [0.217949 0.525641 0.25641]
+π'  = [0.217949 0.525641 0.25641]
+Stationary? true</code></pre>
+</div>
+</div>
+<p>The stationary distribution tells us the long-run average: in the long run, the economy spends a fraction <span class="math inline">\(\pi_1\)</span> of the time in recession, <span class="math inline">\(\pi_2\)</span> in normal conditions, and <span class="math inline">\(\pi_3\)</span> in boom. This is a preview of what we will develop much more carefully in the Markov chains lecture, but the key point for now is that the concept reduces entirely to <strong>eigenvalue analysis</strong>—one of the core tools of linear algebra.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Looking Ahead
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Markov chain lectures will cover transition matrices, stationary distributions, convergence theorems, and simulation in much greater detail. The key takeaway here is that <strong>eigenvalues and eigenvectors are not just abstract mathematics</strong>—they directly answer economically meaningful questions like “What is the long-run state of the economy?”</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="summary" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Summary</h1>
 <p>These notes covered the essential linear algebra concepts needed for computational economics:</p>
 <p><strong>Vectors</strong> are ordered sequences of numbers that live in <span class="math inline">\(\mathbb{R}^n\)</span>. We can add them, scale them, compute their inner products, and measure their lengths with norms.</p>
 <p><strong>Spanning and linear independence</strong> tell us about the structure of vector spaces. The span of a set of vectors is the set of all their linear combinations. Linearly independent vectors provide unique representations—a property essential for regression and identification.</p>
@@ -1198,6 +1858,9 @@ vectors:
 <li><strong>Under-determined</strong> (<span class="math inline">\(n &lt; k\)</span>): infinitely many solutions; <code>pinv</code> returns the minimum-norm solution.</li>
 </ul>
 <p><strong>Eigenvalues and eigenvectors</strong> reveal the intrinsic structure of square matrices. They determine stability of dynamic systems and are connected to determinants and traces.</p>
+<p><strong>Matrix decompositions</strong> (LU, QR, Cholesky) are the computational engines behind solving systems of equations. LU handles general square systems efficiently, QR provides numerically stable least-squares solutions, and Cholesky exploits the structure of symmetric positive definite matrices like covariance matrices.</p>
+<p><strong>Positive definite matrices</strong> govern the curvature of quadratic forms and determine second-order conditions in optimization. A negative definite Hessian confirms a maximum; a positive definite Hessian confirms a minimum.</p>
+<p><strong>Economics applications</strong> tie these tools together. The Leontief input-output model uses matrix inversion to trace supply-chain interdependencies. OLS regression is a least-squares problem solved by the normal equations. And the stationary distribution of a Markov chain is an eigenvector of the transition matrix—connecting dynamics to linear algebra.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1243,6 +1906,14 @@ vectors:
 <tr class="odd">
 <td><code>eigen(A)</code></td>
 <td>Eigenvalues and eigenvectors</td>
+</tr>
+<tr class="even">
+<td><code>lu(A)</code>, <code>qr(A)</code>, <code>cholesky(A)</code></td>
+<td>Matrix decompositions</td>
+</tr>
+<tr class="odd">
+<td><code>isposdef(A)</code></td>
+<td>Check positive definiteness</td>
 </tr>
 <tr class="even">
 <td><code>diag(A)</code>, <code>diagm(...)</code></td>

@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="Intro_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Intro_files/libs/quarto-html/tabby.min.js"></script>
-<script src="Intro_files/libs/quarto-html/popper.min.js"></script>
-<script src="Intro_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="Intro_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Intro_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="Intro_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="IntroLecture_files/libs/clipboard/clipboard.min.js"></script>
+<script src="IntroLecture_files/libs/quarto-html/tabby.min.js"></script>
+<script src="IntroLecture_files/libs/quarto-html/popper.min.js"></script>
+<script src="IntroLecture_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="IntroLecture_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="IntroLecture_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="IntroLecture_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="David Evans">
-  <meta name="dcterms.date" content="2026-03-30">
+  <meta name="dcterms.date" content="2026-03-31">
   <title>EC 410/510 – Computational Economics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="Intro_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="Intro_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="IntroLecture_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="IntroLecture_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -96,13 +96,13 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="Intro_files/libs/revealjs/dist/theme/quarto-915a90914fbb7c2cfe254e56cdee8186.css">
-  <link href="Intro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="Intro_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="Intro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="Intro_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
-  <link href="Intro_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
-  <link href="Intro_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="IntroLecture_files/libs/revealjs/dist/theme/quarto-915a90914fbb7c2cfe254e56cdee8186.css">
+  <link href="IntroLecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="IntroLecture_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="IntroLecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="IntroLecture_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="IntroLecture_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="IntroLecture_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
@@ -206,7 +206,7 @@ David Evans
 </div>
 </div>
 
-  <p class="date">2026-03-30</p>
+  <p class="date">2026-03-31</p>
 </section>
 <section>
 <section id="about-me" class="title-slide slide level1 center">
@@ -233,7 +233,7 @@ David Evans
 <ul>
 <li>Email: devans@uoregon.edu</li>
 <li>Office: PLC 538</li>
-<li>Office Hours: Wednesdays 1–3pm and by appointment</li>
+<li>Office Hours: Th 10am–11am and Fridays 1pm–2pm and by appointment</li>
 </ul>
 </div><div class="column" style="width:45%;">
 
@@ -246,9 +246,9 @@ David Evans
 </ul>
 <div class="fragment">
 <ul>
-<li>I’ll switch between slides and writing on the board
+<li>I’ll switch between slides and code in class
 <ul>
-<li>All notes will be posted to Canvas</li>
+<li>All slides will be posted to Canvas</li>
 </ul></li>
 </ul>
 </div>
@@ -281,7 +281,7 @@ David Evans
 </tr>
 <tr class="even">
 <td>Schedule</td>
-<td>TTh 2:00–3:20pm</td>
+<td>TTh 12:00–1:20pm</td>
 </tr>
 <tr class="odd">
 <td>Room</td>
@@ -413,158 +413,6 @@ David Evans
 <ul>
 <li>You can always contact me if you need to turn in an assignment late</li>
 </ul>
-</div>
-</section></section>
-<section>
-<section id="getting-set-up" class="title-slide slide level1 center">
-<h1>Getting Set Up</h1>
-
-</section>
-<section id="what-you-need-to-install" class="slide level3">
-<h3>What You Need to Install</h3>
-<p>Install these four things <strong>in order</strong> before the first problem set:</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Software</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Git</strong></td>
-<td>Version control — download from <a href="https://git-scm.com/install/">git-scm.com</a></td>
-</tr>
-<tr class="even">
-<td><strong>VS Code</strong></td>
-<td>Code editor — download from <a href="https://code.visualstudio.com/">code.visualstudio.com</a></td>
-</tr>
-<tr class="odd">
-<td><strong>Julia</strong></td>
-<td>The language we use — install via <code>juliaup</code> (see next slide)</td>
-</tr>
-<tr class="even">
-<td><strong>Julia + Jupyter extensions</strong></td>
-<td>Run Julia inside VS Code</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Tip</strong></p>
-</div>
-<div class="callout-content">
-<p>A detailed step-by-step guide is posted on Canvas (<code>GettingStarted.html</code>).</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="installing-julia-via-juliaup" class="slide level3">
-<h3>Installing Julia via <code>juliaup</code></h3>
-<p><code>juliaup</code> is the recommended Julia version manager — it handles updates automatically.</p>
-<p><strong>Mac / Linux</strong> — run in your terminal:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href=""></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Windows</strong> — run in PowerShell:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href=""></a><span class="ex">winget</span> install julia <span class="at">-s</span> msstore</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="fragment">
-<p>Then confirm Julia is working:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href=""></a><span class="ex">julia</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="fragment">
-<div class="callout callout-warning callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Warning</strong></p>
-</div>
-<div class="callout-content">
-<p>If VS Code cannot find Julia after installation, restart VS Code (or your terminal) to pick up the updated PATH.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="vs-code-extensions" class="slide level3">
-<h3>VS Code Extensions</h3>
-<p>Open VS Code, click the <strong>Extensions</strong> icon (<code>⌘+Shift+X</code> / <code>Ctrl+Shift+X</code>), and install:</p>
-<ol type="1">
-<li><strong>Julia</strong> by <code>julialang</code> — syntax highlighting, REPL, code completion</li>
-<li><strong>Jupyter</strong> by Microsoft — run <code>.ipynb</code> notebooks for problem sets</li>
-</ol>
-<div class="fragment">
-<p><strong>Test your Julia setup:</strong></p>
-<ol type="1">
-<li>Create a new file <code>test.jl</code></li>
-<li>Type <code>println("Hello, EC 410!")</code></li>
-<li>Press <code>⌘+Enter</code> (Mac) / <code>Ctrl+Enter</code> (Windows) to run</li>
-</ol>
-</div>
-<div class="fragment">
-<p><strong>Set up IJulia</strong> (needed for notebooks) — in the Julia REPL press <code>]</code> then:</p>
-<pre><code>add IJulia</code></pre>
-</div>
-</section>
-<section id="course-repository-and-project-environment" class="slide level3">
-<h3>Course Repository and Project Environment</h3>
-<p>I will provide a <strong>GitHub repository</strong> containing all notebooks and problem sets. Clone it once and you’re set.</p>
-<div class="fragment">
-<p>The repository includes a <code>Project.toml</code> file that lists all required packages. To install them, open VS Code in the repo folder, start the Julia REPL (<code>Alt+J</code>, <code>Alt+O</code>), then press <code>]</code> and run:</p>
-<pre><code>instantiate</code></pre>
-<p>This installs the exact package versions used in the course. <strong>It only needs to run once</strong> (may take 5–10 minutes the first time).</p>
-</div>
-<div class="fragment">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Tip</strong></p>
-</div>
-<div class="callout-content">
-<p>After instantiating, packages will load automatically whenever you open a notebook from the repo folder. You should never need to <code>] add</code> packages manually for this course.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="why-julia-environments-matter" class="slide level3">
-<h3>Why Julia Environments Matter</h3>
-<pre><code>MyRepo/
-├── Project.toml    ← lists required packages and versions
-├── Manifest.toml   ← exact dependency tree (auto-generated)
-├── notebooks/
-│   └── ps1.ipynb
-└── ...</code></pre>
-<div class="fragment">
-<ul>
-<li><strong>Reproducibility:</strong> everyone runs the same package versions</li>
-<li><strong>Clean global environment:</strong> course packages don’t conflict with your other projects</li>
-<li><strong>No manual installs:</strong> <code>] instantiate</code> handles everything</li>
-</ul>
-</div>
-<div class="fragment">
-<div class="callout callout-warning callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Warning</strong></p>
-</div>
-<div class="callout-content">
-<p>Always open VS Code from the <strong>repo root folder</strong> so Julia activates the correct project environment automatically.</p>
-</div>
-</div>
-</div>
 </div>
 </section></section>
 <section>
@@ -799,11 +647,11 @@ David Evans
 </tr>
 <tr class="even">
 <td>7–8</td>
-<td>Kydland &amp; Prescott (1982): Time Consistency</td>
+<td>Kydland &amp; Prescott (1982): Real Business Cycles</td>
 </tr>
 <tr class="odd">
 <td>9–10</td>
-<td>Sovereign Default + <strong>Final</strong></td>
+<td>Sovereign Default</td>
 </tr>
 </tbody>
 </table>
@@ -820,10 +668,10 @@ David Evans
 </ul>
 </div>
 <div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href=""></a><span class="co"># Example: compute a simple present value</span></span>
-<span id="cb7-2"><a href=""></a>β <span class="op">=</span> <span class="fl">0.96</span></span>
-<span id="cb7-3"><a href=""></a>T <span class="op">=</span> <span class="fl">50</span></span>
-<span id="cb7-4"><a href=""></a>pv <span class="op">=</span> <span class="fu">sum</span>(β<span class="op">^</span>t <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href=""></a><span class="co"># Example: compute a simple present value</span></span>
+<span id="cb1-2"><a href=""></a>β <span class="op">=</span> <span class="fl">0.96</span></span>
+<span id="cb1-3"><a href=""></a>T <span class="op">=</span> <span class="fl">50</span></span>
+<span id="cb1-4"><a href=""></a>pv <span class="op">=</span> <span class="fu">sum</span>(β<span class="op">^</span>t <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
 <div class="callout callout-tip callout-titled callout-style-default">
@@ -836,6 +684,99 @@ David Evans
 </div>
 <div class="callout-content">
 <p>Learning at least two general-purpose programming languages over your career pays large dividends. Julia is a great second language after Python, or a great first language for scientific computing.</p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="getting-set-up" class="title-slide slide level1 center">
+<h1>Getting Set Up</h1>
+
+</section>
+<section id="what-you-need-to-install" class="slide level3">
+<h3>What You Need to Install</h3>
+<p>Install these <strong>in order</strong> before the first problem set:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Software</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Julia</strong></td>
+<td>The language we use — download from <a href="https://julialang.org/downloads/">julialang.org</a></td>
+</tr>
+<tr class="even">
+<td><strong>VS Code</strong></td>
+<td>Code editor — download from <a href="https://code.visualstudio.com/">code.visualstudio.com</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Julia + Jupyter extensions</strong></td>
+<td>Run Julia inside VS Code</td>
+</tr>
+<tr class="even">
+<td><strong>Git</strong></td>
+<td>Download the course notebooks</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>A detailed step-by-step guide is posted on Canvas (<code>GettingStarted.html</code>).</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="installing-git" class="slide level3">
+<h3>Installing Git</h3>
+<p><strong>Mac</strong> — Git may already be installed. Open a terminal and run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href=""></a><span class="fu">git</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If not installed, macOS will prompt you to install the <strong>Xcode Command Line Tools</strong>.</p>
+<div class="fragment">
+<p><strong>Windows</strong> — download and run the installer from <a href="https://git-scm.com/download/win">git-scm.com/download/win</a>. Use the default settings.</p>
+</div>
+</section>
+<section id="downloading-the-course-notebooks" class="slide level3">
+<h3>Downloading the Course Notebooks</h3>
+<p>Open a terminal (Mac) or Git Bash (Windows) and run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href=""></a><span class="fu">git</span> clone https://github.com/dgevans/UndergraduateComputationalNotebooks</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment">
+<p>This creates a folder called <code>UndergraduateComputationalNotebooks</code> with all course notebooks and problem sets.</p>
+</div>
+</section>
+<section id="setting-up-the-julia-environment" class="slide level3">
+<h3>Setting Up the Julia Environment</h3>
+<p>The repository includes a <code>Project.toml</code> with all required packages. Install them once:</p>
+<ol type="1">
+<li>Open the <code>UndergraduateComputationalNotebooks</code> folder in VS Code</li>
+<li>Click <strong>Julia env:</strong> in the bottom toolbar and select the course environment</li>
+<li>Open the Julia REPL: <code>Alt+J</code> then <code>Alt+O</code></li>
+<li>Press <code>]</code> to enter package mode, then run:</li>
+</ol>
+<pre><code>instantiate</code></pre>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>This only needs to run <strong>once</strong> and may take 5–10 minutes. After that, all packages load automatically when you open a notebook from this folder.</p>
 </div>
 </div>
 </div>
@@ -895,20 +836,20 @@ David Evans
 </div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="Intro_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="Intro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="Intro_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="Intro_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="IntroLecture_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -925,7 +866,7 @@ David Evans
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
-'smaller': true,
+'smaller': false,
  
         // Display controls in the bottom right corner
         controls: false,
@@ -1070,9 +1011,9 @@ David Evans
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1920,
 
-        height: 700,
+        height: 1080,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

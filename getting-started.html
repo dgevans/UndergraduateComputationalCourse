@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Evans">
-<meta name="dcterms.date" content="2026-03-24">
+<meta name="dcterms.date" content="2026-03-30">
 
 <title>Getting Started: Installing Julia and VS Code</title>
 <style>
@@ -98,12 +98,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#testing-the-julia-extension" id="toc-testing-the-julia-extension" class="nav-link" data-scroll-target="#testing-the-julia-extension"><span class="header-section-number">3.0.1</span> Testing the Julia Extension</a></li>
   </ul></li>
-  <li><a href="#installing-the-jupyter-notebook-extension-in-vs-code" id="toc-installing-the-jupyter-notebook-extension-in-vs-code" class="nav-link" data-scroll-target="#installing-the-jupyter-notebook-extension-in-vs-code"><span class="header-section-number">4</span> Installing the Jupyter Notebook Extension in VS Code</a>
+  <li><a href="#installing-the-jupyter-notebook-extension-in-vs-code" id="toc-installing-the-jupyter-notebook-extension-in-vs-code" class="nav-link" data-scroll-target="#installing-the-jupyter-notebook-extension-in-vs-code"><span class="header-section-number">4</span> Installing the Jupyter Notebook Extension in VS Code</a></li>
+  <li><a href="#getting-the-course-notebooks" id="toc-getting-the-course-notebooks" class="nav-link" data-scroll-target="#getting-the-course-notebooks"><span class="header-section-number">5</span> Getting the Course Notebooks</a>
   <ul class="collapse">
-  <li><a href="#setting-up-julia-in-jupyter-notebooks" id="toc-setting-up-julia-in-jupyter-notebooks" class="nav-link" data-scroll-target="#setting-up-julia-in-jupyter-notebooks"><span class="header-section-number">4.0.1</span> Setting Up Julia in Jupyter Notebooks</a></li>
-  <li><a href="#testing-jupyter-notebooks" id="toc-testing-jupyter-notebooks" class="nav-link" data-scroll-target="#testing-jupyter-notebooks"><span class="header-section-number">4.0.2</span> Testing Jupyter Notebooks</a></li>
+  <li><a href="#installing-git" id="toc-installing-git" class="nav-link" data-scroll-target="#installing-git"><span class="header-section-number">5.1</span> Installing Git</a>
+  <ul class="collapse">
+  <li><a href="#mac-2" id="toc-mac-2" class="nav-link" data-scroll-target="#mac-2"><span class="header-section-number">5.1.1</span> Mac</a></li>
+  <li><a href="#windows-2" id="toc-windows-2" class="nav-link" data-scroll-target="#windows-2"><span class="header-section-number">5.1.2</span> Windows</a></li>
   </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5</span> Summary</a></li>
+  <li><a href="#downloading-the-course-notebooks" id="toc-downloading-the-course-notebooks" class="nav-link" data-scroll-target="#downloading-the-course-notebooks"><span class="header-section-number">5.2</span> Downloading the Course Notebooks</a></li>
+  <li><a href="#setting-up-the-julia-environment" id="toc-setting-up-the-julia-environment" class="nav-link" data-scroll-target="#setting-up-the-julia-environment"><span class="header-section-number">5.3</span> Setting Up the Julia Environment</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6</span> Summary</a></li>
   </ul>
 </nav>
 </div>
@@ -128,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 24, 2026</p>
+      <p class="date">March 30, 2026</p>
     </div>
   </div>
   
@@ -237,31 +243,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Find the extension called <strong>Jupyter</strong> by <strong>Microsoft</strong> (it should be the first result).</li>
 <li>Click <strong>Install</strong>. This will also install several related extensions (Jupyter Keymap, Jupyter Cell Tags, etc.) automatically.</li>
 </ol>
-<section id="setting-up-julia-in-jupyter-notebooks" class="level3" data-number="4.0.1">
-<h3 data-number="4.0.1" class="anchored" data-anchor-id="setting-up-julia-in-jupyter-notebooks"><span class="header-section-number">4.0.1</span> Setting Up Julia in Jupyter Notebooks</h3>
-<p>Before you can use Julia in a Jupyter notebook, you need to install the <code>IJulia</code> package:</p>
+</section>
+<section id="getting-the-course-notebooks" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Getting the Course Notebooks</h1>
+<section id="installing-git" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="installing-git"><span class="header-section-number">5.1</span> Installing Git</h2>
+<p>Git is a version control tool we will use to download the course notebooks.</p>
+<section id="mac-2" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="mac-2"><span class="header-section-number">5.1.1</span> Mac</h3>
 <ol type="1">
-<li><p>Open Julia (either the standalone app or the Julia REPL inside VS Code by pressing <code>Alt+J</code> then <code>Alt+O</code>).</p></li>
-<li><p>Press <code>]</code> to enter package mode. The prompt will change from <code>julia&gt;</code> to <code>(@v1.11) pkg&gt;</code>.</p></li>
+<li>Open a terminal (search for “Terminal” with Spotlight: ⌘ + Space).</li>
+<li>Type <code>git --version</code> and press Enter. If Git is already installed, you will see a version number and can skip to the next section.</li>
+<li>If Git is not installed, macOS will prompt you to install the <strong>Xcode Command Line Tools</strong> — click <strong>Install</strong> and follow the prompts. This may take a few minutes.</li>
+</ol>
+</section>
+<section id="windows-2" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="windows-2"><span class="header-section-number">5.1.2</span> Windows</h3>
+<ol type="1">
+<li>Go to <a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a>.</li>
+<li>The download should start automatically. Run the installer.</li>
+<li>Click through the installer with the default settings.</li>
+<li>Once installed, open <strong>Git Bash</strong> from the Start menu to confirm it works: type <code>git --version</code> and press Enter.</li>
+</ol>
+</section>
+</section>
+<section id="downloading-the-course-notebooks" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="downloading-the-course-notebooks"><span class="header-section-number">5.2</span> Downloading the Course Notebooks</h2>
+<p>With Git installed, you can now download the course notebook repository.</p>
+<ol type="1">
+<li><p>Open a terminal (Mac) or Git Bash (Windows).</p></li>
+<li><p>Navigate to the folder where you want to store course files. For example, to put them on your Desktop:</p>
+<ul>
+<li><strong>Mac:</strong> <code>cd ~/Desktop</code></li>
+<li><strong>Windows:</strong> <code>cd ~/Desktop</code></li>
+</ul></li>
+<li><p>Run the following command to clone the repository:</p>
+<pre><code>git clone https://github.com/dgevans/UndergraduateComputationalNotebooks</code></pre></li>
+<li><p>This will create a folder called <code>UndergraduateComputationalNotebooks</code> containing all the course notebooks.</p></li>
+</ol>
+</section>
+<section id="setting-up-the-julia-environment" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="setting-up-the-julia-environment"><span class="header-section-number">5.3</span> Setting Up the Julia Environment</h2>
+<p>The notebook repository includes a <code>Project.toml</code> file that lists all the Julia packages used in this course. You need to activate this environment and install the packages once before running any notebooks.</p>
+<ol type="1">
+<li><p>Open VS Code and open the <code>UndergraduateComputationalNotebooks</code> folder (<code>File</code> → <code>Open Folder</code>).</p></li>
+<li><p>In the bottom toolbar, click <strong>Julia env:</strong> and select the <code>UndergraduateComputationalNotebooks</code> environment from the list.</p></li>
+<li><p>Open the Julia REPL by pressing <code>Alt+J</code> then <code>Alt+O</code>. A Julia terminal will appear at the bottom of VS Code.</p></li>
+<li><p>Press <code>]</code> to enter package mode. The prompt will change to <code>(UndergraduateComputationalNotebooks) pkg&gt;</code>.</p></li>
 <li><p>Type the following and press Enter:</p>
-<pre><code>add IJulia</code></pre></li>
-<li><p>Wait for the installation to complete, then press <strong>Backspace</strong> to return to the normal Julia prompt.</p></li>
+<pre><code>instantiate</code></pre></li>
+<li><p>Julia will download and install all required packages. This may take several minutes the first time. Press <strong>Backspace</strong> when it finishes to return to the normal Julia prompt.</p></li>
 </ol>
-</section>
-<section id="testing-jupyter-notebooks" class="level3" data-number="4.0.2">
-<h3 data-number="4.0.2" class="anchored" data-anchor-id="testing-jupyter-notebooks"><span class="header-section-number">4.0.2</span> Testing Jupyter Notebooks</h3>
-<ol type="1">
-<li><p>In VS Code, open the Command Palette (<code>Ctrl+Shift+P</code> / <code>⌘+Shift+P</code>).</p></li>
-<li><p>Type <strong>“Jupyter: Create New Blank Notebook”</strong> and select it.</p></li>
-<li><p>A new notebook will open. In the top-right corner, click <strong>Select Kernel</strong> → <strong>Julia</strong> (it may say something like “Julia 1.11.4”).</p></li>
-<li><p>In the first cell, type:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Notebooks are working!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Click the <strong>Run</strong> button (▶) to the left of the cell, or press <code>Shift+Enter</code>. You should see the output <code>Notebooks are working!</code> below the cell.</p></li>
-</ol>
+<p>After this one-time setup, the environment will be ready whenever you open a notebook from this folder.</p>
 </section>
 </section>
-<section id="summary" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Summary</h1>
+<section id="summary" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Summary</h1>
 <p>You should now have the following installed and working:</p>
 <table class="caption-top table">
 <colgroup>
@@ -290,6 +327,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td><strong>Jupyter extension</strong></td>
 <td>Lets you create and run <code>.ipynb</code> notebooks in VS Code for problem sets</td>
+</tr>
+<tr class="odd">
+<td><strong>Git</strong></td>
+<td>Downloads the course notebook repository</td>
+</tr>
+<tr class="even">
+<td><strong>Course notebooks</strong></td>
+<td>The <code>.ipynb</code> files you will use for lectures and problem sets</td>
 </tr>
 </tbody>
 </table>
