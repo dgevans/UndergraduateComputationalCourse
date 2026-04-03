@@ -9,7 +9,7 @@
 <meta name="author" content="David Evans">
 <meta name="dcterms.date" content="2026-04-02">
 
-<title>Getting Started: Installing Julia and VS Code</title>
+<title>Turning In Homeworks</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,18 +60,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="GettingStarted_files/libs/clipboard/clipboard.min.js"></script>
-<script src="GettingStarted_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="GettingStarted_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="GettingStarted_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="GettingStarted_files/libs/quarto-html/popper.min.js"></script>
-<script src="GettingStarted_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="GettingStarted_files/libs/quarto-html/anchor.min.js"></script>
-<link href="GettingStarted_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="GettingStarted_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="GettingStarted_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="GettingStarted_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="GettingStarted_files/libs/bootstrap/bootstrap-a5be5c2b86aab4cd02b109e9a469e1ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="TurningInHomeworks_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TurningInHomeworks_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="TurningInHomeworks_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="TurningInHomeworks_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="TurningInHomeworks_files/libs/quarto-html/popper.min.js"></script>
+<script src="TurningInHomeworks_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TurningInHomeworks_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TurningInHomeworks_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TurningInHomeworks_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TurningInHomeworks_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TurningInHomeworks_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TurningInHomeworks_files/libs/bootstrap/bootstrap-a5be5c2b86aab4cd02b109e9a469e1ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -84,32 +84,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#installing-julia" id="toc-installing-julia" class="nav-link active" data-scroll-target="#installing-julia"><span class="header-section-number">1</span> Installing Julia</a>
+  <li><a href="#completing-a-problem-set" id="toc-completing-a-problem-set" class="nav-link active" data-scroll-target="#completing-a-problem-set"><span class="header-section-number">1</span> Completing a Problem Set</a>
   <ul class="collapse">
-  <li><a href="#mac" id="toc-mac" class="nav-link" data-scroll-target="#mac"><span class="header-section-number">1.1</span> Mac</a></li>
-  <li><a href="#windows" id="toc-windows" class="nav-link" data-scroll-target="#windows"><span class="header-section-number">1.2</span> Windows</a></li>
+  <li><a href="#step-1-copy-the-problem-set-to-a-new-location" id="toc-step-1-copy-the-problem-set-to-a-new-location" class="nav-link" data-scroll-target="#step-1-copy-the-problem-set-to-a-new-location"><span class="header-section-number">1.1</span> Step 1: Copy the Problem Set to a New Location</a></li>
+  <li><a href="#step-2-answer-the-questions" id="toc-step-2-answer-the-questions" class="nav-link" data-scroll-target="#step-2-answer-the-questions"><span class="header-section-number">1.2</span> Step 2: Answer the Questions</a></li>
+  <li><a href="#step-3-export-the-notebook-to-html" id="toc-step-3-export-the-notebook-to-html" class="nav-link" data-scroll-target="#step-3-export-the-notebook-to-html"><span class="header-section-number">1.3</span> Step 3: Export the Notebook to HTML</a></li>
+  <li><a href="#step-4-upload-to-canvas" id="toc-step-4-upload-to-canvas" class="nav-link" data-scroll-target="#step-4-upload-to-canvas"><span class="header-section-number">1.4</span> Step 4: Upload to Canvas</a></li>
   </ul></li>
-  <li><a href="#installing-vs-code" id="toc-installing-vs-code" class="nav-link" data-scroll-target="#installing-vs-code"><span class="header-section-number">2</span> Installing VS Code</a>
+  <li><a href="#getting-new-problem-sets" id="toc-getting-new-problem-sets" class="nav-link" data-scroll-target="#getting-new-problem-sets"><span class="header-section-number">2</span> Getting New Problem Sets</a>
   <ul class="collapse">
-  <li><a href="#mac-1" id="toc-mac-1" class="nav-link" data-scroll-target="#mac-1"><span class="header-section-number">2.1</span> Mac</a></li>
-  <li><a href="#windows-1" id="toc-windows-1" class="nav-link" data-scroll-target="#windows-1"><span class="header-section-number">2.2</span> Windows</a></li>
+  <li><a href="#pulling-updates-in-vs-code" id="toc-pulling-updates-in-vs-code" class="nav-link" data-scroll-target="#pulling-updates-in-vs-code"><span class="header-section-number">2.1</span> Pulling Updates in VS Code</a></li>
   </ul></li>
-  <li><a href="#installing-the-julia-extension-in-vs-code" id="toc-installing-the-julia-extension-in-vs-code" class="nav-link" data-scroll-target="#installing-the-julia-extension-in-vs-code"><span class="header-section-number">3</span> Installing the Julia Extension in VS Code</a>
-  <ul class="collapse">
-  <li><a href="#testing-the-julia-extension" id="toc-testing-the-julia-extension" class="nav-link" data-scroll-target="#testing-the-julia-extension"><span class="header-section-number">3.1</span> Testing the Julia Extension</a></li>
-  </ul></li>
-  <li><a href="#installing-the-jupyter-notebook-extension-in-vs-code" id="toc-installing-the-jupyter-notebook-extension-in-vs-code" class="nav-link" data-scroll-target="#installing-the-jupyter-notebook-extension-in-vs-code"><span class="header-section-number">4</span> Installing the Jupyter Notebook Extension in VS Code</a></li>
-  <li><a href="#getting-the-course-notebooks" id="toc-getting-the-course-notebooks" class="nav-link" data-scroll-target="#getting-the-course-notebooks"><span class="header-section-number">5</span> Getting the Course Notebooks</a>
-  <ul class="collapse">
-  <li><a href="#installing-git" id="toc-installing-git" class="nav-link" data-scroll-target="#installing-git"><span class="header-section-number">5.1</span> Installing Git</a>
-  <ul class="collapse">
-  <li><a href="#mac-2" id="toc-mac-2" class="nav-link" data-scroll-target="#mac-2"><span class="header-section-number">5.1.1</span> Mac</a></li>
-  <li><a href="#windows-2" id="toc-windows-2" class="nav-link" data-scroll-target="#windows-2"><span class="header-section-number">5.1.2</span> Windows</a></li>
-  </ul></li>
-  <li><a href="#downloading-the-course-notebooks" id="toc-downloading-the-course-notebooks" class="nav-link" data-scroll-target="#downloading-the-course-notebooks"><span class="header-section-number">5.2</span> Downloading the Course Notebooks</a></li>
-  <li><a href="#setting-up-the-julia-environment" id="toc-setting-up-the-julia-environment" class="nav-link" data-scroll-target="#setting-up-the-julia-environment"><span class="header-section-number">5.3</span> Setting Up the Julia Environment</a></li>
-  </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6</span> Summary</a></li>
   </ul>
 </nav>
 </div>
@@ -117,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Getting Started: Installing Julia and VS Code</h1>
+<h1 class="title">Turning In Homeworks</h1>
 </div>
 
 
@@ -146,198 +131,136 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This guide will walk you through installing everything you need for this course: the Julia programming language, the VS Code editor, and two VS Code extensions for writing and running Julia code.</p>
-<section id="installing-julia" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Installing Julia</h1>
-<p>The recommended way to install Julia is through the terminal using <a href="https://julialang.org/downloads/">juliaup</a>, Julia’s official version manager. See the <a href="https://julialang.org/downloads/">Julia downloads page</a> for more details.</p>
-<section id="mac" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="mac"><span class="header-section-number">1.1</span> Mac</h2>
+<p>This guide explains how to complete and submit problem sets for EC 410/510, and how to get new problem sets as they are released.</p>
+<section id="completing-a-problem-set" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Completing a Problem Set</h1>
+<section id="step-1-copy-the-problem-set-to-a-new-location" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="step-1-copy-the-problem-set-to-a-new-location"><span class="header-section-number">1.1</span> Step 1: Copy the Problem Set to a New Location</h2>
+<p>Each problem set is a Jupyter notebook (<code>.ipynb</code> file) located in the <code>UndergraduateComputationalNotebooks</code> folder you cloned during setup. <strong>Do not edit the original file directly</strong> — you will need the original folder clean to pull updates later.</p>
 <ol type="1">
-<li><p>Open a terminal (search for “Terminal” with Spotlight: ⌘ + Space).</p></li>
-<li><p>Run the following command:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Follow the on-screen prompts. The installer will set up <strong>juliaup</strong> (Julia’s version manager) and install the latest stable version of Julia.</p></li>
-<li><p>Close and reopen your terminal so the new PATH settings take effect.</p></li>
-<li><p>Type <code>julia</code> and press Enter. The Julia prompt <code>julia&gt;</code> should appear. Type <code>1 + 1</code> and press Enter to confirm it works.</p></li>
+<li>Open the <code>UndergraduateComputationalNotebooks</code> folder in VS Code (<code>File</code> → <code>Open Folder</code>).</li>
+<li>In the Explorer sidebar, navigate to the <code>problem-sets/</code> folder.</li>
+<li>Find the problem set you want to work on (e.g., <code>ProblemSet1.ipynb</code>).</li>
+<li><strong>Right-click</strong> the file and select <strong>Copy</strong>.</li>
+<li>Navigate to a separate folder where you keep your homework (e.g., a <code>Homework</code> folder on your Desktop). <strong>Right-click</strong> in the Explorer sidebar and select <strong>Paste</strong>, or simply copy the file using your file manager (Finder on Mac, File Explorer on Windows).</li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a dedicated folder for your homework submissions, such as <code>EC410-Homework</code> in the <code>UndergraduateComputationalNotebooks</code>.</p>
+</div>
+</div>
 </section>
-<section id="windows" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="windows"><span class="header-section-number">1.2</span> Windows</h2>
+<section id="step-2-answer-the-questions" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="step-2-answer-the-questions"><span class="header-section-number">1.2</span> Step 2: Answer the Questions</h2>
 <ol type="1">
-<li><p>Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> (search for either in the Start menu).</p></li>
-<li><p>Run the following command:</p>
-<pre><code>winget install --name Julia --id 9NJNWW8PVKMN -e -s msstore</code></pre></li>
-<li><p>Follow the on-screen prompts. This installs <strong>juliaup</strong> (Julia’s version manager) and the latest stable version of Julia, and adds it to your PATH automatically.</p></li>
-<li><p>Close and reopen your terminal so the new PATH settings take effect.</p></li>
-<li><p>Type <code>julia</code> and press Enter. The Julia prompt <code>julia&gt;</code> should appear. Type <code>1 + 1</code> and press Enter to confirm it works.</p></li>
+<li>Open your <strong>copy</strong> of the problem set in VS Code.</li>
+<li>Make sure the Julia environment is set to <code>UndergraduateComputationalNotebooks</code>. Check the bottom toolbar: click <strong>Julia env:</strong> and select <code>UndergraduateComputationalNotebooks</code> if it is not already selected.</li>
+<li>You may need to select the julia kernel (top right hand side of the notebook)</li>
+<li>Work through the notebook, filling in code cells where you see <code># Your code here</code> and answering any written questions in Markdown cells.</li>
+<li>Run each cell to make sure your code works. You can run a cell by clicking the <strong>play button</strong> to the left of the cell or pressing <code>Shift+Enter</code>.</li>
+<li><strong>Save</strong> your work frequently (<code>Ctrl+S</code> / <code>⌘+S</code>).</li>
 </ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make sure all your cells have been run and the output is visible before exporting. The HTML file will include whatever output is currently shown in the notebook.</p>
+</div>
+</div>
 </section>
-</section>
-<section id="installing-vs-code" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Installing VS Code</h1>
-<section id="mac-1" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="mac-1"><span class="header-section-number">2.1</span> Mac</h2>
+<section id="step-3-export-the-notebook-to-html" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="step-3-export-the-notebook-to-html"><span class="header-section-number">1.3</span> Step 3: Export the Notebook to HTML</h2>
+<p>Once you have completed the problem set and all cells display their output:</p>
 <ol type="1">
-<li>Go to <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>.</li>
-<li>Click the large <strong>Download for macOS</strong> button.</li>
-<li>Open the downloaded <code>.dmg</code> file.</li>
-<li>Drag <strong>Visual Studio Code</strong> into your <strong>Applications</strong> folder.</li>
-<li>Open VS Code from your Applications folder.</li>
+<li>Open your completed <code>.ipynb</code> file in VS Code.</li>
+<li>Click the <strong><code>...</code></strong> (more actions) button in the top toolbar of the notebook.</li>
+<li>Select <strong>Export</strong>.</li>
+<li>Choose <strong>HTML</strong> from the list of export formats.</li>
+<li>VS Code will prompt you to choose a save location. You can save the <code>.html</code> file in the same folder as your <code>.ipynb</code> file.</li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you do not see the <strong>Export</strong> option, make sure you have the <strong>Jupyter</strong> extension installed (see the Getting Started guide).</p>
+</div>
+</div>
 </section>
-<section id="windows-1" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="windows-1"><span class="header-section-number">2.2</span> Windows</h2>
+<section id="step-4-upload-to-canvas" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="step-4-upload-to-canvas"><span class="header-section-number">1.4</span> Step 4: Upload to Canvas</h2>
 <ol type="1">
-<li>Go to <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>.</li>
-<li>Click the large <strong>Download for Windows</strong> button.</li>
-<li>Run the downloaded installer.</li>
-<li>Accept the license agreement and click through the installer. On the <strong>Select Additional Tasks</strong> screen, I recommend checking:
+<li>Go to the Canvas page and navigate to the appropriate assignment.</li>
+<li>Upload <strong>both</strong> files:
 <ul>
-<li><strong>Add “Open with Code” action to Windows Explorer file context menu</strong></li>
-<li><strong>Add to PATH</strong> (should be checked by default)</li>
+<li>The <code>.ipynb</code> file (your notebook with code and output)</li>
+<li>The <code>.html</code> file (the exported version for easy grading)</li>
 </ul></li>
-<li>Click <strong>Install</strong> and then <strong>Finish</strong>.</li>
-<li>VS Code should open automatically. If not, search for “Visual Studio Code” in the Start menu.</li>
+<li>Click <strong>Submit Assignment</strong>.</li>
 </ol>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make sure you upload <strong>both</strong> files. The <code>.ipynb</code> file lets us run your code if needed, and the <code>.html</code> file lets us read your answers quickly.</p>
+</div>
+</div>
 </section>
 </section>
-<section id="installing-the-julia-extension-in-vs-code" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Installing the Julia Extension in VS Code</h1>
-<p>This extension gives you syntax highlighting, code completion, and the ability to run Julia code directly inside VS Code.</p>
+<section id="getting-new-problem-sets" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Getting New Problem Sets</h1>
+<p>New problem sets will be added to the <code>UndergraduateComputationalNotebooks</code> repository throughout the quarter. They will also be posted to Canvas, but the easiest way to get them is to <strong>pull</strong> the latest version using Git. This downloads any new or updated files without affecting your separate homework folder.</p>
+<section id="pulling-updates-in-vs-code" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="pulling-updates-in-vs-code"><span class="header-section-number">2.1</span> Pulling Updates in VS Code</h2>
 <ol type="1">
-<li>Open VS Code.</li>
-<li>Click the <strong>Extensions</strong> icon in the left sidebar (it looks like four small squares, or press <code>Ctrl+Shift+X</code> on Windows / <code>⌘+Shift+X</code> on Mac).</li>
-<li>In the search bar at the top, type <strong>Julia</strong>.</li>
-<li>Find the extension called <strong>Julia</strong> by <strong>julialang</strong> (it should be the first result).</li>
-<li>Click <strong>Install</strong>.</li>
-<li>After installation, VS Code may prompt you to set the Julia executable path. If Julia was added to your PATH (see installation steps above), VS Code should detect it automatically. If not:
-<ul>
-<li>Open VS Code settings (<code>Ctrl+,</code> on Windows / <code>⌘+,</code> on Mac).</li>
-<li>Search for <code>Julia: Executable Path</code>.</li>
-<li>Set it to the path where Julia is installed:
-<ul>
-<li><strong>Mac:</strong> <code>/Applications/Julia-1.12.app/Contents/Resources/julia/bin/julia</code> (adjust the version number if needed)</li>
-<li><strong>Windows:</strong> <code>C:\Users\YourUsername\AppData\Local\Programs\Julia-1.12.0\bin\julia.exe</code> (adjust the version number and username)</li>
-</ul></li>
-</ul></li>
-<li>After you restart VS Code, you can open the Julia REPL by pressing <code>Alt+J</code> then <code>Alt+O</code>. (Option J + Option O on Mac). It may ask you to install Revise.jl. Click install to install it.</li>
+<li>Open the <code>UndergraduateComputationalNotebooks</code> folder in VS Code (<code>File</code> → <code>Open Folder</code>).</li>
+<li>Open the <strong>Source Control</strong> panel by clicking the branch icon in the left sidebar (or press <code>Ctrl+Shift+G</code>).</li>
+<li>Click the <strong><code>...</code></strong> (more actions) menu at the top of the Source Control panel.</li>
+<li>Select <strong>Pull</strong>.</li>
+<li>VS Code will download any new or updated files from the repository.</li>
 </ol>
-<section id="testing-the-julia-extension" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="testing-the-julia-extension"><span class="header-section-number">3.1</span> Testing the Julia Extension</h2>
-<ol type="1">
-<li><p>Create a new file in VS Code (<code>Ctrl+N</code> / <code>⌘+N</code>) and save it as <code>test.jl</code>. (.jl is the file extension for Julia files. That way the Julia extension knows to highlight the file as Julia code.)</p></li>
-<li><p>Type the following:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Hello, EC 410!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Press <code>Ctrl+Enter</code> to run the line. The Julia REPL should open at the bottom of VS Code and print <code>Hello, EC 410!</code>.</p></li>
-</ol>
-</section>
-</section>
-<section id="installing-the-jupyter-notebook-extension-in-vs-code" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Installing the Jupyter Notebook Extension in VS Code</h1>
-<p>This extension allows you to create and run Jupyter notebooks (<code>.ipynb</code> files) directly in VS Code. We will use notebooks for completing and submitting problem sets.</p>
-<ol type="1">
-<li>Open VS Code.</li>
-<li>Click the <strong>Extensions</strong> icon in the left sidebar (<code>Ctrl+Shift+X</code> / <code>⌘+Shift+X</code>).</li>
-<li>In the search bar, type <strong>Jupyter</strong>.</li>
-<li>Find the extension called <strong>Jupyter</strong> by <strong>Microsoft</strong> (it should be the first result).</li>
-<li>Click <strong>Install</strong>. This will also install several related extensions (Jupyter Keymap, Jupyter Cell Tags, etc.) automatically.</li>
-</ol>
-</section>
-<section id="getting-the-course-notebooks" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Getting the Course Notebooks</h1>
-<section id="installing-git" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="installing-git"><span class="header-section-number">5.1</span> Installing Git</h2>
-<p>Git is a version control tool we will use to download the course notebooks.</p>
-<section id="mac-2" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="mac-2"><span class="header-section-number">5.1.1</span> Mac</h3>
-<ol type="1">
-<li>Open a terminal (search for “Terminal” with Spotlight: ⌘ + Space).</li>
-<li>Type <code>git --version</code> and press Enter. If Git is already installed, you will see a version number and can skip to the next section.</li>
-<li>If Git is not installed, macOS will prompt you to install the <strong>Xcode Command Line Tools</strong> — click <strong>Install</strong> and follow the prompts. This may take a few minutes.</li>
-</ol>
-</section>
-<section id="windows-2" class="level3" data-number="5.1.2">
-<h3 data-number="5.1.2" class="anchored" data-anchor-id="windows-2"><span class="header-section-number">5.1.2</span> Windows</h3>
-<ol type="1">
-<li>Go to <a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a>.</li>
-<li>The download should start automatically. Run the installer.</li>
-<li>Click through the installer with the default settings.</li>
-<li>Once installed, open <strong>Git Bash</strong> from the Start menu to confirm it works: type <code>git --version</code> and press Enter.</li>
-</ol>
-</section>
-</section>
-<section id="downloading-the-course-notebooks" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="downloading-the-course-notebooks"><span class="header-section-number">5.2</span> Downloading the Course Notebooks</h2>
-<p>With Git installed, you can now download the course notebook repository.</p>
-<ol type="1">
-<li><p>Open a terminal (Mac) or Git Bash (Windows).</p></li>
-<li><p>Navigate to the folder where you want to store course files. For example, to put them on your Desktop:</p>
-<ul>
-<li><strong>Mac:</strong> <code>cd ~/Desktop</code></li>
-<li><strong>Windows:</strong> <code>cd ~/Desktop</code></li>
-</ul></li>
-<li><p>Run the following command to clone the repository:</p>
-<pre><code>git clone https://github.com/dgevans/UndergraduateComputationalNotebooks</code></pre></li>
-<li><p>This will create a folder called <code>UndergraduateComputationalNotebooks</code> containing all the course notebooks.</p></li>
-</ol>
-</section>
-<section id="setting-up-the-julia-environment" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="setting-up-the-julia-environment"><span class="header-section-number">5.3</span> Setting Up the Julia Environment</h2>
-<p>The notebook repository includes a <code>Project.toml</code> file that lists all the Julia packages used in this course. You need to activate this environment and install the packages once before running any notebooks.</p>
-<ol type="1">
-<li><p>Open VS Code and open the <code>UndergraduateComputationalNotebooks</code> folder (<code>File</code> → <code>Open Folder</code>).</p></li>
-<li><p>In the bottom toolbar, click <strong>Julia env:</strong> and select the <code>UndergraduateComputationalNotebooks</code> environment from the list.</p></li>
-<li><p>Open the Julia REPL by pressing <code>Alt+J</code> then <code>Alt+O</code>. A Julia terminal will appear at the bottom of VS Code.</p></li>
-<li><p>Press <code>]</code> to enter package mode. The prompt will change to <code>(UndergraduateComputationalNotebooks) pkg&gt;</code>.</p></li>
-<li><p>Type the following and press Enter:</p>
-<pre><code>instantiate</code></pre></li>
-<li><p>Julia will download and install all required packages. This may take several minutes the first time. Press <strong>Backspace</strong> when it finishes to return to the normal Julia prompt.</p></li>
-</ol>
-<p>After this one-time setup, the environment will be ready whenever you open a notebook from this folder.</p>
-</section>
-</section>
-<section id="summary" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Summary</h1>
-<p>You should now have the following installed and working:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 52%">
-<col style="width: 47%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Software</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Julia</strong></td>
-<td>The programming language we use in this course</td>
-</tr>
-<tr class="even">
-<td><strong>VS Code</strong></td>
-<td>The code editor where you will write and run Julia code</td>
-</tr>
-<tr class="odd">
-<td><strong>Julia extension</strong></td>
-<td>Lets you run <code>.jl</code> files and provides syntax highlighting in VS Code</td>
-</tr>
-<tr class="even">
-<td><strong>Jupyter extension</strong></td>
-<td>Lets you create and run <code>.ipynb</code> notebooks in VS Code for problem sets</td>
-</tr>
-<tr class="odd">
-<td><strong>Git</strong></td>
-<td>Downloads the course notebook repository</td>
-</tr>
-<tr class="even">
-<td><strong>Course notebooks</strong></td>
-<td>The <code>.ipynb</code> files you will use for lectures and problem sets</td>
-</tr>
-</tbody>
-</table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can also pull from the terminal. Open a terminal in VS Code (Terminal -&gt; New Terminal), make sure you are in the <code>UndergraduateComputationalNotebooks</code> directory, and run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>After pulling, check the <code>problem-sets/</code> folder for any new problem set notebooks. Copy them to your homework folder following the steps in [Step 1] above.</p>
 <p>If you run into any issues, don’t hesitate to come to office hours or email me at devans@uoregon.edu.</p>
+</section>
 </section>
 
 </main>
