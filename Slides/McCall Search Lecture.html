@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="David Evans">
-  <meta name="dcterms.date" content="2026-02-23">
+  <meta name="dcterms.date" content="2026-04-20">
   <title>McCall Search Model</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -209,7 +209,7 @@ David Evans
 </div>
 </div>
 
-  <p class="date">2026-02-23</p>
+  <p class="date">2026-04-20</p>
 </section>
 <section>
 <section id="model-setup" class="title-slide slide level1 center">
@@ -242,13 +242,6 @@ David Evans
 </ul>
 </div>
 </section>
-<section id="the-decision-tree" class="slide level3">
-<h3>The Decision Tree</h3>
-<p><img data-src="decision_tree.png" class="quarto-figure quarto-figure-center" style="width:100.0%"> <strong>Figure 1:</strong> Decision tree for the McCall search model.</p>
-<ul>
-<li><span class="math inline">\(2^n\)</span> possible paths after <span class="math inline">\(n\)</span> periods — how to solve this efficiently?</li>
-</ul>
-</section>
 <section id="objective" class="slide level3">
 <h3>Objective</h3>
 <ul>
@@ -264,11 +257,27 @@ David Evans
 </ul>
 </div>
 </section>
+<section id="the-decision-tree" class="slide level3">
+<h3>The Decision Tree</h3>
+
+<img data-src="decision_tree.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"><div class="fragment">
+<ul>
+<li><span class="math inline">\(2^n\)</span> possible paths after <span class="math inline">\(n\)</span> periods — how to solve this efficiently?</li>
+</ul>
+</div>
+</section>
 <section id="employed-vs.-unemployed" class="slide level3">
 <h3>Employed vs.&nbsp;Unemployed</h3>
 <ul>
-<li>An employed worker with wage <span class="math inline">\(\bar w_j\)</span> can quit, receive <span class="math inline">\(c\)</span>, and draw a new offer next period</li>
+<li><p>An <strong>unemployed worker</strong> with wage offer <span class="math inline">\(\bar w_j\)</span> can reject the offer, receive <span class="math inline">\(c\)</span>, and draw a new offer next period</p></li>
+<li><p>Or accept the offer, receive <span class="math inline">\(\bar w_j\)</span>, and be employed next period at wage <span class="math inline">\(\bar w_j\)</span></p></li>
 </ul>
+<div class="fragment">
+<ul>
+<li><p>An <strong>employed worker</strong> with wage <span class="math inline">\(\bar w_j\)</span> can quit, receive <span class="math inline">\(c\)</span>, and draw a new offer next period</p></li>
+<li><p>Or continue to work, receive <span class="math inline">\(\bar w_j\)</span>, and be employed next period at wage <span class="math inline">\(\bar w_j\)</span></p></li>
+</ul>
+</div>
 <div class="fragment">
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
@@ -276,7 +285,7 @@ David Evans
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Key Insight</strong></p>
+<p><strong>Insight</strong></p>
 </div>
 <div class="callout-content">
 <p>An employed worker deciding whether to keep wage <span class="math inline">\(\bar w_j\)</span> faces the same problem as an unemployed worker who just received offer <span class="math inline">\(\bar w_j\)</span>.</p>
@@ -509,6 +518,10 @@ V_{2,s} = \max\left\{ \bar w_s + \beta V_{1,s},\; c + \beta Q_1 \right\}
 <div class="fragment">
 <ul>
 <li>Value of <strong>accepting</strong>: <span class="math inline">\(\bar w_s + \beta V_{t-1,s}\)</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li>Value of <strong>rejecting</strong>: <span class="math inline">\(c + \beta Q_{t-1}\)</span></li>
 </ul>
 </div>
@@ -604,8 +617,8 @@ V_{2,s} = \max\left\{ \bar w_s + \beta V_{1,s},\; c + \beta Q_1 \right\}
 </ul>
 <div id="24" class="cell" data-execution_count="0">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb17-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">iterateBellman</span>(V, Q, β, p, w̄, c)</span>
-<span id="cb17-2" class="hljs-ln-code"><a href=""></a>    V_accept <span class="op">=</span> w̄ <span class="op">+</span> β <span class="op">*</span> V                       <span class="co"># w̄[s] + β*V[s] for each wage s</span></span>
-<span id="cb17-3" class="hljs-ln-code"><a href=""></a>    V_reject <span class="op">=</span> c <span class="op">+</span> β <span class="op">*</span> Q                        <span class="co"># c + β*Q (same for all wages)</span></span>
+<span id="cb17-2" class="hljs-ln-code"><a href=""></a>    V_accept <span class="op">=</span> w̄ <span class="op">.+</span> β <span class="op">.*</span> V                       <span class="co"># w̄[s] + β*V[s] for each wage s</span></span>
+<span id="cb17-3" class="hljs-ln-code"><a href=""></a>    V_reject <span class="op">=</span> c  <span class="op">+</span> β  <span class="op">*</span> Q                        <span class="co"># c + β*Q (same for all wages)</span></span>
 <span id="cb17-4" class="hljs-ln-code"><a href=""></a>    <span class="co"># ...</span></span>
 <span id="cb17-5" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -621,8 +634,8 @@ V_{2,s} = \max\left\{ \bar w_s + \beta V_{1,s},\; c + \beta Q_1 \right\}
 <h3 data-id="quarto-animate-title"><code>iterateBellman</code>: Full Function</h3>
 <div id="26" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" data-code-line-numbers="|1,8|2-3|4-6|7"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb18-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">iterateBellman</span>(V, Q, β, p, w̄, c)     <span class="co"># V, Q from next period</span></span>
-<span id="cb18-2" class="hljs-ln-code"><a href=""></a>    V_accept <span class="op">=</span> w̄ <span class="op">+</span> β <span class="op">*</span> V                       <span class="co"># w̄[s] + β*V[s] for each wage s</span></span>
-<span id="cb18-3" class="hljs-ln-code"><a href=""></a>    V_reject <span class="op">=</span> c <span class="op">+</span> β <span class="op">*</span> Q                        <span class="co"># c + β*Q (same for all wages)</span></span>
+<span id="cb18-2" class="hljs-ln-code"><a href=""></a>    V_accept <span class="op">=</span> w̄ <span class="op">.+</span> β <span class="op">.*</span> V                       <span class="co"># w̄[s] + β*V[s] for each wage s</span></span>
+<span id="cb18-3" class="hljs-ln-code"><a href=""></a>    V_reject <span class="op">=</span> c  <span class="op">+</span> β  <span class="op">*</span> Q                        <span class="co"># c + β*Q (same for all wages)</span></span>
 <span id="cb18-4" class="hljs-ln-code"><a href=""></a>    V_new <span class="op">=</span> <span class="fu">max</span>.(V_accept, V_reject)            <span class="co"># pick the better option</span></span>
 <span id="cb18-5" class="hljs-ln-code"><a href=""></a>    Q_new <span class="op">=</span> <span class="fu">dot</span>(p, V_new)                       <span class="co"># expected value of random offer</span></span>
 <span id="cb18-6" class="hljs-ln-code"><a href=""></a>    C <span class="op">=</span> V_accept <span class="op">.&gt;=</span> V_reject                   <span class="co"># 1 = accept, 0 = reject</span></span>
@@ -1354,48 +1367,25 @@ U_t = c + \beta Q_{t-1}
 <li>4 arguments instead of 8 — same pattern as <code>iterateBellman</code></li>
 </ul>
 </section>
-<section id="finite-horizon-with-firing" class="slide level3">
-<h3>Finite Horizon with Firing</h3>
-<div id="84" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69" data-code-line-numbers="|1-2,15|3-5|7,8|10-13|14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href=""></a><span class="kw">function</span> <span class="fu">solveMcCallFiring</span>(m<span class="op">::</span><span class="dt">McCallModel</span>, T<span class="op">::</span><span class="dt">Int</span>)  <span class="co"># model + number of periods</span></span>
-<span id="cb69-2"><a href=""></a>    (; β, p, w̄, c, α) <span class="op">=</span> m                  <span class="co"># extract parameters</span></span>
-<span id="cb69-3"><a href=""></a>    S <span class="op">=</span> <span class="fu">length</span>(w̄)                              <span class="co"># number of wage offers</span></span>
-<span id="cb69-4"><a href=""></a>    V <span class="op">=</span> <span class="fu">zeros</span>(T, S);  Q <span class="op">=</span> <span class="fu">zeros</span>(T);  U <span class="op">=</span> <span class="fu">zeros</span>(T)  <span class="co"># allocate V, Q, U</span></span>
-<span id="cb69-5"><a href=""></a>    C <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">Int</span>, T, S)                        <span class="co"># allocate policy matrix</span></span>
-<span id="cb69-6"><a href=""></a></span>
-<span id="cb69-7"><a href=""></a>    V[<span class="fl">1</span>, <span class="op">:</span>] <span class="op">=</span> <span class="fu">max</span>.(w̄, c);  Q[<span class="fl">1</span>] <span class="op">=</span> <span class="fu">dot</span>(p, V[<span class="fl">1</span>, <span class="op">:</span>])  <span class="co"># base case values</span></span>
-<span id="cb69-8"><a href=""></a>    U[<span class="fl">1</span>] <span class="op">=</span> c;               C[<span class="fl">1</span>, <span class="op">:</span>] <span class="op">=</span> w̄ <span class="op">.&gt;=</span> c       <span class="co"># base case policy</span></span>
-<span id="cb69-9"><a href=""></a></span>
-<span id="cb69-10"><a href=""></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span>T                                <span class="co"># build up from t=2 to T</span></span>
-<span id="cb69-11"><a href=""></a>        V[t,<span class="op">:</span>], Q[t], U[t], C[t,<span class="op">:</span>] <span class="op">=</span>           <span class="co"># unpack all outputs</span></span>
-<span id="cb69-12"><a href=""></a>            <span class="fu">iterateBellmanFiring</span>(m, V[t<span class="op">-</span><span class="fl">1</span>,<span class="op">:</span>], Q[t<span class="op">-</span><span class="fl">1</span>], U[t<span class="op">-</span><span class="fl">1</span>])</span>
-<span id="cb69-13"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb69-14"><a href=""></a>    <span class="cf">return</span> (V<span class="op">=</span>V, Q<span class="op">=</span>Q, U<span class="op">=</span>U, C<span class="op">=</span>C)                 <span class="co"># return as named tuple</span></span>
-<span id="cb69-15"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>solveMcCallFiring (generic function with 1 method)</code></pre>
-</div>
-</div>
-</section>
 <section id="infinite-horizon-with-firing" class="slide level3">
 <h3>Infinite Horizon with Firing</h3>
-<div id="86" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71" data-code-line-numbers="|1-2,14|4-5|7-12|13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href=""></a><span class="kw">function</span> <span class="fu">solveMcCallFiring</span>(m<span class="op">::</span><span class="dt">McCallModel</span>)      <span class="co"># takes a McCallModel with α &gt; 0</span></span>
-<span id="cb71-2"><a href=""></a>    (; β, p, w̄, c, α) <span class="op">=</span> m                  <span class="co"># extract all parameters</span></span>
-<span id="cb71-3"><a href=""></a></span>
-<span id="cb71-4"><a href=""></a>    V <span class="op">=</span> <span class="fu">max</span>.(w̄, c);  C <span class="op">=</span> w̄ <span class="op">.&gt;=</span> c              <span class="co"># initial guess for V, C</span></span>
-<span id="cb71-5"><a href=""></a>    Q <span class="op">=</span> <span class="fu">dot</span>(p, V);    U <span class="op">=</span> c                     <span class="co"># initial guess for Q, U</span></span>
-<span id="cb71-6"><a href=""></a></span>
-<span id="cb71-7"><a href=""></a>    dist <span class="op">=</span> <span class="fl">1.0</span>                                  <span class="co"># initialize distance</span></span>
-<span id="cb71-8"><a href=""></a>    <span class="cf">while</span> dist <span class="op">&gt;</span> <span class="fl">1e-10</span>                          <span class="co"># iterate until convergence</span></span>
-<span id="cb71-9"><a href=""></a>        V_new, Q_new, U_new, C <span class="op">=</span> <span class="fu">iterateBellmanFiring</span>(m, V, Q, U)  <span class="co"># model first</span></span>
-<span id="cb71-10"><a href=""></a>        dist <span class="op">=</span> <span class="fu">norm</span>(V <span class="op">-</span> V_new, <span class="cn">Inf</span>)             <span class="co"># max absolute change in V</span></span>
-<span id="cb71-11"><a href=""></a>        V <span class="op">=</span> V_new;  Q <span class="op">=</span> Q_new;  U <span class="op">=</span> U_new       <span class="co"># update all values</span></span>
-<span id="cb71-12"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb71-13"><a href=""></a>    <span class="cf">return</span> (V<span class="op">=</span>V, Q<span class="op">=</span>Q, U<span class="op">=</span>U, C<span class="op">=</span>C)                 <span class="co"># return as named tuple</span></span>
-<span id="cb71-14"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="84" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69" data-code-line-numbers="|1-2,14|4-5|7-12|13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href=""></a><span class="kw">function</span> <span class="fu">solveMcCallFiring</span>(m<span class="op">::</span><span class="dt">McCallModel</span>)      <span class="co"># takes a McCallModel with α &gt; 0</span></span>
+<span id="cb69-2"><a href=""></a>    (; β, p, w̄, c, α) <span class="op">=</span> m                  <span class="co"># extract all parameters</span></span>
+<span id="cb69-3"><a href=""></a></span>
+<span id="cb69-4"><a href=""></a>    V <span class="op">=</span> <span class="fu">max</span>.(w̄, c);  C <span class="op">=</span> w̄ <span class="op">.&gt;=</span> c              <span class="co"># initial guess for V, C</span></span>
+<span id="cb69-5"><a href=""></a>    Q <span class="op">=</span> <span class="fu">dot</span>(p, V);    U <span class="op">=</span> c                     <span class="co"># initial guess for Q, U</span></span>
+<span id="cb69-6"><a href=""></a></span>
+<span id="cb69-7"><a href=""></a>    dist <span class="op">=</span> <span class="fl">1.0</span>                                  <span class="co"># initialize distance</span></span>
+<span id="cb69-8"><a href=""></a>    <span class="cf">while</span> dist <span class="op">&gt;</span> <span class="fl">1e-10</span>                          <span class="co"># iterate until convergence</span></span>
+<span id="cb69-9"><a href=""></a>        V_new, Q_new, U_new, C <span class="op">=</span> <span class="fu">iterateBellmanFiring</span>(m, V, Q, U)  <span class="co"># model first</span></span>
+<span id="cb69-10"><a href=""></a>        dist <span class="op">=</span> <span class="fu">norm</span>(V <span class="op">-</span> V_new, <span class="cn">Inf</span>)             <span class="co"># max absolute change in V</span></span>
+<span id="cb69-11"><a href=""></a>        V <span class="op">=</span> V_new;  Q <span class="op">=</span> Q_new;  U <span class="op">=</span> U_new       <span class="co"># update all values</span></span>
+<span id="cb69-12"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb69-13"><a href=""></a>    <span class="cf">return</span> (V<span class="op">=</span>V, Q<span class="op">=</span>Q, U<span class="op">=</span>U, C<span class="op">=</span>C)                 <span class="co"># return as named tuple</span></span>
+<span id="cb69-14"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>solveMcCallFiring (generic function with 2 methods)</code></pre>
+<pre><code>solveMcCallFiring (generic function with 1 method)</code></pre>
 </div>
 </div>
 </section>
@@ -1406,14 +1396,14 @@ U_t = c + \beta Q_{t-1}
 </section>
 <section id="effect-of-firing-probability-alpha" class="slide level3">
 <h3>Effect of Firing Probability (<span class="math inline">\(\alpha\)</span>)</h3>
-<div id="88" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73" data-code-line-numbers="|1|2-5|6-7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href=""></a><span class="fu">plot</span>()                                          <span class="co"># initialize empty plot</span></span>
-<span id="cb73-2"><a href=""></a><span class="cf">for</span> α <span class="kw">in</span> <span class="fu">LinRange</span>(<span class="fl">0</span>., <span class="fl">0.15</span>, <span class="fl">6</span>)                 <span class="co"># loop over 6 values of α</span></span>
-<span id="cb73-3"><a href=""></a>    sol <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α))           <span class="co"># create model, solve</span></span>
-<span id="cb73-4"><a href=""></a>    <span class="fu">scatter!</span>(w̄, sol.V, label<span class="op">=</span><span class="st">"α = </span><span class="sc">$</span>(<span class="fu">round</span>(α, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)  <span class="co"># add to plot</span></span>
-<span id="cb73-5"><a href=""></a><span class="cf">end</span></span>
-<span id="cb73-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)                                 <span class="co"># label axes</span></span>
-<span id="cb73-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="86" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71" data-code-line-numbers="|1|2-5|6-7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href=""></a><span class="fu">plot</span>()                                          <span class="co"># initialize empty plot</span></span>
+<span id="cb71-2"><a href=""></a><span class="cf">for</span> α <span class="kw">in</span> <span class="fu">LinRange</span>(<span class="fl">0</span>., <span class="fl">0.15</span>, <span class="fl">6</span>)                 <span class="co"># loop over 6 values of α</span></span>
+<span id="cb71-3"><a href=""></a>    sol <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α))           <span class="co"># create model, solve</span></span>
+<span id="cb71-4"><a href=""></a>    <span class="fu">scatter!</span>(w̄, sol.V, label<span class="op">=</span><span class="st">"α = </span><span class="sc">$</span>(<span class="fu">round</span>(α, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)  <span class="co"># add to plot</span></span>
+<span id="cb71-5"><a href=""></a><span class="cf">end</span></span>
+<span id="cb71-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)                                 <span class="co"># label axes</span></span>
+<span id="cb71-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -1428,20 +1418,20 @@ U_t = c + \beta Q_{t-1}
 </section>
 <section id="effect-of-unemployment-benefits-c" class="slide level3">
 <h3>Effect of Unemployment Benefits (<span class="math inline">\(c\)</span>)</h3>
-<div id="90" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb74-1"><a href=""></a>α <span class="op">=</span> <span class="fl">0.02</span>   <span class="co"># fix α for remaining comparative statics</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="88" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb72-1"><a href=""></a>α <span class="op">=</span> <span class="fl">0.02</span>   <span class="co"># fix α for remaining comparative statics</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>0.02</code></pre>
 </div>
 </div>
-<div id="92" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76" data-code-line-numbers="|1|2-5|6-7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb76-1"><a href=""></a><span class="fu">plot</span>()                                          <span class="co"># initialize empty plot</span></span>
-<span id="cb76-2"><a href=""></a><span class="cf">for</span> c <span class="kw">in</span> <span class="fu">LinRange</span>(<span class="fl">2</span>., <span class="fl">4</span>., <span class="fl">5</span>)                   <span class="co"># loop over 5 values of c</span></span>
-<span id="cb76-3"><a href=""></a>    sol <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α, c<span class="op">=</span>c))         <span class="co"># vary c, fix α</span></span>
-<span id="cb76-4"><a href=""></a>    <span class="fu">scatter!</span>(w̄, sol.V, label<span class="op">=</span><span class="st">"c = </span><span class="sc">$</span>(<span class="fu">round</span>(c, digits<span class="op">=</span><span class="fl">1</span>))<span class="st">"</span>)  <span class="co"># add to plot</span></span>
-<span id="cb76-5"><a href=""></a><span class="cf">end</span></span>
-<span id="cb76-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)                                 <span class="co"># label axes</span></span>
-<span id="cb76-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="90" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74" data-code-line-numbers="|1|2-5|6-7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb74-1"><a href=""></a><span class="fu">plot</span>()                                          <span class="co"># initialize empty plot</span></span>
+<span id="cb74-2"><a href=""></a><span class="cf">for</span> c <span class="kw">in</span> <span class="fu">LinRange</span>(<span class="fl">2</span>., <span class="fl">4</span>., <span class="fl">5</span>)                   <span class="co"># loop over 5 values of c</span></span>
+<span id="cb74-3"><a href=""></a>    sol <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α, c<span class="op">=</span>c))         <span class="co"># vary c, fix α</span></span>
+<span id="cb74-4"><a href=""></a>    <span class="fu">scatter!</span>(w̄, sol.V, label<span class="op">=</span><span class="st">"c = </span><span class="sc">$</span>(<span class="fu">round</span>(c, digits<span class="op">=</span><span class="fl">1</span>))<span class="st">"</span>)  <span class="co"># add to plot</span></span>
+<span id="cb74-5"><a href=""></a><span class="cf">end</span></span>
+<span id="cb74-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)                                 <span class="co"># label axes</span></span>
+<span id="cb74-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -1460,16 +1450,16 @@ U_t = c + \beta Q_{t-1}
 <li>A change in the wage distribution that <strong>keeps the mean the same</strong> but <strong>increases the variance</strong></li>
 </ul>
 <div class="fragment">
-<div id="94" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href=""></a>phat <span class="op">=</span> <span class="fl">0.04</span> <span class="op">*</span> ((w̄ <span class="op">.-</span> <span class="fl">5.5</span>) <span class="op">/</span> <span class="fl">4.5</span>)<span class="op">.^</span><span class="fl">2</span></span>
-<span id="cb77-2"><a href=""></a>phat <span class="op">.-=</span> <span class="fu">dot</span>(phat, w̄) <span class="op">/</span> <span class="fu">sum</span>(w̄)</span>
-<span id="cb77-3"><a href=""></a>p2 <span class="op">=</span> p <span class="op">+</span> phat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="92" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb75-1"><a href=""></a>phat <span class="op">=</span> <span class="fl">0.04</span> <span class="op">*</span> ((w̄ <span class="op">.-</span> <span class="fl">5.5</span>) <span class="op">/</span> <span class="fl">4.5</span>)<span class="op">.^</span><span class="fl">2</span></span>
+<span id="cb75-2"><a href=""></a>phat <span class="op">.-=</span> <span class="fu">dot</span>(phat, w̄) <span class="op">/</span> <span class="fu">sum</span>(w̄)</span>
+<span id="cb75-3"><a href=""></a>p2 <span class="op">=</span> p <span class="op">+</span> phat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="96" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb78-1"><a href=""></a><span class="fu">plot</span>(w̄, p, label<span class="op">=</span><span class="st">"p (original)"</span>, linewidth<span class="op">=</span><span class="fl">2</span>)</span>
-<span id="cb78-2"><a href=""></a><span class="fu">plot!</span>(w̄, p2, label<span class="op">=</span><span class="st">"p₂ (more spread)"</span>, linewidth<span class="op">=</span><span class="fl">2</span>)</span>
-<span id="cb78-3"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)</span>
-<span id="cb78-4"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Probability"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="94" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb76-1"><a href=""></a><span class="fu">plot</span>(w̄, p, label<span class="op">=</span><span class="st">"p (original)"</span>, linewidth<span class="op">=</span><span class="fl">2</span>)</span>
+<span id="cb76-2"><a href=""></a><span class="fu">plot!</span>(w̄, p2, label<span class="op">=</span><span class="st">"p₂ (more spread)"</span>, linewidth<span class="op">=</span><span class="fl">2</span>)</span>
+<span id="cb76-3"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)</span>
+<span id="cb76-4"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Probability"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -1480,9 +1470,9 @@ U_t = c + \beta Q_{t-1}
 </section>
 <section id="verifying-equal-means" class="slide level3">
 <h3>Verifying Equal Means</h3>
-<div id="98" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Mean under p:  "</span>, <span class="fu">dot</span>(p, w̄))</span>
-<span id="cb79-2"><a href=""></a><span class="fu">println</span>(<span class="st">"Mean under p₂: "</span>, <span class="fu">dot</span>(p2, w̄))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="96" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Mean under p:  "</span>, <span class="fu">dot</span>(p, w̄))</span>
+<span id="cb77-2"><a href=""></a><span class="fu">println</span>(<span class="st">"Mean under p₂: "</span>, <span class="fu">dot</span>(p2, w̄))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean under p:  5.500000000000001
 Mean under p₂: 5.5</code></pre>
@@ -1494,13 +1484,13 @@ Mean under p₂: 5.5</code></pre>
 </section>
 <section id="effect-on-value-and-policy" class="slide level3">
 <h3>Effect on Value and Policy</h3>
-<div id="100" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb81-1"><a href=""></a>sol  <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α))          <span class="co"># original wages</span></span>
-<span id="cb81-2"><a href=""></a>sol2 <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α, p<span class="op">=</span>p2))   <span class="co"># more spread</span></span>
-<span id="cb81-3"><a href=""></a><span class="fu">scatter</span>(w̄, sol.V, label<span class="op">=</span><span class="st">"p = original"</span>)</span>
-<span id="cb81-4"><a href=""></a><span class="fu">scatter!</span>(w̄, sol2.V, label<span class="op">=</span><span class="st">"p = more spread"</span>)</span>
-<span id="cb81-5"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)</span>
-<span id="cb81-6"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="98" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href=""></a>sol  <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α))          <span class="co"># original wages</span></span>
+<span id="cb79-2"><a href=""></a>sol2 <span class="op">=</span> <span class="fu">solveMcCallFiring</span>(<span class="fu">McCallModel</span>(α<span class="op">=</span>α, p<span class="op">=</span>p2))   <span class="co"># more spread</span></span>
+<span id="cb79-3"><a href=""></a><span class="fu">scatter</span>(w̄, sol.V, label<span class="op">=</span><span class="st">"p = original"</span>)</span>
+<span id="cb79-4"><a href=""></a><span class="fu">scatter!</span>(w̄, sol2.V, label<span class="op">=</span><span class="st">"p = more spread"</span>)</span>
+<span id="cb79-5"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)</span>
+<span id="cb79-6"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -1510,11 +1500,11 @@ Mean under p₂: 5.5</code></pre>
 </section>
 <section id="effect-on-acceptance-policy" class="slide level3">
 <h3>Effect on Acceptance Policy</h3>
-<div id="102" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb82-1"><a href=""></a><span class="fu">scatter</span>(w̄, sol.C, label<span class="op">=</span><span class="st">"p = original"</span>)</span>
-<span id="cb82-2"><a href=""></a><span class="fu">scatter!</span>(w̄, sol2.C, label<span class="op">=</span><span class="st">"p = more spread"</span>)</span>
-<span id="cb82-3"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)</span>
-<span id="cb82-4"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Choice (1 = accept)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="100" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb80-1"><a href=""></a><span class="fu">scatter</span>(w̄, sol.C, label<span class="op">=</span><span class="st">"p = original"</span>)</span>
+<span id="cb80-2"><a href=""></a><span class="fu">scatter!</span>(w̄, sol2.C, label<span class="op">=</span><span class="st">"p = more spread"</span>)</span>
+<span id="cb80-3"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Wage"</span>)</span>
+<span id="cb80-4"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Choice (1 = accept)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
