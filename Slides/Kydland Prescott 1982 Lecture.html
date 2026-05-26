@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="David Evans">
-  <meta name="dcterms.date" content="2026-05-21">
+  <meta name="dcterms.date" content="2026-05-26">
   <title>Kydland &amp; Prescott (1982): Real Business Cycles</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -209,7 +209,7 @@ David Evans
 </div>
 </div>
 
-  <p class="date">2026-05-21</p>
+  <p class="date">2026-05-26</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -2347,16 +2347,17 @@ Lower Bound: 0.7065757834312844, Upper Bound: 6.359182050881559</code></pre>
 <section id="computing-moments" class="slide level3">
 <h3>Computing Moments</h3>
 <ul>
-<li>Simulate a long series and add <strong>log-deviation</strong> columns using <code>transform</code>:</li>
+<li>Simulate a long series and construct <strong>log-deviation</strong> :</li>
 </ul>
 <div id="80" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61" data-code-line-numbers="|1|3-6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href=""></a>sim_long <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">10_000</span>)</span>
 <span id="cb61-2"><a href=""></a></span>
-<span id="cb61-3"><a href=""></a><span class="fu">transform!</span>(sim_long,</span>
-<span id="cb61-4"><a href=""></a>    <span class="op">:</span>y <span class="op">=&gt;</span> (x <span class="op">-&gt;</span> <span class="fu">log</span>.(x) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(x))) <span class="op">=&gt;</span> <span class="op">:</span>y_dev,</span>
-<span id="cb61-5"><a href=""></a>    <span class="op">:</span>c <span class="op">=&gt;</span> (x <span class="op">-&gt;</span> <span class="fu">log</span>.(x) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(x))) <span class="op">=&gt;</span> <span class="op">:</span>c_dev,</span>
-<span id="cb61-6"><a href=""></a>    <span class="op">:</span>i <span class="op">=&gt;</span> (x <span class="op">-&gt;</span> <span class="fu">log</span>.(x) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(x))) <span class="op">=&gt;</span> <span class="op">:</span>i_dev,</span>
-<span id="cb61-7"><a href=""></a>    <span class="op">:</span>k <span class="op">=&gt;</span> (x <span class="op">-&gt;</span> <span class="fu">log</span>.(x) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(x))) <span class="op">=&gt;</span> <span class="op">:</span>k_dev)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb61-3"><a href=""></a>sim_long.y_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.y) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.y))</span>
+<span id="cb61-4"><a href=""></a>sim_long.c_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.c) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.c))</span>
+<span id="cb61-5"><a href=""></a>sim_long.i_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.i) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.i))</span>
+<span id="cb61-6"><a href=""></a>sim_long.k_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.k) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.k))</span>
+<span id="cb61-7"><a href=""></a></span>
+<span id="cb61-8"><a href=""></a>sim_long</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div><div style="float: left;"><span>10000×10 DataFrame</span></div><div style="float: right; font-style: italic;"><span>9975 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame caption-top" style="margin-bottom: 6px;">
@@ -2731,11 +2732,6 @@ Lower Bound: 0.7065757834312844, Upper Bound: 6.359182050881559</code></pre>
 </table>
 </div>
 </div>
-</div>
-<div class="fragment">
-<ul>
-<li><code>transform!</code> adds new columns <strong>in place</strong> — no need to create separate vectors</li>
-</ul>
 </div>
 </section>
 <section id="standard-deviations" class="slide level3">
@@ -3449,7 +3445,7 @@ k_{t+1} \approx k_{ss} + \phi_k \, (k_t - k_{ss}) + \phi_z \, (z_t - 1)
 <li><code>Interpolations.jl</code>: <code>linear_interpolation</code> with call syntax</li>
 <li><code>Optim.jl</code>: <code>Brent()</code> for 1D optimization</li>
 <li><code>NonlinearSolve.jl</code>: <code>NonlinearProblem</code>, <code>NewtonRaphson()</code></li>
-<li><code>DataFrames.jl</code>: tabular simulation output, <code>transform!</code></li>
+<li><code>DataFrames.jl</code>: tabular simulation output</li>
 <li>Mutable structs with <code>setup!</code> and <code>(; ...) = m</code> destructuring</li>
 <li><code>Categorical</code> for Markov simulation</li>
 <li>Broadcasting for element-wise operations</li>
