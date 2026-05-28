@@ -1298,13 +1298,10 @@ V(k') \approx (1 - w) \cdot V_i + w \cdot V_{i+1}
 <p><span class="math display">\[
 V(k, s) = \max_{k'} \left\{ \log(c) + \beta \, \mathbb{E}\big[V(k', s') \mid s\big] \right\}, \qquad c = \bar z_s \, k^\alpha + (1-\delta) k - k'
 \]</span></p>
-<div class="fragment">
 <ul>
 <li>An <strong>infinite-horizon, stochastic, recursive</strong> problem — it looks intimidating</li>
 <li>But at its heart is a <strong>simple one-period trade-off</strong>: consume now vs.&nbsp;save for later</li>
 </ul>
-</div>
-<div class="fragment">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1315,7 +1312,6 @@ V(k, s) = \max_{k'} \left\{ \log(c) + \beta \, \mathbb{E}\big[V(k', s') \mid s\b
 </div>
 <div class="callout-content">
 <p>Boil this down to a problem you can solve in a few lines of Julia, then <strong>iterate</strong> it to recover <span class="math inline">\(V\)</span>.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1339,6 +1335,7 @@ c + k' = R
 <ul>
 <li>we’ll have to find this eventually, but for now we’ll take it as given</li>
 </ul></li>
+<li>Assume that planner must choose <span class="math inline">\(k'\)</span> inside the range of the grid</li>
 </ul>
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
@@ -1377,7 +1374,7 @@ c + k' = R
 <section id="example-vfk-0" class="slide level3">
 <h3>Example: <span class="math inline">\(v^f(k') = 0\)</span></h3>
 <ul>
-<li>The planner places <strong>no value</strong> on the future. Build <span class="math inline">\(R\)</span> at <span class="math inline">\((k, s) = (k_{ss}, 4)\)</span>:</li>
+<li>The planner places <strong>no value</strong> on the future, assuming <span class="math inline">\(R=5\)</span></li>
 </ul>
 <div id="40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href=""></a><span class="co">#inputs</span></span>
@@ -1387,11 +1384,21 @@ c + k' = R
 <span id="cb31-5"><a href=""></a><span class="co">#solve for max</span></span>
 <span id="cb31-6"><a href=""></a><span class="fu">obj</span>(kp) <span class="op">=</span> <span class="fu">-</span>(<span class="fu">log</span>(resources <span class="op">-</span> kp) <span class="op">+</span> m.β <span class="op">*</span> <span class="fu">vf_zero</span>(kp))</span>
 <span id="cb31-7"><a href=""></a>k_max <span class="op">=</span> <span class="fu">min</span>(m.k_grid[<span class="kw">end</span>], resources <span class="op">-</span> <span class="fl">1e-8</span>)</span>
-<span id="cb31-8"><a href=""></a>res <span class="op">=</span> <span class="fu">optimize</span>(obj, m.k_grid[<span class="fl">1</span>], k_max, <span class="fu">Brent</span>())</span>
-<span id="cb31-9"><a href=""></a></span>
-<span id="cb31-10"><a href=""></a>(kp <span class="op">=</span> Optim.<span class="fu">minimizer</span>(res), c <span class="op">=</span> resources <span class="op">-</span> Optim.<span class="fu">minimizer</span>(res))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb31-8"><a href=""></a>k_min <span class="op">=</span> m.k_grid[<span class="fl">1</span>]</span>
+<span id="cb31-9"><a href=""></a>res <span class="op">=</span> <span class="fu">optimize</span>(obj, k_min, k_max, <span class="fu">Brent</span>())</span>
+<span id="cb31-10"><a href=""></a></span>
+<span id="cb31-11"><a href=""></a>(kp <span class="op">=</span> Optim.<span class="fu">minimizer</span>(res), c <span class="op">=</span> resources <span class="op">-</span> Optim.<span class="fu">minimizer</span>(res))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>(kp = 0.8867671586152314, c = 4.113232841384769)</code></pre>
+</div>
+</div>
+<ul>
+<li>Compare to</li>
+</ul>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href=""></a>k_min</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.8867671427443429</code></pre>
 </div>
 </div>
 <ul>
@@ -1403,23 +1410,27 @@ c + k' = R
 <ul>
 <li>Now give capital a future value of <span class="math inline">\(\log(k')\)</span>:</li>
 </ul>
-<div id="42" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href=""></a><span class="co">#inputs</span></span>
-<span id="cb33-2"><a href=""></a><span class="fu">vf_log</span>(kp) <span class="op">=</span> <span class="fu">log</span>(kp)</span>
-<span id="cb33-3"><a href=""></a>resources <span class="op">=</span> <span class="fl">5</span>.</span>
-<span id="cb33-4"><a href=""></a></span>
-<span id="cb33-5"><a href=""></a><span class="co">#solve for max</span></span>
-<span id="cb33-6"><a href=""></a><span class="fu">obj</span>(kp) <span class="op">=</span> <span class="fu">-</span>(<span class="fu">log</span>(resources <span class="op">-</span> kp) <span class="op">+</span> m.β <span class="op">*</span> <span class="fu">vf_log</span>(kp))   <span class="co"># same code, new future value</span></span>
-<span id="cb33-7"><a href=""></a>res <span class="op">=</span> <span class="fu">optimize</span>(obj, m.k_grid[<span class="fl">1</span>], k_max, <span class="fu">Brent</span>())</span>
-<span id="cb33-8"><a href=""></a></span>
-<span id="cb33-9"><a href=""></a>(kp <span class="op">=</span> Optim.<span class="fu">minimizer</span>(res), c <span class="op">=</span> resources <span class="op">-</span> Optim.<span class="fu">minimizer</span>(res))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href=""></a><span class="co">#inputs</span></span>
+<span id="cb35-2"><a href=""></a><span class="fu">vf_log</span>(kp) <span class="op">=</span> <span class="fu">log</span>(kp)</span>
+<span id="cb35-3"><a href=""></a>resources <span class="op">=</span> <span class="fl">5</span>.</span>
+<span id="cb35-4"><a href=""></a></span>
+<span id="cb35-5"><a href=""></a><span class="co">#solve for max</span></span>
+<span id="cb35-6"><a href=""></a><span class="fu">obj</span>(kp) <span class="op">=</span> <span class="fu">-</span>(<span class="fu">log</span>(resources <span class="op">-</span> kp) <span class="op">+</span> m.β <span class="op">*</span> <span class="fu">vf_log</span>(kp))   <span class="co"># same code, new future value</span></span>
+<span id="cb35-7"><a href=""></a>k_max <span class="op">=</span> <span class="fu">min</span>(m.k_grid[<span class="kw">end</span>], resources <span class="op">-</span> <span class="fl">1e-8</span>)</span>
+<span id="cb35-8"><a href=""></a>k_min <span class="op">=</span> m.k_grid[<span class="fl">1</span>]</span>
+<span id="cb35-9"><a href=""></a>res <span class="op">=</span> <span class="fu">optimize</span>(obj, k_min, k_max)</span>
+<span id="cb35-10"><a href=""></a></span>
+<span id="cb35-11"><a href=""></a>(kp <span class="op">=</span> Optim.<span class="fu">minimizer</span>(res), c <span class="op">=</span> resources <span class="op">-</span> Optim.<span class="fu">minimizer</span>(res))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>(kp = 2.448979593459382, c = 2.551020406540618)</code></pre>
 </div>
 </div>
 <ul>
-<li>The planner now <strong>saves substantially</strong> — a log future value rewards capital</li>
+<li>The planner now <strong>saves</strong> since there is a future value that rewards capital
+<ul>
 <li>The optimum is <strong>interior</strong> (away from the bounds)</li>
+</ul></li>
 </ul>
 </section>
 
@@ -1435,17 +1446,19 @@ c + k' = R
 <li>taking <strong>resources</strong> <span class="math inline">\(R\)</span> and the future value <code>vf</code> as inputs</li>
 </ul></li>
 </ul>
-<div id="44" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35" data-code-line-numbers="|1,7-10|2|3-4|5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href=""></a><span class="kw">function</span> <span class="fu">optimal_policy</span>(m, R, vf)</span>
-<span id="cb35-2"><a href=""></a>    (; β, k_grid) <span class="op">=</span> m</span>
-<span id="cb35-3"><a href=""></a>    <span class="fu">obj</span>(kp) <span class="op">=</span> <span class="fu">-</span>(<span class="fu">log</span>(R <span class="op">-</span> kp) <span class="op">+</span> β <span class="op">*</span> <span class="fu">vf</span>(kp))</span>
-<span id="cb35-4"><a href=""></a>    k_max <span class="op">=</span> <span class="fu">min</span>(k_grid[<span class="kw">end</span>], R <span class="op">-</span> <span class="fl">1e-8</span>) <span class="co">#avoid negative consumption</span></span>
-<span id="cb35-5"><a href=""></a>    res <span class="op">=</span> <span class="fu">optimize</span>(obj, k_grid[<span class="fl">1</span>], k_max)</span>
-<span id="cb35-6"><a href=""></a></span>
-<span id="cb35-7"><a href=""></a>    <span class="cf">return</span> (V  <span class="op">=</span> <span class="op">-</span>Optim.<span class="fu">minimum</span>(res),</span>
-<span id="cb35-8"><a href=""></a>            kp <span class="op">=</span> Optim.<span class="fu">minimizer</span>(res),</span>
-<span id="cb35-9"><a href=""></a>            c  <span class="op">=</span> R <span class="op">-</span> Optim.<span class="fu">minimizer</span>(res))</span>
-<span id="cb35-10"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37" data-code-line-numbers="|1,9-13|2,3|5-7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href=""></a><span class="kw">function</span> <span class="fu">optimal_policy</span>(m, R, vf)</span>
+<span id="cb37-2"><a href=""></a>    (; β, k_grid) <span class="op">=</span> m</span>
+<span id="cb37-3"><a href=""></a>    <span class="fu">obj</span>(kp) <span class="op">=</span> <span class="fu">-</span>(<span class="fu">log</span>(R <span class="op">-</span> kp) <span class="op">+</span> β <span class="op">*</span> <span class="fu">vf</span>(kp))</span>
+<span id="cb37-4"><a href=""></a></span>
+<span id="cb37-5"><a href=""></a>    k_max <span class="op">=</span> <span class="fu">min</span>(k_grid[<span class="kw">end</span>], R <span class="op">-</span> <span class="fl">1e-8</span>) <span class="co">#avoid negative consumption</span></span>
+<span id="cb37-6"><a href=""></a>    k_min <span class="op">=</span> k_grid[<span class="fl">1</span>]</span>
+<span id="cb37-7"><a href=""></a>    res <span class="op">=</span> <span class="fu">optimize</span>(obj, k_min, k_max)</span>
+<span id="cb37-8"><a href=""></a></span>
+<span id="cb37-9"><a href=""></a>    <span class="cf">return</span> (V  <span class="op">=</span> <span class="op">-</span>Optim.<span class="fu">minimum</span>(res),</span>
+<span id="cb37-10"><a href=""></a>            kp <span class="op">=</span> Optim.<span class="fu">minimizer</span>(res),</span>
+<span id="cb37-11"><a href=""></a>            c  <span class="op">=</span> R <span class="op">-</span> Optim.<span class="fu">minimizer</span>(res))</span>
+<span id="cb37-12"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>optimal_policy (generic function with 1 method)</code></pre>
 </div>
@@ -1515,18 +1528,18 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 <ul>
 <li><code>compute_vf(m, V, s)</code> builds the future value <span class="math inline">\(v^f(\cdot)\)</span> for a single current state <span class="math inline">\(s\)</span>:</li>
 </ul>
-<div id="46" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href=""></a><span class="kw">function</span> <span class="fu">compute_vf</span>(m, V, s)</span>
-<span id="cb37-2"><a href=""></a>    (; k_grid, P_z) <span class="op">=</span> m</span>
-<span id="cb37-3"><a href=""></a>    Nk <span class="op">=</span> <span class="fu">length</span>(k_grid)</span>
-<span id="cb37-4"><a href=""></a>    S <span class="op">=</span> <span class="fu">length</span>(P_z[s, <span class="op">:</span>])</span>
-<span id="cb37-5"><a href=""></a>    EV_s <span class="op">=</span> <span class="fu">zeros</span>(Nk)                        <span class="co"># E[V(k', s') | s] on the grid</span></span>
-<span id="cb37-6"><a href=""></a>    <span class="cf">for</span> i′ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>Nk</span>
-<span id="cb37-7"><a href=""></a>        EV_s[i′] <span class="op">=</span> <span class="fu">sum</span>(P_z[s, s′] <span class="op">*</span> V[i′, s′] <span class="cf">for</span> s′ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span>
-<span id="cb37-8"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb37-9"><a href=""></a>    <span class="co">#construct the interpolated callable function</span></span>
-<span id="cb37-10"><a href=""></a>    <span class="cf">return</span> <span class="fu">linear_interpolation</span>(k_grid, EV_s)</span>
-<span id="cb37-11"><a href=""></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href=""></a><span class="kw">function</span> <span class="fu">compute_vf</span>(m, V, s)</span>
+<span id="cb39-2"><a href=""></a>    (; k_grid, P_z) <span class="op">=</span> m</span>
+<span id="cb39-3"><a href=""></a>    Nk <span class="op">=</span> <span class="fu">length</span>(k_grid)</span>
+<span id="cb39-4"><a href=""></a>    S <span class="op">=</span> <span class="fu">length</span>(P_z[s, <span class="op">:</span>])</span>
+<span id="cb39-5"><a href=""></a>    EV_s <span class="op">=</span> <span class="fu">zeros</span>(Nk)                        <span class="co"># E[V(k', s') | s] on the grid</span></span>
+<span id="cb39-6"><a href=""></a>    <span class="cf">for</span> i′ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>Nk</span>
+<span id="cb39-7"><a href=""></a>        EV_s[i′] <span class="op">=</span> <span class="fu">sum</span>(P_z[s, s′] <span class="op">*</span> V[i′, s′] <span class="cf">for</span> s′ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span>
+<span id="cb39-8"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb39-9"><a href=""></a>    <span class="co">#construct the interpolated callable function</span></span>
+<span id="cb39-10"><a href=""></a>    <span class="cf">return</span> <span class="fu">linear_interpolation</span>(k_grid, EV_s)</span>
+<span id="cb39-11"><a href=""></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>compute_vf (generic function with 1 method)</code></pre>
 </div>
@@ -1540,39 +1553,39 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="bellman_operator-pseudocode" class="slide level3" data-auto-animate="true">
 <h3 data-id="quarto-animate-title"><code>bellman_operator</code>: Pseudocode</h3>
-<div id="48" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb39-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">bellman_operator</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, V)</span>
-<span id="cb39-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># For each state s:</span></span>
-<span id="cb39-3" class="hljs-ln-code"><a href=""></a>    <span class="co">#   vf = compute_vf(m, V, s)            # expected continuation value</span></span>
-<span id="cb39-4" class="hljs-ln-code"><a href=""></a>    <span class="co">#   For each capital k_i:</span></span>
-<span id="cb39-5" class="hljs-ln-code"><a href=""></a>    <span class="co">#     R = resources at (k_i, s)</span></span>
-<span id="cb39-6" class="hljs-ln-code"><a href=""></a>    <span class="co">#     optimal_policy(m, R, vf)          # optimize</span></span>
-<span id="cb39-7" class="hljs-ln-code"><a href=""></a>    <span class="co"># Return V_new, kp_policy, c_policy</span></span>
-<span id="cb39-8" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="50" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb41-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">bellman_operator</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, V)</span>
+<span id="cb41-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># For each state s:</span></span>
+<span id="cb41-3" class="hljs-ln-code"><a href=""></a>    <span class="co">#   vf = compute_vf(m, V, s)            # expected continuation value</span></span>
+<span id="cb41-4" class="hljs-ln-code"><a href=""></a>    <span class="co">#   For each capital k_i:</span></span>
+<span id="cb41-5" class="hljs-ln-code"><a href=""></a>    <span class="co">#     R = resources at (k_i, s)</span></span>
+<span id="cb41-6" class="hljs-ln-code"><a href=""></a>    <span class="co">#     optimal_policy(m, R, vf)          # optimize</span></span>
+<span id="cb41-7" class="hljs-ln-code"><a href=""></a>    <span class="co"># Return V_new, kp_policy, c_policy</span></span>
+<span id="cb41-8" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="bellman_operator-full-function" class="slide level3" data-auto-animate="true">
 <h3 data-id="quarto-animate-title"><code>bellman_operator</code>: Full Function</h3>
-<div id="50" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40" data-code-line-numbers="|1,18,19|2-5|6-8|9-17"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb40-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">bellman_operator</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, V)</span>
-<span id="cb40-2" class="hljs-ln-code"><a href=""></a>    (; N_k, N_z, α, δ, z_grid, k_grid) <span class="op">=</span> m</span>
-<span id="cb40-3" class="hljs-ln-code"><a href=""></a>    V_new     <span class="op">=</span> <span class="fu">similar</span>(V)</span>
-<span id="cb40-4" class="hljs-ln-code"><a href=""></a>    kp_policy <span class="op">=</span> <span class="fu">similar</span>(V)</span>
-<span id="cb40-5" class="hljs-ln-code"><a href=""></a>    c_policy  <span class="op">=</span> <span class="fu">similar</span>(V)</span>
-<span id="cb40-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_z</span>
-<span id="cb40-7" class="hljs-ln-code"><a href=""></a>        vf <span class="op">=</span> <span class="fu">compute_vf</span>(m, V, s)                     <span class="co"># E[V(k', s')|s] as a function</span></span>
-<span id="cb40-8" class="hljs-ln-code"><a href=""></a>        z  <span class="op">=</span> z_grid[s]</span>
-<span id="cb40-9" class="hljs-ln-code"><a href=""></a>        <span class="cf">for</span> ik <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_k</span>
-<span id="cb40-10" class="hljs-ln-code"><a href=""></a>            k <span class="op">=</span> k_grid[ik]</span>
-<span id="cb40-11" class="hljs-ln-code"><a href=""></a>            R <span class="op">=</span> z <span class="op">*</span> k<span class="op">^</span>α <span class="op">+</span> (<span class="fl">1</span> <span class="op">-</span> δ) <span class="op">*</span> k                <span class="co"># resources at (k, s)</span></span>
-<span id="cb40-12" class="hljs-ln-code"><a href=""></a>            result <span class="op">=</span> <span class="fu">optimal_policy</span>(m, R, vf)</span>
-<span id="cb40-13" class="hljs-ln-code"><a href=""></a>            V_new[ik, s]     <span class="op">=</span> result.V</span>
-<span id="cb40-14" class="hljs-ln-code"><a href=""></a>            kp_policy[ik, s] <span class="op">=</span> result.kp</span>
-<span id="cb40-15" class="hljs-ln-code"><a href=""></a>            c_policy[ik, s]  <span class="op">=</span> result.c</span>
-<span id="cb40-16" class="hljs-ln-code"><a href=""></a>        <span class="cf">end</span></span>
-<span id="cb40-17" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb40-18" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> V_new, kp_policy, c_policy</span>
-<span id="cb40-19" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42" data-code-line-numbers="|1,18,19|2-5|6-8|9-17"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb42-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">bellman_operator</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, V)</span>
+<span id="cb42-2" class="hljs-ln-code"><a href=""></a>    (; N_k, N_z, α, δ, z_grid, k_grid) <span class="op">=</span> m</span>
+<span id="cb42-3" class="hljs-ln-code"><a href=""></a>    V_new     <span class="op">=</span> <span class="fu">similar</span>(V)</span>
+<span id="cb42-4" class="hljs-ln-code"><a href=""></a>    kp_policy <span class="op">=</span> <span class="fu">similar</span>(V)</span>
+<span id="cb42-5" class="hljs-ln-code"><a href=""></a>    c_policy  <span class="op">=</span> <span class="fu">similar</span>(V)</span>
+<span id="cb42-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_z</span>
+<span id="cb42-7" class="hljs-ln-code"><a href=""></a>        vf <span class="op">=</span> <span class="fu">compute_vf</span>(m, V, s)                     <span class="co"># E[V(k', s')|s] as a function</span></span>
+<span id="cb42-8" class="hljs-ln-code"><a href=""></a>        z  <span class="op">=</span> z_grid[s]</span>
+<span id="cb42-9" class="hljs-ln-code"><a href=""></a>        <span class="cf">for</span> ik <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_k</span>
+<span id="cb42-10" class="hljs-ln-code"><a href=""></a>            k <span class="op">=</span> k_grid[ik]</span>
+<span id="cb42-11" class="hljs-ln-code"><a href=""></a>            R <span class="op">=</span> z <span class="op">*</span> k<span class="op">^</span>α <span class="op">+</span> (<span class="fl">1</span> <span class="op">-</span> δ) <span class="op">*</span> k                <span class="co"># resources at (k, s)</span></span>
+<span id="cb42-12" class="hljs-ln-code"><a href=""></a>            result <span class="op">=</span> <span class="fu">optimal_policy</span>(m, R, vf)</span>
+<span id="cb42-13" class="hljs-ln-code"><a href=""></a>            V_new[ik, s]     <span class="op">=</span> result.V</span>
+<span id="cb42-14" class="hljs-ln-code"><a href=""></a>            kp_policy[ik, s] <span class="op">=</span> result.kp</span>
+<span id="cb42-15" class="hljs-ln-code"><a href=""></a>            c_policy[ik, s]  <span class="op">=</span> result.c</span>
+<span id="cb42-16" class="hljs-ln-code"><a href=""></a>        <span class="cf">end</span></span>
+<span id="cb42-17" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb42-18" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> V_new, kp_policy, c_policy</span>
+<span id="cb42-19" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>bellman_operator (generic function with 1 method)</code></pre>
 </div>
@@ -1614,36 +1627,36 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="solverbc-pseudocode" class="slide level3" data-auto-animate="true">
 <h3 data-id="quarto-animate-title"><code>solveRBC</code>: Pseudocode</h3>
-<div id="52" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb42-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">solveRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>; tol<span class="op">=</span><span class="fl">1e-6</span>, maxiter<span class="op">=</span><span class="fl">1000</span>, verbose<span class="op">=</span><span class="cn">true</span>)</span>
-<span id="cb42-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># Initial guess V = 0</span></span>
-<span id="cb42-3" class="hljs-ln-code"><a href=""></a>    <span class="co"># Iterate Bellman operator until convergence</span></span>
-<span id="cb42-4" class="hljs-ln-code"><a href=""></a>    <span class="co"># Build interpolated policy functions</span></span>
-<span id="cb42-5" class="hljs-ln-code"><a href=""></a>    <span class="co"># Return solution (grids + interpolated functions)</span></span>
-<span id="cb42-6" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="54" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb44-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">solveRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>; tol<span class="op">=</span><span class="fl">1e-6</span>, maxiter<span class="op">=</span><span class="fl">1000</span>, verbose<span class="op">=</span><span class="cn">true</span>)</span>
+<span id="cb44-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># Initial guess V = 0</span></span>
+<span id="cb44-3" class="hljs-ln-code"><a href=""></a>    <span class="co"># Iterate Bellman operator until convergence</span></span>
+<span id="cb44-4" class="hljs-ln-code"><a href=""></a>    <span class="co"># Build interpolated policy functions</span></span>
+<span id="cb44-5" class="hljs-ln-code"><a href=""></a>    <span class="co"># Return solution (grids + interpolated functions)</span></span>
+<span id="cb44-6" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="solverbc-full-function" class="slide level3" data-auto-animate="true">
 <h3 data-id="quarto-animate-title"><code>solveRBC</code>: Full Function</h3>
-<div id="54" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43" data-code-line-numbers="|1,18,19|2-4|5-12|14-17"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb43-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">solveRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>; tol<span class="op">=</span><span class="fl">1e-6</span>, maxiter<span class="op">=</span><span class="fl">1000</span>, verbose<span class="op">=</span><span class="cn">true</span>)</span>
-<span id="cb43-2" class="hljs-ln-code"><a href=""></a>    (; k_grid, N_k, N_z) <span class="op">=</span> m</span>
-<span id="cb43-3" class="hljs-ln-code"><a href=""></a>    V <span class="op">=</span> <span class="fu">zeros</span>(N_k, N_z)                              <span class="co"># initial guess: V = 0</span></span>
-<span id="cb43-4" class="hljs-ln-code"><a href=""></a>    V_new, kp_policy, c_policy <span class="op">=</span> <span class="fu">bellman_operator</span>(m, V)</span>
-<span id="cb43-5" class="hljs-ln-code"><a href=""></a>    dist <span class="op">=</span> <span class="fl">1.0</span>; iter <span class="op">=</span> <span class="fl">0</span></span>
-<span id="cb43-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">while</span> dist <span class="op">&gt;</span> tol <span class="op">&amp;&amp;</span> iter <span class="op">&lt;</span> maxiter</span>
-<span id="cb43-7" class="hljs-ln-code"><a href=""></a>        V_new, kp_policy, c_policy <span class="op">=</span> <span class="fu">bellman_operator</span>(m, V)</span>
-<span id="cb43-8" class="hljs-ln-code"><a href=""></a>        dist <span class="op">=</span> <span class="fu">maximum</span>(<span class="fu">abs</span>.(V_new <span class="op">-</span> V))</span>
-<span id="cb43-9" class="hljs-ln-code"><a href=""></a>        V <span class="op">=</span> V_new</span>
-<span id="cb43-10" class="hljs-ln-code"><a href=""></a>        iter <span class="op">+=</span> <span class="fl">1</span></span>
-<span id="cb43-11" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb43-12" class="hljs-ln-code"><a href=""></a>    <span class="cf">if</span> dist <span class="op">&lt;</span> tol <span class="op">&amp;&amp;</span> verbose</span>
-<span id="cb43-13" class="hljs-ln-code"><a href=""></a>        <span class="fu">println</span>(<span class="st">"Converged in </span><span class="sc">$</span>iter<span class="st"> iterations (dist = </span><span class="sc">$</span>(<span class="fu">round</span>(dist,digits<span class="op">=</span><span class="fl">8</span>))<span class="st">)"</span>)</span>
-<span id="cb43-14" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb43-15" class="hljs-ln-code"><a href=""></a>    kp_itp <span class="op">=</span> [<span class="fu">linear_interpolation</span>(k_grid, kp_policy[<span class="op">:</span>, s]) for s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_z]</span>
-<span id="cb43-16" class="hljs-ln-code"><a href=""></a>    c_itp  <span class="op">=</span> [<span class="fu">linear_interpolation</span>(k_grid, c_policy[<span class="op">:</span>, s])  for s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_z]</span>
-<span id="cb43-17" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> (V<span class="op">=</span>V, kp<span class="op">=</span>kp_policy, c<span class="op">=</span>c_policy, kp_itp<span class="op">=</span>kp_itp, c_itp<span class="op">=</span>c_itp)</span>
-<span id="cb43-18" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45" data-code-line-numbers="|1,18,19|2-4|5-12|14-17"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb45-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">solveRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>; tol<span class="op">=</span><span class="fl">1e-6</span>, maxiter<span class="op">=</span><span class="fl">1000</span>, verbose<span class="op">=</span><span class="cn">true</span>)</span>
+<span id="cb45-2" class="hljs-ln-code"><a href=""></a>    (; k_grid, N_k, N_z) <span class="op">=</span> m</span>
+<span id="cb45-3" class="hljs-ln-code"><a href=""></a>    V <span class="op">=</span> <span class="fu">zeros</span>(N_k, N_z)                              <span class="co"># initial guess: V = 0</span></span>
+<span id="cb45-4" class="hljs-ln-code"><a href=""></a>    V_new, kp_policy, c_policy <span class="op">=</span> <span class="fu">bellman_operator</span>(m, V)</span>
+<span id="cb45-5" class="hljs-ln-code"><a href=""></a>    dist <span class="op">=</span> <span class="fl">1.0</span>; iter <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb45-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">while</span> dist <span class="op">&gt;</span> tol <span class="op">&amp;&amp;</span> iter <span class="op">&lt;</span> maxiter</span>
+<span id="cb45-7" class="hljs-ln-code"><a href=""></a>        V_new, kp_policy, c_policy <span class="op">=</span> <span class="fu">bellman_operator</span>(m, V)</span>
+<span id="cb45-8" class="hljs-ln-code"><a href=""></a>        dist <span class="op">=</span> <span class="fu">maximum</span>(<span class="fu">abs</span>.(V_new <span class="op">-</span> V))</span>
+<span id="cb45-9" class="hljs-ln-code"><a href=""></a>        V <span class="op">=</span> V_new</span>
+<span id="cb45-10" class="hljs-ln-code"><a href=""></a>        iter <span class="op">+=</span> <span class="fl">1</span></span>
+<span id="cb45-11" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb45-12" class="hljs-ln-code"><a href=""></a>    <span class="cf">if</span> dist <span class="op">&lt;</span> tol <span class="op">&amp;&amp;</span> verbose</span>
+<span id="cb45-13" class="hljs-ln-code"><a href=""></a>        <span class="fu">println</span>(<span class="st">"Converged in </span><span class="sc">$</span>iter<span class="st"> iterations (dist = </span><span class="sc">$</span>(<span class="fu">round</span>(dist,digits<span class="op">=</span><span class="fl">8</span>))<span class="st">)"</span>)</span>
+<span id="cb45-14" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb45-15" class="hljs-ln-code"><a href=""></a>    kp_itp <span class="op">=</span> [<span class="fu">linear_interpolation</span>(k_grid, kp_policy[<span class="op">:</span>, s]) for s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_z]</span>
+<span id="cb45-16" class="hljs-ln-code"><a href=""></a>    c_itp  <span class="op">=</span> [<span class="fu">linear_interpolation</span>(k_grid, c_policy[<span class="op">:</span>, s])  for s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N_z]</span>
+<span id="cb45-17" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> (V<span class="op">=</span>V, kp<span class="op">=</span>kp_policy, c<span class="op">=</span>c_policy, kp_itp<span class="op">=</span>kp_itp, c_itp<span class="op">=</span>c_itp)</span>
+<span id="cb45-18" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>solveRBC (generic function with 1 method)</code></pre>
 </div>
@@ -1651,9 +1664,9 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="running-the-solver" class="slide level3">
 <h3>Running the Solver</h3>
-<div id="56" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href=""></a>m <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>())</span>
-<span id="cb45-2"><a href=""></a>sol <span class="op">=</span> <span class="fu">solveRBC</span>(m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="58" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href=""></a>m <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>())</span>
+<span id="cb47-2"><a href=""></a>sol <span class="op">=</span> <span class="fu">solveRBC</span>(m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Converged in 294 iterations (dist = 9.6e-7)</code></pre>
 </div>
@@ -1957,9 +1970,10 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </div>
 </div>
 </section>
-
-<section id="calibration" class="title-slide slide level2 center">
-<h2>Calibration</h2>
+</section>
+<section>
+<section id="calibration" class="title-slide slide level1 center">
+<h1>Calibration</h1>
 
 </section>
 <section id="why-calibrate" class="slide level3">
@@ -2011,7 +2025,7 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 <tr class="even">
 <td><span class="math inline">\(\beta\)</span></td>
 <td>Real interest rate</td>
-<td><span class="math inline">\(r = 1/\beta - 1 + \delta \approx 4\%\)</span>/yr</td>
+<td><span class="math inline">\(r = 1/\beta - 1\approx 4\%\)</span>/yr</td>
 <td>0.96</td>
 </tr>
 <tr class="odd">
@@ -2025,7 +2039,7 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 <div class="fragment">
 <ul>
 <li><span class="math inline">\(\alpha = 0.33\)</span>: from NIPA data, labor’s share of income <span class="math inline">\(\approx 2/3\)</span>, so capital’s share <span class="math inline">\(\approx 1/3\)</span></li>
-<li><span class="math inline">\(\beta = 0.96\)</span>: steady-state Euler equation <span class="math inline">\(r_{ss} = 1/\beta - (1-\delta)\)</span>; with <span class="math inline">\(r \approx 4\%\)</span> and <span class="math inline">\(\delta = 0.10\)</span>, we get <span class="math inline">\(\beta \approx 0.96\)</span></li>
+<li><span class="math inline">\(\beta = 0.96\)</span>: steady-state Euler equation <span class="math inline">\(r_{ss} = 1/\beta - 1\)</span>; with <span class="math inline">\(r \approx 4\%\)</span> we get <span class="math inline">\(\beta \approx 0.96\)</span></li>
 <li><span class="math inline">\(\delta = 0.08\)</span>: annual depreciation of the capital stock is roughly 8%</li>
 </ul>
 </div>
@@ -2058,13 +2072,13 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="our-calibration" class="slide level3">
 <h3>Our Calibration</h3>
-<div id="58" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Calibrated Parameters:"</span>)</span>
-<span id="cb48-2"><a href=""></a><span class="fu">println</span>(<span class="st">"  α  = </span><span class="sc">$</span>(m.α)<span class="st">   (capital share)"</span>)</span>
-<span id="cb48-3"><a href=""></a><span class="fu">println</span>(<span class="st">"  β  = </span><span class="sc">$</span>(m.β)<span class="st">   (discount factor → r ≈ </span><span class="sc">$</span>(<span class="fu">round</span>(<span class="fl">1</span><span class="op">/</span>m.β <span class="op">-</span> <span class="fl">1</span> <span class="op">+</span> m.δ, digits<span class="op">=</span><span class="fl">3</span>))<span class="st">)"</span>)</span>
-<span id="cb48-4"><a href=""></a><span class="fu">println</span>(<span class="st">"  δ  = </span><span class="sc">$</span>(m.δ)<span class="st">   (depreciation rate)"</span>)</span>
-<span id="cb48-5"><a href=""></a><span class="fu">println</span>(<span class="st">"  ρ  = </span><span class="sc">$</span>(m.ρ)<span class="st">   (TFP persistence)"</span>)</span>
-<span id="cb48-6"><a href=""></a><span class="fu">println</span>(<span class="st">"  σ_ε = </span><span class="sc">$</span>(m.σ_ε)<span class="st">  (TFP innovation std dev)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="60" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Calibrated Parameters:"</span>)</span>
+<span id="cb50-2"><a href=""></a><span class="fu">println</span>(<span class="st">"  α  = </span><span class="sc">$</span>(m.α)<span class="st">   (capital share)"</span>)</span>
+<span id="cb50-3"><a href=""></a><span class="fu">println</span>(<span class="st">"  β  = </span><span class="sc">$</span>(m.β)<span class="st">   (discount factor → r ≈ </span><span class="sc">$</span>(<span class="fu">round</span>(<span class="fl">1</span><span class="op">/</span>m.β <span class="op">-</span> <span class="fl">1</span> <span class="op">+</span> m.δ, digits<span class="op">=</span><span class="fl">3</span>))<span class="st">)"</span>)</span>
+<span id="cb50-4"><a href=""></a><span class="fu">println</span>(<span class="st">"  δ  = </span><span class="sc">$</span>(m.δ)<span class="st">   (depreciation rate)"</span>)</span>
+<span id="cb50-5"><a href=""></a><span class="fu">println</span>(<span class="st">"  ρ  = </span><span class="sc">$</span>(m.ρ)<span class="st">   (TFP persistence)"</span>)</span>
+<span id="cb50-6"><a href=""></a><span class="fu">println</span>(<span class="st">"  σ_ε = </span><span class="sc">$</span>(m.σ_ε)<span class="st">  (TFP innovation std dev)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Calibrated Parameters:
   α  = 0.33   (capital share)
@@ -2075,11 +2089,11 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </div>
 </div>
 <div class="fragment">
-<div id="60" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Implied Steady State:"</span>)</span>
-<span id="cb50-2"><a href=""></a><span class="fu">println</span>(<span class="st">"  K/Y  = </span><span class="sc">$</span>(<span class="fu">round</span>(ss.k <span class="op">/</span> ss.y, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">    (data: ≈ 2.8)"</span>)</span>
-<span id="cb50-3"><a href=""></a><span class="fu">println</span>(<span class="st">"  I/Y  = </span><span class="sc">$</span>(<span class="fu">round</span>(ss.i <span class="op">/</span> ss.y, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">    (data: ≈ 0.25-0.30)"</span>)</span>
-<span id="cb50-4"><a href=""></a><span class="fu">println</span>(<span class="st">"  C/Y  = </span><span class="sc">$</span>(<span class="fu">round</span>(ss.c <span class="op">/</span> ss.y, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">    (data: ≈ 0.65-0.70)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="62" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Implied Steady State:"</span>)</span>
+<span id="cb52-2"><a href=""></a><span class="fu">println</span>(<span class="st">"  K/Y  = </span><span class="sc">$</span>(<span class="fu">round</span>(ss.k <span class="op">/</span> ss.y, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">    (data: ≈ 2.8)"</span>)</span>
+<span id="cb52-3"><a href=""></a><span class="fu">println</span>(<span class="st">"  I/Y  = </span><span class="sc">$</span>(<span class="fu">round</span>(ss.i <span class="op">/</span> ss.y, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">    (data: ≈ 0.25-0.30)"</span>)</span>
+<span id="cb52-4"><a href=""></a><span class="fu">println</span>(<span class="st">"  C/Y  = </span><span class="sc">$</span>(<span class="fu">round</span>(ss.c <span class="op">/</span> ss.y, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">    (data: ≈ 0.65-0.70)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Implied Steady State:
   K/Y  = 2.71    (data: ≈ 2.8)
@@ -2109,23 +2123,22 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </div>
 </div>
 </section>
-
 <section id="results" class="title-slide slide level2 center">
 <h2>Results</h2>
 
 </section>
 <section id="the-value-function" class="slide level3">
 <h3>The Value Function</h3>
-<div id="62" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>bottomright, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
-<span id="cb52-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
-<span id="cb52-3"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.V[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
-<span id="cb52-4"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
-<span id="cb52-5"><a href=""></a><span class="cf">end</span></span>
-<span id="cb52-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Capital k"</span>)</span>
-<span id="cb52-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"V(k, s)"</span>)</span>
-<span id="cb52-8"><a href=""></a><span class="fu">title!</span>(<span class="st">"Value Function"</span>)</span>
-<span id="cb52-9"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"k_ss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="64" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>bottomright, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
+<span id="cb54-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
+<span id="cb54-3"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.V[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
+<span id="cb54-4"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb54-5"><a href=""></a><span class="cf">end</span></span>
+<span id="cb54-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Capital k"</span>)</span>
+<span id="cb54-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"V(k, s)"</span>)</span>
+<span id="cb54-8"><a href=""></a><span class="fu">title!</span>(<span class="st">"Value Function"</span>)</span>
+<span id="cb54-9"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"k_ss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2139,17 +2152,17 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="the-savings-policy-kk-s" class="slide level3">
 <h3>The Savings Policy <span class="math inline">\(k'(k, s)\)</span></h3>
-<div id="64" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
-<span id="cb53-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
-<span id="cb53-3"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.kp[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
-<span id="cb53-4"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
-<span id="cb53-5"><a href=""></a><span class="cf">end</span></span>
-<span id="cb53-6"><a href=""></a><span class="fu">plot!</span>(m.k_grid, m.k_grid, color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"45° line"</span>)</span>
-<span id="cb53-7"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
-<span id="cb53-8"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span>
-<span id="cb53-9"><a href=""></a><span class="fu">title!</span>(<span class="st">"Savings Policy Function"</span>)</span>
-<span id="cb53-10"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dot, label<span class="op">=</span><span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="66" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
+<span id="cb55-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
+<span id="cb55-3"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.kp[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
+<span id="cb55-4"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb55-5"><a href=""></a><span class="cf">end</span></span>
+<span id="cb55-6"><a href=""></a><span class="fu">plot!</span>(m.k_grid, m.k_grid, color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"45° line"</span>)</span>
+<span id="cb55-7"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
+<span id="cb55-8"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span>
+<span id="cb55-9"><a href=""></a><span class="fu">title!</span>(<span class="st">"Savings Policy Function"</span>)</span>
+<span id="cb55-10"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dot, label<span class="op">=</span><span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2164,16 +2177,16 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="the-consumption-policy-ck-s" class="slide level3">
 <h3>The Consumption Policy <span class="math inline">\(c(k, s)\)</span></h3>
-<div id="66" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
-<span id="cb54-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
-<span id="cb54-3"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.c[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
-<span id="cb54-4"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
-<span id="cb54-5"><a href=""></a><span class="cf">end</span></span>
-<span id="cb54-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Capital k"</span>)</span>
-<span id="cb54-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Consumption c(k, s)"</span>)</span>
-<span id="cb54-8"><a href=""></a><span class="fu">title!</span>(<span class="st">"Consumption Policy Function"</span>)</span>
-<span id="cb54-9"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"k_ss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="68" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
+<span id="cb56-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
+<span id="cb56-3"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.c[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
+<span id="cb56-4"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb56-5"><a href=""></a><span class="cf">end</span></span>
+<span id="cb56-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Capital k"</span>)</span>
+<span id="cb56-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Consumption c(k, s)"</span>)</span>
+<span id="cb56-8"><a href=""></a><span class="fu">title!</span>(<span class="st">"Consumption Policy Function"</span>)</span>
+<span id="cb56-9"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"k_ss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2187,18 +2200,18 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="the-investment-policy" class="slide level3">
 <h3>The Investment Policy</h3>
-<div id="68" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href=""></a>i_policy <span class="op">=</span> sol.kp <span class="op">.-</span> (<span class="fl">1</span> <span class="op">-</span> m.δ) <span class="op">.*</span> m.k_grid         <span class="co"># i = k' - (1-δ)k</span></span>
-<span id="cb55-2"><a href=""></a></span>
-<span id="cb55-3"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
-<span id="cb55-4"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
-<span id="cb55-5"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, i_policy[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
-<span id="cb55-6"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
-<span id="cb55-7"><a href=""></a><span class="cf">end</span></span>
-<span id="cb55-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Capital k"</span>)</span>
-<span id="cb55-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Investment i(k, s)"</span>)</span>
-<span id="cb55-10"><a href=""></a><span class="fu">title!</span>(<span class="st">"Investment Policy Function"</span>)</span>
-<span id="cb55-11"><a href=""></a><span class="fu">hline!</span>([m.δ <span class="op">*</span> ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Steady state i"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="70" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb57-1"><a href=""></a>i_policy <span class="op">=</span> sol.kp <span class="op">.-</span> (<span class="fl">1</span> <span class="op">-</span> m.δ) <span class="op">.*</span> m.k_grid         <span class="co"># i = k' - (1-δ)k</span></span>
+<span id="cb57-2"><a href=""></a></span>
+<span id="cb57-3"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
+<span id="cb57-4"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
+<span id="cb57-5"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, i_policy[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
+<span id="cb57-6"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(m.z_grid[s], digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>)</span>
+<span id="cb57-7"><a href=""></a><span class="cf">end</span></span>
+<span id="cb57-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Capital k"</span>)</span>
+<span id="cb57-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Investment i(k, s)"</span>)</span>
+<span id="cb57-10"><a href=""></a><span class="fu">title!</span>(<span class="st">"Investment Policy Function"</span>)</span>
+<span id="cb57-11"><a href=""></a><span class="fu">hline!</span>([m.δ <span class="op">*</span> ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Steady state i"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2225,42 +2238,42 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="the-simulation-function" class="slide level3" data-auto-animate="true">
 <h3 data-id="quarto-animate-title">The Simulation Function</h3>
-<div id="70" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb56-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">simulateRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, sol, T; seed<span class="op">=</span><span class="fl">42</span>)</span>
-<span id="cb56-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># Initialize at steady state</span></span>
-<span id="cb56-3" class="hljs-ln-code"><a href=""></a>    <span class="co"># For each period: </span></span>
-<span id="cb56-4" class="hljs-ln-code"><a href=""></a>        <span class="co"># use policies to get k', c, i</span></span>
-<span id="cb56-5" class="hljs-ln-code"><a href=""></a>        <span class="co"># draw next period's productivity from the Markov chain</span></span>
-<span id="cb56-6" class="hljs-ln-code"><a href=""></a>        <span class="co"># update state k_{t+1} = k'</span></span>
-<span id="cb56-7" class="hljs-ln-code"><a href=""></a>    <span class="co"># Return a DataFrame with columns t, k, z, y, c, i</span></span>
-<span id="cb56-8" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="72" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb58-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">simulateRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, sol, T; seed<span class="op">=</span><span class="fl">42</span>)</span>
+<span id="cb58-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># Initialize at steady state</span></span>
+<span id="cb58-3" class="hljs-ln-code"><a href=""></a>    <span class="co"># For each period: </span></span>
+<span id="cb58-4" class="hljs-ln-code"><a href=""></a>        <span class="co"># use policies to get k', c, i</span></span>
+<span id="cb58-5" class="hljs-ln-code"><a href=""></a>        <span class="co"># draw next period's productivity from the Markov chain</span></span>
+<span id="cb58-6" class="hljs-ln-code"><a href=""></a>        <span class="co"># update state k_{t+1} = k'</span></span>
+<span id="cb58-7" class="hljs-ln-code"><a href=""></a>    <span class="co"># Return a DataFrame with columns t, k, z, y, c, i</span></span>
+<span id="cb58-8" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="the-simulation-function-1" class="slide level3" data-auto-animate="true">
 <h3 data-id="quarto-animate-title">The Simulation Function</h3>
-<div id="72" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57" data-code-line-numbers="|1,21,22|2-5|6,7|8-20"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb57-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">simulateRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, sol, T; seed<span class="op">=</span><span class="fl">42</span>)</span>
-<span id="cb57-2" class="hljs-ln-code"><a href=""></a>    <span class="bu">Random</span>.<span class="fu">seed!</span>(seed)</span>
-<span id="cb57-3" class="hljs-ln-code"><a href=""></a>    (; α, δ, z_grid, P_z, N_z) <span class="op">=</span> m</span>
-<span id="cb57-4" class="hljs-ln-code"><a href=""></a>    k_sim <span class="op">=</span> <span class="fu">zeros</span>(T); z_sim <span class="op">=</span> <span class="fu">zeros</span>(T); s_sim <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">Int</span>, T)</span>
-<span id="cb57-5" class="hljs-ln-code"><a href=""></a>    y_sim <span class="op">=</span> <span class="fu">zeros</span>(T); c_sim <span class="op">=</span> <span class="fu">zeros</span>(T); i_sim <span class="op">=</span> <span class="fu">zeros</span>(T)</span>
-<span id="cb57-6" class="hljs-ln-code"><a href=""></a>    k_sim[<span class="fl">1</span>] <span class="op">=</span> <span class="fu">steady_state</span>(m).k                    <span class="co"># start at steady state</span></span>
-<span id="cb57-7" class="hljs-ln-code"><a href=""></a>    s_sim[<span class="fl">1</span>] <span class="op">=</span> (N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span>                        <span class="co"># start at median z</span></span>
-<span id="cb57-8" class="hljs-ln-code"><a href=""></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>T</span>
-<span id="cb57-9" class="hljs-ln-code"><a href=""></a>        s <span class="op">=</span> s_sim[t]</span>
-<span id="cb57-10" class="hljs-ln-code"><a href=""></a>        z <span class="op">=</span> z_grid[s]</span>
-<span id="cb57-11" class="hljs-ln-code"><a href=""></a>        kp <span class="op">=</span> sol.kp_itp[s](k_sim[t])               <span class="co"># interpolated policy!</span></span>
-<span id="cb57-12" class="hljs-ln-code"><a href=""></a>        z_sim[t] <span class="op">=</span> z</span>
-<span id="cb57-13" class="hljs-ln-code"><a href=""></a>        y_sim[t] <span class="op">=</span> z <span class="op">*</span> k_sim[t]<span class="op">^</span>α</span>
-<span id="cb57-14" class="hljs-ln-code"><a href=""></a>        c_sim[t] <span class="op">=</span> y_sim[t] <span class="op">+</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t] <span class="op">-</span> kp</span>
-<span id="cb57-15" class="hljs-ln-code"><a href=""></a>        i_sim[t] <span class="op">=</span> kp <span class="op">-</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t]</span>
-<span id="cb57-16" class="hljs-ln-code"><a href=""></a>        <span class="cf">if</span> t <span class="op">&lt;</span> T</span>
-<span id="cb57-17" class="hljs-ln-code"><a href=""></a>            k_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> kp</span>
-<span id="cb57-18" class="hljs-ln-code"><a href=""></a>            s_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">Categorical</span>(P_z[s, <span class="op">:</span>]))</span>
-<span id="cb57-19" class="hljs-ln-code"><a href=""></a>        <span class="cf">end</span></span>
-<span id="cb57-20" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb57-21" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> <span class="fu">DataFrame</span>(t<span class="op">=</span><span class="fl">1</span><span class="op">:</span>T, k<span class="op">=</span>k_sim, z<span class="op">=</span>z_sim, y<span class="op">=</span>y_sim, c<span class="op">=</span>c_sim, i<span class="op">=</span>i_sim)</span>
-<span id="cb57-22" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="74" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59" data-code-line-numbers="|1,21,22|2-5|6,7|8-20"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb59-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">simulateRBC</span>(m<span class="op">::</span><span class="dt">RBCModel</span>, sol, T; seed<span class="op">=</span><span class="fl">42</span>)</span>
+<span id="cb59-2" class="hljs-ln-code"><a href=""></a>    <span class="bu">Random</span>.<span class="fu">seed!</span>(seed)</span>
+<span id="cb59-3" class="hljs-ln-code"><a href=""></a>    (; α, δ, z_grid, P_z, N_z) <span class="op">=</span> m</span>
+<span id="cb59-4" class="hljs-ln-code"><a href=""></a>    k_sim <span class="op">=</span> <span class="fu">zeros</span>(T); z_sim <span class="op">=</span> <span class="fu">zeros</span>(T); s_sim <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">Int</span>, T)</span>
+<span id="cb59-5" class="hljs-ln-code"><a href=""></a>    y_sim <span class="op">=</span> <span class="fu">zeros</span>(T); c_sim <span class="op">=</span> <span class="fu">zeros</span>(T); i_sim <span class="op">=</span> <span class="fu">zeros</span>(T)</span>
+<span id="cb59-6" class="hljs-ln-code"><a href=""></a>    k_sim[<span class="fl">1</span>] <span class="op">=</span> <span class="fu">steady_state</span>(m).k                    <span class="co"># start at steady state</span></span>
+<span id="cb59-7" class="hljs-ln-code"><a href=""></a>    s_sim[<span class="fl">1</span>] <span class="op">=</span> (N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span>                        <span class="co"># start at median z</span></span>
+<span id="cb59-8" class="hljs-ln-code"><a href=""></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>T</span>
+<span id="cb59-9" class="hljs-ln-code"><a href=""></a>        s <span class="op">=</span> s_sim[t]</span>
+<span id="cb59-10" class="hljs-ln-code"><a href=""></a>        z <span class="op">=</span> z_grid[s]</span>
+<span id="cb59-11" class="hljs-ln-code"><a href=""></a>        kp <span class="op">=</span> sol.kp_itp[s](k_sim[t])               <span class="co"># interpolated policy!</span></span>
+<span id="cb59-12" class="hljs-ln-code"><a href=""></a>        z_sim[t] <span class="op">=</span> z</span>
+<span id="cb59-13" class="hljs-ln-code"><a href=""></a>        y_sim[t] <span class="op">=</span> z <span class="op">*</span> k_sim[t]<span class="op">^</span>α</span>
+<span id="cb59-14" class="hljs-ln-code"><a href=""></a>        c_sim[t] <span class="op">=</span> y_sim[t] <span class="op">+</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t] <span class="op">-</span> kp</span>
+<span id="cb59-15" class="hljs-ln-code"><a href=""></a>        i_sim[t] <span class="op">=</span> kp <span class="op">-</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t]</span>
+<span id="cb59-16" class="hljs-ln-code"><a href=""></a>        <span class="cf">if</span> t <span class="op">&lt;</span> T</span>
+<span id="cb59-17" class="hljs-ln-code"><a href=""></a>            k_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> kp</span>
+<span id="cb59-18" class="hljs-ln-code"><a href=""></a>            s_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">Categorical</span>(P_z[s, <span class="op">:</span>]))</span>
+<span id="cb59-19" class="hljs-ln-code"><a href=""></a>        <span class="cf">end</span></span>
+<span id="cb59-20" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb59-21" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> <span class="fu">DataFrame</span>(t<span class="op">=</span><span class="fl">1</span><span class="op">:</span>T, k<span class="op">=</span>k_sim, z<span class="op">=</span>z_sim, y<span class="op">=</span>y_sim, c<span class="op">=</span>c_sim, i<span class="op">=</span>i_sim)</span>
+<span id="cb59-22" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>simulateRBC (generic function with 1 method)</code></pre>
 </div>
@@ -2271,7 +2284,7 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 <ul>
 <li>Since <code>solveRBC</code> returns interpolated functions, simulation just <strong>calls</strong> them:</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb59-1"><a href=""></a>kp <span class="op">=</span> sol.kp_itp[s](k_sim[t])         <span class="co"># reads like math: k'(k_t, s_t)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb61"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href=""></a>kp <span class="op">=</span> sol.kp_itp[s](k_sim[t])         <span class="co"># reads like math: k'(k_t, s_t)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="fragment">
 <ul>
 <li>The current capital <span class="math inline">\(k_t\)</span> may not be on our grid (because last period’s optimal <span class="math inline">\(k'\)</span> was found by continuous optimization)</li>
@@ -2296,9 +2309,9 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="running-the-simulation" class="slide level3">
 <h3>Running the Simulation</h3>
-<div id="74" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href=""></a>sim <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">200</span>)</span>
-<span id="cb60-2"><a href=""></a><span class="fu">first</span>(sim, <span class="fl">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="76" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href=""></a>sim <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">200</span>)</span>
+<span id="cb62-2"><a href=""></a><span class="fu">first</span>(sim, <span class="fl">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div><div style="float: left;"><span>6×6 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame caption-top" style="margin-bottom: 6px;">
@@ -2391,11 +2404,11 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="output-consumption-and-investment" class="slide level3">
 <h3>Output, Consumption, and Investment</h3>
-<div id="76" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href=""></a>p1 <span class="op">=</span> <span class="fu">plot</span>(sim.y, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>, title<span class="op">=</span><span class="st">"Output"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">150</span>))</span>
-<span id="cb61-2"><a href=""></a>p2 <span class="op">=</span> <span class="fu">plot</span>(sim.c, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>, title<span class="op">=</span><span class="st">"Consumption"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">150</span>))</span>
-<span id="cb61-3"><a href=""></a>p3 <span class="op">=</span> <span class="fu">plot</span>(sim.i, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>, title<span class="op">=</span><span class="st">"Investment"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">150</span>))</span>
-<span id="cb61-4"><a href=""></a><span class="fu">plot</span>(p1, p2, p3, layout<span class="op">=</span>(<span class="fl">3</span>, <span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">500</span>), xlabel<span class="op">=</span><span class="st">"Period"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="78" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb63-1"><a href=""></a>p1 <span class="op">=</span> <span class="fu">plot</span>(sim.y, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>, title<span class="op">=</span><span class="st">"Output"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">150</span>))</span>
+<span id="cb63-2"><a href=""></a>p2 <span class="op">=</span> <span class="fu">plot</span>(sim.c, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>, title<span class="op">=</span><span class="st">"Consumption"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">150</span>))</span>
+<span id="cb63-3"><a href=""></a>p3 <span class="op">=</span> <span class="fu">plot</span>(sim.i, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>, title<span class="op">=</span><span class="st">"Investment"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">150</span>))</span>
+<span id="cb63-4"><a href=""></a><span class="fu">plot</span>(p1, p2, p3, layout<span class="op">=</span>(<span class="fl">3</span>, <span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">500</span>), xlabel<span class="op">=</span><span class="st">"Period"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2417,13 +2430,13 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="productivity-and-capital" class="slide level3">
 <h3>Productivity and Capital</h3>
-<div id="78" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href=""></a>p1 <span class="op">=</span> <span class="fu">plot</span>(sim.z, linewidth<span class="op">=</span><span class="fl">2</span>, color<span class="op">=:</span>steelblue, label<span class="op">=</span><span class="st">"Productivity z"</span>,</span>
-<span id="cb62-2"><a href=""></a>          title<span class="op">=</span><span class="st">"Technology Shock"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">200</span>))</span>
-<span id="cb62-3"><a href=""></a>p2 <span class="op">=</span> <span class="fu">plot</span>(sim.k, linewidth<span class="op">=</span><span class="fl">2</span>, color<span class="op">=:</span>darkgreen, label<span class="op">=</span><span class="st">"Capital k"</span>,</span>
-<span id="cb62-4"><a href=""></a>          title<span class="op">=</span><span class="st">"Capital Stock"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">200</span>))</span>
-<span id="cb62-5"><a href=""></a><span class="fu">hline!</span>(p2, [ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"k_ss"</span>)</span>
-<span id="cb62-6"><a href=""></a><span class="fu">plot</span>(p1, p2, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">450</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="80" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href=""></a>p1 <span class="op">=</span> <span class="fu">plot</span>(sim.z, linewidth<span class="op">=</span><span class="fl">2</span>, color<span class="op">=:</span>steelblue, label<span class="op">=</span><span class="st">"Productivity z"</span>,</span>
+<span id="cb64-2"><a href=""></a>          title<span class="op">=</span><span class="st">"Technology Shock"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">200</span>))</span>
+<span id="cb64-3"><a href=""></a>p2 <span class="op">=</span> <span class="fu">plot</span>(sim.k, linewidth<span class="op">=</span><span class="fl">2</span>, color<span class="op">=:</span>darkgreen, label<span class="op">=</span><span class="st">"Capital k"</span>,</span>
+<span id="cb64-4"><a href=""></a>          title<span class="op">=</span><span class="st">"Capital Stock"</span>, size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">200</span>))</span>
+<span id="cb64-5"><a href=""></a><span class="fu">hline!</span>(p2, [ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"k_ss"</span>)</span>
+<span id="cb64-6"><a href=""></a><span class="fu">plot</span>(p1, p2, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">450</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2448,15 +2461,15 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 <ul>
 <li>Simulate a long series and construct <strong>log-deviation</strong> :</li>
 </ul>
-<div id="80" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63" data-code-line-numbers="|1|3-6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb63-1"><a href=""></a>sim_long <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">10_000</span>)</span>
-<span id="cb63-2"><a href=""></a></span>
-<span id="cb63-3"><a href=""></a>sim_long.y_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.y) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.y))</span>
-<span id="cb63-4"><a href=""></a>sim_long.c_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.c) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.c))</span>
-<span id="cb63-5"><a href=""></a>sim_long.i_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.i) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.i))</span>
-<span id="cb63-6"><a href=""></a>sim_long.k_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.k) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.k))</span>
-<span id="cb63-7"><a href=""></a></span>
-<span id="cb63-8"><a href=""></a><span class="fu">first</span>(sim_long, <span class="fl">6</span>) <span class="co">#report the first 6 rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="82" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65" data-code-line-numbers="|1|3-6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href=""></a>sim_long <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">10_000</span>)</span>
+<span id="cb65-2"><a href=""></a></span>
+<span id="cb65-3"><a href=""></a>sim_long.y_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.y) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.y))</span>
+<span id="cb65-4"><a href=""></a>sim_long.c_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.c) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.c))</span>
+<span id="cb65-5"><a href=""></a>sim_long.i_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.i) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.i))</span>
+<span id="cb65-6"><a href=""></a>sim_long.k_dev <span class="op">=</span> <span class="fu">log</span>.(sim_long.k) <span class="op">.-</span> <span class="fu">mean</span>(<span class="fu">log</span>.(sim_long.k))</span>
+<span id="cb65-7"><a href=""></a></span>
+<span id="cb65-8"><a href=""></a><span class="fu">first</span>(sim_long, <span class="fl">6</span>) <span class="co">#report the first 6 rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div><div style="float: left;"><span>6×10 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame caption-top" style="margin-bottom: 6px;">
@@ -2575,14 +2588,14 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="standard-deviations" class="slide level3">
 <h3>Standard Deviations</h3>
-<div id="82" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href=""></a>stats <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
-<span id="cb64-2"><a href=""></a>    Variable   <span class="op">=</span> [<span class="st">"Output"</span>, <span class="st">"Consumption"</span>, <span class="st">"Investment"</span>, <span class="st">"Capital"</span>],</span>
-<span id="cb64-3"><a href=""></a>    σ_pct      <span class="op">=</span> [<span class="fl">100</span><span class="fu">*std</span>(sim_long.y_dev), <span class="fl">100</span><span class="fu">*std</span>(sim_long.c_dev), <span class="fl">100</span><span class="fu">*std</span>(sim_long.i_dev), <span class="fl">100</span><span class="fu">*std</span>(sim_long.k_dev)],</span>
-<span id="cb64-4"><a href=""></a>    σ_relative <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fu">std</span>(sim_long.c_dev)<span class="op">/</span><span class="fu">std</span>(sim_long.y_dev), <span class="fu">std</span>(sim_long.i_dev)<span class="op">/</span><span class="fu">std</span>(sim_long.y_dev), <span class="fu">std</span>(sim_long.k_dev)<span class="op">/</span><span class="fu">std</span>(sim_long.y_dev)],</span>
-<span id="cb64-5"><a href=""></a>    corr_y     <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fu">cor</span>(sim_long.y_dev, sim_long.c_dev), <span class="fu">cor</span>(sim_long.y_dev, sim_long.i_dev), <span class="fu">cor</span>(sim_long.y_dev, sim_long.k_dev)]</span>
-<span id="cb64-6"><a href=""></a>)</span>
-<span id="cb64-7"><a href=""></a>stats</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="84" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href=""></a>stats <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb66-2"><a href=""></a>    Variable   <span class="op">=</span> [<span class="st">"Output"</span>, <span class="st">"Consumption"</span>, <span class="st">"Investment"</span>, <span class="st">"Capital"</span>],</span>
+<span id="cb66-3"><a href=""></a>    σ_pct      <span class="op">=</span> [<span class="fl">100</span><span class="fu">*std</span>(sim_long.y_dev), <span class="fl">100</span><span class="fu">*std</span>(sim_long.c_dev), <span class="fl">100</span><span class="fu">*std</span>(sim_long.i_dev), <span class="fl">100</span><span class="fu">*std</span>(sim_long.k_dev)],</span>
+<span id="cb66-4"><a href=""></a>    σ_relative <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fu">std</span>(sim_long.c_dev)<span class="op">/</span><span class="fu">std</span>(sim_long.y_dev), <span class="fu">std</span>(sim_long.i_dev)<span class="op">/</span><span class="fu">std</span>(sim_long.y_dev), <span class="fu">std</span>(sim_long.k_dev)<span class="op">/</span><span class="fu">std</span>(sim_long.y_dev)],</span>
+<span id="cb66-5"><a href=""></a>    corr_y     <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fu">cor</span>(sim_long.y_dev, sim_long.c_dev), <span class="fu">cor</span>(sim_long.y_dev, sim_long.i_dev), <span class="fu">cor</span>(sim_long.y_dev, sim_long.k_dev)]</span>
+<span id="cb66-6"><a href=""></a>)</span>
+<span id="cb66-7"><a href=""></a>stats</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div><div style="float: left;"><span>4×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame caption-top" style="margin-bottom: 6px;">
@@ -2679,16 +2692,16 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="effect-of-persistence-rho" class="slide level3">
 <h3>Effect of Persistence (<span class="math inline">\(\rho\)</span>)</h3>
-<div id="84" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topright, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"Output: Effect of Shock Persistence"</span>)</span>
-<span id="cb65-2"><a href=""></a><span class="cf">for</span> ρ_val <span class="kw">in</span> [<span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.95</span>]</span>
-<span id="cb65-3"><a href=""></a>    m_trial <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>(ρ<span class="op">=</span>ρ_val, N_k<span class="op">=</span><span class="fl">100</span>))</span>
-<span id="cb65-4"><a href=""></a>    sol_trial <span class="op">=</span> <span class="fu">solveRBC</span>(m_trial, tol<span class="op">=</span><span class="fl">1e-5</span>, verbose<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb65-5"><a href=""></a>    sim_trial <span class="op">=</span> <span class="fu">simulateRBC</span>(m_trial, sol_trial, <span class="fl">150</span>)</span>
-<span id="cb65-6"><a href=""></a>    <span class="fu">plot!</span>(sim_trial.y, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"ρ = </span><span class="sc">$</span><span class="st">ρ</span>_val<span class="st">"</span>)</span>
-<span id="cb65-7"><a href=""></a><span class="cf">end</span></span>
-<span id="cb65-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Period"</span>)</span>
-<span id="cb65-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Output"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="86" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topright, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"Output: Effect of Shock Persistence"</span>)</span>
+<span id="cb67-2"><a href=""></a><span class="cf">for</span> ρ_val <span class="kw">in</span> [<span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.95</span>]</span>
+<span id="cb67-3"><a href=""></a>    m_trial <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>(ρ<span class="op">=</span>ρ_val, N_k<span class="op">=</span><span class="fl">100</span>))</span>
+<span id="cb67-4"><a href=""></a>    sol_trial <span class="op">=</span> <span class="fu">solveRBC</span>(m_trial, tol<span class="op">=</span><span class="fl">1e-5</span>, verbose<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb67-5"><a href=""></a>    sim_trial <span class="op">=</span> <span class="fu">simulateRBC</span>(m_trial, sol_trial, <span class="fl">150</span>)</span>
+<span id="cb67-6"><a href=""></a>    <span class="fu">plot!</span>(sim_trial.y, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"ρ = </span><span class="sc">$</span><span class="st">ρ</span>_val<span class="st">"</span>)</span>
+<span id="cb67-7"><a href=""></a><span class="cf">end</span></span>
+<span id="cb67-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Period"</span>)</span>
+<span id="cb67-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Output"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2704,16 +2717,16 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="effect-of-capital-share-alpha" class="slide level3">
 <h3>Effect of Capital Share (<span class="math inline">\(\alpha\)</span>)</h3>
-<div id="86" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"Savings Policy: Effect of α"</span>)</span>
-<span id="cb66-2"><a href=""></a><span class="cf">for</span> α_val <span class="kw">in</span> [<span class="fl">0.25</span>, <span class="fl">0.33</span>, <span class="fl">0.40</span>]</span>
-<span id="cb66-3"><a href=""></a>    m_trial <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>(α<span class="op">=</span>α_val, N_k<span class="op">=</span><span class="fl">100</span>))</span>
-<span id="cb66-4"><a href=""></a>    sol_trial <span class="op">=</span> <span class="fu">solveRBC</span>(m_trial, tol<span class="op">=</span><span class="fl">1e-5</span>, verbose<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb66-5"><a href=""></a>    s_mid <span class="op">=</span> (m_trial.N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
-<span id="cb66-6"><a href=""></a>    <span class="fu">plot!</span>(m_trial.k_grid, sol_trial.kp[<span class="op">:</span>, s_mid], linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"α = </span><span class="sc">$</span><span class="st">α</span>_val<span class="st">"</span>)</span>
-<span id="cb66-7"><a href=""></a><span class="cf">end</span></span>
-<span id="cb66-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
-<span id="cb66-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="88" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"Savings Policy: Effect of α"</span>)</span>
+<span id="cb68-2"><a href=""></a><span class="cf">for</span> α_val <span class="kw">in</span> [<span class="fl">0.25</span>, <span class="fl">0.33</span>, <span class="fl">0.40</span>]</span>
+<span id="cb68-3"><a href=""></a>    m_trial <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>(α<span class="op">=</span>α_val, N_k<span class="op">=</span><span class="fl">100</span>))</span>
+<span id="cb68-4"><a href=""></a>    sol_trial <span class="op">=</span> <span class="fu">solveRBC</span>(m_trial, tol<span class="op">=</span><span class="fl">1e-5</span>, verbose<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb68-5"><a href=""></a>    s_mid <span class="op">=</span> (m_trial.N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
+<span id="cb68-6"><a href=""></a>    <span class="fu">plot!</span>(m_trial.k_grid, sol_trial.kp[<span class="op">:</span>, s_mid], linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"α = </span><span class="sc">$</span><span class="st">α</span>_val<span class="st">"</span>)</span>
+<span id="cb68-7"><a href=""></a><span class="cf">end</span></span>
+<span id="cb68-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
+<span id="cb68-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -2728,16 +2741,16 @@ R = \underbrace{\bar z_s \, k^\alpha + (1-\delta)k}_{\text{resources at }(k,\,s)
 </section>
 <section id="effect-of-discount-factor-beta" class="slide level3">
 <h3>Effect of Discount Factor (<span class="math inline">\(\beta\)</span>)</h3>
-<div id="88" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"Savings Policy: Effect of β"</span>)</span>
-<span id="cb67-2"><a href=""></a><span class="cf">for</span> β_val <span class="kw">in</span> [<span class="fl">0.90</span>, <span class="fl">0.96</span>, <span class="fl">0.99</span>]</span>
-<span id="cb67-3"><a href=""></a>    m_trial <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>(β<span class="op">=</span>β_val, N_k<span class="op">=</span><span class="fl">100</span>))</span>
-<span id="cb67-4"><a href=""></a>    sol_trial <span class="op">=</span> <span class="fu">solveRBC</span>(m_trial, tol<span class="op">=</span><span class="fl">1e-5</span>, verbose<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb67-5"><a href=""></a>    s_mid <span class="op">=</span> (m_trial.N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
-<span id="cb67-6"><a href=""></a>    <span class="fu">plot!</span>(m_trial.k_grid, sol_trial.kp[<span class="op">:</span>, s_mid], linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"β = </span><span class="sc">$</span><span class="st">β</span>_val<span class="st">"</span>)</span>
-<span id="cb67-7"><a href=""></a><span class="cf">end</span></span>
-<span id="cb67-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
-<span id="cb67-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="90" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"Savings Policy: Effect of β"</span>)</span>
+<span id="cb69-2"><a href=""></a><span class="cf">for</span> β_val <span class="kw">in</span> [<span class="fl">0.90</span>, <span class="fl">0.96</span>, <span class="fl">0.99</span>]</span>
+<span id="cb69-3"><a href=""></a>    m_trial <span class="op">=</span> <span class="fu">setup!</span>(<span class="fu">RBCModel</span>(β<span class="op">=</span>β_val, N_k<span class="op">=</span><span class="fl">100</span>))</span>
+<span id="cb69-4"><a href=""></a>    sol_trial <span class="op">=</span> <span class="fu">solveRBC</span>(m_trial, tol<span class="op">=</span><span class="fl">1e-5</span>, verbose<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb69-5"><a href=""></a>    s_mid <span class="op">=</span> (m_trial.N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
+<span id="cb69-6"><a href=""></a>    <span class="fu">plot!</span>(m_trial.k_grid, sol_trial.kp[<span class="op">:</span>, s_mid], linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"β = </span><span class="sc">$</span><span class="st">β</span>_val<span class="st">"</span>)</span>
+<span id="cb69-7"><a href=""></a><span class="cf">end</span></span>
+<span id="cb69-8"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
+<span id="cb69-9"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -3064,31 +3077,31 @@ c_t + k_{t+1} = z_t \, k_t^\alpha + (1-\delta) \, k_t
 <ul>
 <li>Use <code>NonlinearSolve.jl</code> to solve the <span class="math inline">\(\phi_k\)</span> equation, then compute <span class="math inline">\(\phi_z\)</span> directly:</li>
 </ul>
-<div id="90" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href=""></a><span class="im">using</span> <span class="bu">NonlinearSolve</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <div id="92" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69" data-code-line-numbers="|1-6|8-14|16-18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href=""></a><span class="kw">function</span> <span class="fu">linearize_rbc</span>(m)</span>
-<span id="cb69-2"><a href=""></a>    (; α, β, δ, ρ) <span class="op">=</span> m</span>
-<span id="cb69-3"><a href=""></a>    ss_vals <span class="op">=</span> <span class="fu">steady_state</span>(m)</span>
-<span id="cb69-4"><a href=""></a>    k_ss <span class="op">=</span> ss_vals.k;  y_ss <span class="op">=</span> ss_vals.y;  c_ss <span class="op">=</span> ss_vals.c</span>
-<span id="cb69-5"><a href=""></a>    r_ss <span class="op">=</span> α <span class="op">*</span> k_ss<span class="op">^</span>(α<span class="op">-</span><span class="fl">1</span>)</span>
-<span id="cb69-6"><a href=""></a>    γ <span class="op">=</span> (α <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> r_ss <span class="op">/</span> k_ss                        <span class="co"># curvature of MPK</span></span>
-<span id="cb69-7"><a href=""></a></span>
-<span id="cb69-8"><a href=""></a>    <span class="co"># Step 1: solve for ϕ_k  (ψ_k = ψ_k·ϕ_k − β·c_ss·γ·ϕ_k)</span></span>
-<span id="cb69-9"><a href=""></a>    <span class="kw">function</span> <span class="fu">ϕk_residual</span>(x, p)</span>
-<span id="cb69-10"><a href=""></a>        ψ_k <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>β <span class="op">-</span> x[<span class="fl">1</span>]</span>
-<span id="cb69-11"><a href=""></a>        <span class="cf">return</span> [ψ_k <span class="op">-</span> x[<span class="fl">1</span>] <span class="op">*</span> (ψ_k <span class="op">-</span> β <span class="op">*</span> c_ss <span class="op">*</span> γ)]</span>
-<span id="cb69-12"><a href=""></a>    <span class="kw">end</span></span>
-<span id="cb69-13"><a href=""></a>    prob <span class="op">=</span> <span class="fu">NonlinearProblem</span>(ϕk_residual, [<span class="fl">0.9</span>])</span>
-<span id="cb69-14"><a href=""></a>    ϕ_k <span class="op">=</span> <span class="fu">solve</span>(prob, <span class="fu">NewtonRaphson</span>()).u[<span class="fl">1</span>]</span>
-<span id="cb69-15"><a href=""></a></span>
-<span id="cb69-16"><a href=""></a>    <span class="co"># Step 2: compute ϕ_z directly</span></span>
-<span id="cb69-17"><a href=""></a>    ψ_k <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>β <span class="op">-</span> ϕ_k</span>
-<span id="cb69-18"><a href=""></a>    ϕ_z <span class="op">=</span> (<span class="fu">y_ss*</span>(<span class="fl">1</span> <span class="op">-</span> ρ) <span class="op">+</span> β<span class="op">*</span>c_ss<span class="op">*</span>r_ss<span class="op">*</span>ρ) <span class="op">/</span> (ψ_k <span class="op">-</span> β<span class="op">*</span>c_ss<span class="op">*</span>γ <span class="op">+</span> (<span class="fl">1</span> <span class="op">-</span> ρ))</span>
-<span id="cb69-19"><a href=""></a></span>
-<span id="cb69-20"><a href=""></a>    <span class="cf">return</span> (ϕ_k<span class="op">=</span>ϕ_k, ϕ_z<span class="op">=</span>ϕ_z)</span>
-<span id="cb69-21"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href=""></a><span class="im">using</span> <span class="bu">NonlinearSolve</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="94" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71" data-code-line-numbers="|1-6|8-14|16-18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href=""></a><span class="kw">function</span> <span class="fu">linearize_rbc</span>(m)</span>
+<span id="cb71-2"><a href=""></a>    (; α, β, δ, ρ) <span class="op">=</span> m</span>
+<span id="cb71-3"><a href=""></a>    ss_vals <span class="op">=</span> <span class="fu">steady_state</span>(m)</span>
+<span id="cb71-4"><a href=""></a>    k_ss <span class="op">=</span> ss_vals.k;  y_ss <span class="op">=</span> ss_vals.y;  c_ss <span class="op">=</span> ss_vals.c</span>
+<span id="cb71-5"><a href=""></a>    r_ss <span class="op">=</span> α <span class="op">*</span> k_ss<span class="op">^</span>(α<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb71-6"><a href=""></a>    γ <span class="op">=</span> (α <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> r_ss <span class="op">/</span> k_ss                        <span class="co"># curvature of MPK</span></span>
+<span id="cb71-7"><a href=""></a></span>
+<span id="cb71-8"><a href=""></a>    <span class="co"># Step 1: solve for ϕ_k  (ψ_k = ψ_k·ϕ_k − β·c_ss·γ·ϕ_k)</span></span>
+<span id="cb71-9"><a href=""></a>    <span class="kw">function</span> <span class="fu">ϕk_residual</span>(x, p)</span>
+<span id="cb71-10"><a href=""></a>        ψ_k <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>β <span class="op">-</span> x[<span class="fl">1</span>]</span>
+<span id="cb71-11"><a href=""></a>        <span class="cf">return</span> [ψ_k <span class="op">-</span> x[<span class="fl">1</span>] <span class="op">*</span> (ψ_k <span class="op">-</span> β <span class="op">*</span> c_ss <span class="op">*</span> γ)]</span>
+<span id="cb71-12"><a href=""></a>    <span class="kw">end</span></span>
+<span id="cb71-13"><a href=""></a>    prob <span class="op">=</span> <span class="fu">NonlinearProblem</span>(ϕk_residual, [<span class="fl">0.9</span>])</span>
+<span id="cb71-14"><a href=""></a>    ϕ_k <span class="op">=</span> <span class="fu">solve</span>(prob, <span class="fu">NewtonRaphson</span>()).u[<span class="fl">1</span>]</span>
+<span id="cb71-15"><a href=""></a></span>
+<span id="cb71-16"><a href=""></a>    <span class="co"># Step 2: compute ϕ_z directly</span></span>
+<span id="cb71-17"><a href=""></a>    ψ_k <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>β <span class="op">-</span> ϕ_k</span>
+<span id="cb71-18"><a href=""></a>    ϕ_z <span class="op">=</span> (<span class="fu">y_ss*</span>(<span class="fl">1</span> <span class="op">-</span> ρ) <span class="op">+</span> β<span class="op">*</span>c_ss<span class="op">*</span>r_ss<span class="op">*</span>ρ) <span class="op">/</span> (ψ_k <span class="op">-</span> β<span class="op">*</span>c_ss<span class="op">*</span>γ <span class="op">+</span> (<span class="fl">1</span> <span class="op">-</span> ρ))</span>
+<span id="cb71-19"><a href=""></a></span>
+<span id="cb71-20"><a href=""></a>    <span class="cf">return</span> (ϕ_k<span class="op">=</span>ϕ_k, ϕ_z<span class="op">=</span>ϕ_z)</span>
+<span id="cb71-21"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>linearize_rbc (generic function with 1 method)</code></pre>
 </div>
@@ -3096,10 +3109,10 @@ c_t + k_{t+1} = z_t \, k_t^\alpha + (1-\delta) \, k_t
 </section>
 <section id="the-linearized-policy-rule" class="slide level3">
 <h3>The Linearized Policy Rule</h3>
-<div id="94" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href=""></a>lin <span class="op">=</span> <span class="fu">linearize_rbc</span>(m)</span>
-<span id="cb71-2"><a href=""></a><span class="fu">println</span>(<span class="st">"ϕ_k = </span><span class="sc">$</span>(<span class="fu">round</span>(lin.ϕ_k, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
-<span id="cb71-3"><a href=""></a><span class="fu">println</span>(<span class="st">"ϕ_z = </span><span class="sc">$</span>(<span class="fu">round</span>(lin.ϕ_z, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="96" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href=""></a>lin <span class="op">=</span> <span class="fu">linearize_rbc</span>(m)</span>
+<span id="cb73-2"><a href=""></a><span class="fu">println</span>(<span class="st">"ϕ_k = </span><span class="sc">$</span>(<span class="fu">round</span>(lin.ϕ_k, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
+<span id="cb73-3"><a href=""></a><span class="fu">println</span>(<span class="st">"ϕ_z = </span><span class="sc">$</span>(<span class="fu">round</span>(lin.ϕ_z, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ϕ_k = 0.8784
 ϕ_z = 1.0427</code></pre>
@@ -3125,18 +3138,18 @@ k_{t+1} \approx k_{ss} + \phi_k \, (k_t - k_{ss}) + \phi_z \, (z_t - 1)
 </section>
 <section id="policy-functions" class="slide level3">
 <h3>Policy Functions</h3>
-<div id="96" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href=""></a>s_mid <span class="op">=</span> (m.N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
-<span id="cb73-2"><a href=""></a>kp_linear <span class="op">=</span> ss.k <span class="op">.+</span> lin.ϕ_k <span class="op">.*</span> (m.k_grid <span class="op">.-</span> ss.k) <span class="op">.+</span> lin.ϕ_z <span class="op">.*</span> (m.z_grid[s_mid] <span class="op">-</span> <span class="fl">1.0</span>)</span>
-<span id="cb73-3"><a href=""></a></span>
-<span id="cb73-4"><a href=""></a><span class="fu">plot</span>(m.k_grid, sol.kp[<span class="op">:</span>, s_mid], linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>,</span>
-<span id="cb73-5"><a href=""></a>     legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
-<span id="cb73-6"><a href=""></a><span class="fu">plot!</span>(m.k_grid, kp_linear, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
-<span id="cb73-7"><a href=""></a><span class="fu">plot!</span>(m.k_grid, m.k_grid, color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dot, label<span class="op">=</span><span class="st">"45° line"</span>)</span>
-<span id="cb73-8"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dashdot, label<span class="op">=</span><span class="st">"k_ss"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb73-9"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
-<span id="cb73-10"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span>
-<span id="cb73-11"><a href=""></a><span class="fu">title!</span>(<span class="st">"Savings Policy: VFI vs. Linearized (median z)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="98" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb75-1"><a href=""></a>s_mid <span class="op">=</span> (m.N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
+<span id="cb75-2"><a href=""></a>kp_linear <span class="op">=</span> ss.k <span class="op">.+</span> lin.ϕ_k <span class="op">.*</span> (m.k_grid <span class="op">.-</span> ss.k) <span class="op">.+</span> lin.ϕ_z <span class="op">.*</span> (m.z_grid[s_mid] <span class="op">-</span> <span class="fl">1.0</span>)</span>
+<span id="cb75-3"><a href=""></a></span>
+<span id="cb75-4"><a href=""></a><span class="fu">plot</span>(m.k_grid, sol.kp[<span class="op">:</span>, s_mid], linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>,</span>
+<span id="cb75-5"><a href=""></a>     legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
+<span id="cb75-6"><a href=""></a><span class="fu">plot!</span>(m.k_grid, kp_linear, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
+<span id="cb75-7"><a href=""></a><span class="fu">plot!</span>(m.k_grid, m.k_grid, color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dot, label<span class="op">=</span><span class="st">"45° line"</span>)</span>
+<span id="cb75-8"><a href=""></a><span class="fu">vline!</span>([ss.k], color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dashdot, label<span class="op">=</span><span class="st">"k_ss"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb75-9"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
+<span id="cb75-10"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span>
+<span id="cb75-11"><a href=""></a><span class="fu">title!</span>(<span class="st">"Savings Policy: VFI vs. Linearized (median z)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -3152,19 +3165,19 @@ k_{t+1} \approx k_{ss} + \phi_k \, (k_t - k_{ss}) + \phi_z \, (z_t - 1)
 </section>
 <section id="policy-functions-across-productivity-levels" class="slide level3">
 <h3>Policy Functions Across Productivity Levels</h3>
-<div id="98" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb74-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"VFI (solid) vs. Linearized (dashed)"</span>)</span>
-<span id="cb74-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
-<span id="cb74-3"><a href=""></a>    z <span class="op">=</span> m.z_grid[s]</span>
-<span id="cb74-4"><a href=""></a>    kp_lin <span class="op">=</span> ss.k <span class="op">.+</span> lin.ϕ_k <span class="op">.*</span> (m.k_grid <span class="op">.-</span> ss.k) <span class="op">.+</span> lin.ϕ_z <span class="op">.*</span> (z <span class="op">-</span> <span class="fl">1.0</span>)</span>
-<span id="cb74-5"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.kp[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
-<span id="cb74-6"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(z, digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>, color<span class="op">=</span><span class="fu">palette</span>(<span class="op">:</span>default)[s <span class="op">÷</span> <span class="fl">3</span> <span class="op">+</span> <span class="fl">1</span>])</span>
-<span id="cb74-7"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, kp_lin, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash,</span>
-<span id="cb74-8"><a href=""></a>          label<span class="op">=</span><span class="st">""</span>, color<span class="op">=</span><span class="fu">palette</span>(<span class="op">:</span>default)[s <span class="op">÷</span> <span class="fl">3</span> <span class="op">+</span> <span class="fl">1</span>])</span>
-<span id="cb74-9"><a href=""></a><span class="cf">end</span></span>
-<span id="cb74-10"><a href=""></a><span class="fu">plot!</span>(m.k_grid, m.k_grid, color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dot, label<span class="op">=</span><span class="st">"45°"</span>)</span>
-<span id="cb74-11"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
-<span id="cb74-12"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="100" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb76-1"><a href=""></a><span class="fu">plot</span>(legend<span class="op">=:</span>topleft, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>), title<span class="op">=</span><span class="st">"VFI (solid) vs. Linearized (dashed)"</span>)</span>
+<span id="cb76-2"><a href=""></a><span class="cf">for</span> s <span class="kw">in</span> [<span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>]</span>
+<span id="cb76-3"><a href=""></a>    z <span class="op">=</span> m.z_grid[s]</span>
+<span id="cb76-4"><a href=""></a>    kp_lin <span class="op">=</span> ss.k <span class="op">.+</span> lin.ϕ_k <span class="op">.*</span> (m.k_grid <span class="op">.-</span> ss.k) <span class="op">.+</span> lin.ϕ_z <span class="op">.*</span> (z <span class="op">-</span> <span class="fl">1.0</span>)</span>
+<span id="cb76-5"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, sol.kp[<span class="op">:</span>, s], linewidth<span class="op">=</span><span class="fl">2</span>,</span>
+<span id="cb76-6"><a href=""></a>          label<span class="op">=</span><span class="st">"z = </span><span class="sc">$</span>(<span class="fu">round</span>(z, digits<span class="op">=</span><span class="fl">3</span>))<span class="st">"</span>, color<span class="op">=</span><span class="fu">palette</span>(<span class="op">:</span>default)[s <span class="op">÷</span> <span class="fl">3</span> <span class="op">+</span> <span class="fl">1</span>])</span>
+<span id="cb76-7"><a href=""></a>    <span class="fu">plot!</span>(m.k_grid, kp_lin, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash,</span>
+<span id="cb76-8"><a href=""></a>          label<span class="op">=</span><span class="st">""</span>, color<span class="op">=</span><span class="fu">palette</span>(<span class="op">:</span>default)[s <span class="op">÷</span> <span class="fl">3</span> <span class="op">+</span> <span class="fl">1</span>])</span>
+<span id="cb76-9"><a href=""></a><span class="cf">end</span></span>
+<span id="cb76-10"><a href=""></a><span class="fu">plot!</span>(m.k_grid, m.k_grid, color<span class="op">=:</span>gray, linestyle<span class="op">=:</span>dot, label<span class="op">=</span><span class="st">"45°"</span>)</span>
+<span id="cb76-11"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Current Capital k"</span>)</span>
+<span id="cb76-12"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Next Period Capital k'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -3174,28 +3187,28 @@ k_{t+1} \approx k_{ss} + \phi_k \, (k_t - k_{ss}) + \phi_z \, (z_t - 1)
 </section>
 <section id="simulating-the-linearized-model" class="slide level3">
 <h3>Simulating the Linearized Model</h3>
-<div id="100" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75" data-code-line-numbers="|1,20,21|2-6|7-8|9-19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb75-1"><a href=""></a><span class="kw">function</span> <span class="fu">simulateRBC_linear</span>(m, lin, T; seed<span class="op">=</span><span class="fl">42</span>)</span>
-<span id="cb75-2"><a href=""></a>    <span class="bu">Random</span>.<span class="fu">seed!</span>(seed)</span>
-<span id="cb75-3"><a href=""></a>    (; α, δ, z_grid, P_z, N_z) <span class="op">=</span> m</span>
-<span id="cb75-4"><a href=""></a>    k_ss <span class="op">=</span> <span class="fu">steady_state</span>(m).k</span>
-<span id="cb75-5"><a href=""></a>    k_sim <span class="op">=</span> <span class="fu">zeros</span>(T);  s_sim <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">Int</span>, T)</span>
-<span id="cb75-6"><a href=""></a>    y_sim <span class="op">=</span> <span class="fu">zeros</span>(T);  c_sim <span class="op">=</span> <span class="fu">zeros</span>(T);  i_sim <span class="op">=</span> <span class="fu">zeros</span>(T)</span>
-<span id="cb75-7"><a href=""></a>    k_sim[<span class="fl">1</span>] <span class="op">=</span> k_ss</span>
-<span id="cb75-8"><a href=""></a>    s_sim[<span class="fl">1</span>] <span class="op">=</span> (N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
-<span id="cb75-9"><a href=""></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>T</span>
-<span id="cb75-10"><a href=""></a>        z <span class="op">=</span> z_grid[s_sim[t]]</span>
-<span id="cb75-11"><a href=""></a>        kp <span class="op">=</span> k_ss <span class="op">+</span> lin.ϕ_k <span class="op">*</span> (k_sim[t] <span class="op">-</span> k_ss) <span class="op">+</span> lin.ϕ_z <span class="op">*</span> (z <span class="op">-</span> <span class="fl">1.0</span>)</span>
-<span id="cb75-12"><a href=""></a>        y_sim[t] <span class="op">=</span> z <span class="op">*</span> k_sim[t]<span class="op">^</span>α</span>
-<span id="cb75-13"><a href=""></a>        c_sim[t] <span class="op">=</span> y_sim[t] <span class="op">+</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t] <span class="op">-</span> kp</span>
-<span id="cb75-14"><a href=""></a>        i_sim[t] <span class="op">=</span> kp <span class="op">-</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t]</span>
-<span id="cb75-15"><a href=""></a>        <span class="cf">if</span> t <span class="op">&lt;</span> T</span>
-<span id="cb75-16"><a href=""></a>            k_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> kp</span>
-<span id="cb75-17"><a href=""></a>            s_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">Categorical</span>(P_z[s_sim[t], <span class="op">:</span>]))</span>
-<span id="cb75-18"><a href=""></a>        <span class="cf">end</span></span>
-<span id="cb75-19"><a href=""></a>    <span class="cf">end</span></span>
-<span id="cb75-20"><a href=""></a>    <span class="cf">return</span> <span class="fu">DataFrame</span>(t<span class="op">=</span><span class="fl">1</span><span class="op">:</span>T, k<span class="op">=</span>k_sim, z<span class="op">=</span>z_grid[s_sim], y<span class="op">=</span>y_sim, c<span class="op">=</span>c_sim, i<span class="op">=</span>i_sim)</span>
-<span id="cb75-21"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="102" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77" data-code-line-numbers="|1,20,21|2-6|7-8|9-19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href=""></a><span class="kw">function</span> <span class="fu">simulateRBC_linear</span>(m, lin, T; seed<span class="op">=</span><span class="fl">42</span>)</span>
+<span id="cb77-2"><a href=""></a>    <span class="bu">Random</span>.<span class="fu">seed!</span>(seed)</span>
+<span id="cb77-3"><a href=""></a>    (; α, δ, z_grid, P_z, N_z) <span class="op">=</span> m</span>
+<span id="cb77-4"><a href=""></a>    k_ss <span class="op">=</span> <span class="fu">steady_state</span>(m).k</span>
+<span id="cb77-5"><a href=""></a>    k_sim <span class="op">=</span> <span class="fu">zeros</span>(T);  s_sim <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">Int</span>, T)</span>
+<span id="cb77-6"><a href=""></a>    y_sim <span class="op">=</span> <span class="fu">zeros</span>(T);  c_sim <span class="op">=</span> <span class="fu">zeros</span>(T);  i_sim <span class="op">=</span> <span class="fu">zeros</span>(T)</span>
+<span id="cb77-7"><a href=""></a>    k_sim[<span class="fl">1</span>] <span class="op">=</span> k_ss</span>
+<span id="cb77-8"><a href=""></a>    s_sim[<span class="fl">1</span>] <span class="op">=</span> (N_z <span class="op">+</span> <span class="fl">1</span>) <span class="op">÷</span> <span class="fl">2</span></span>
+<span id="cb77-9"><a href=""></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>T</span>
+<span id="cb77-10"><a href=""></a>        z <span class="op">=</span> z_grid[s_sim[t]]</span>
+<span id="cb77-11"><a href=""></a>        kp <span class="op">=</span> k_ss <span class="op">+</span> lin.ϕ_k <span class="op">*</span> (k_sim[t] <span class="op">-</span> k_ss) <span class="op">+</span> lin.ϕ_z <span class="op">*</span> (z <span class="op">-</span> <span class="fl">1.0</span>)</span>
+<span id="cb77-12"><a href=""></a>        y_sim[t] <span class="op">=</span> z <span class="op">*</span> k_sim[t]<span class="op">^</span>α</span>
+<span id="cb77-13"><a href=""></a>        c_sim[t] <span class="op">=</span> y_sim[t] <span class="op">+</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t] <span class="op">-</span> kp</span>
+<span id="cb77-14"><a href=""></a>        i_sim[t] <span class="op">=</span> kp <span class="op">-</span> (<span class="fl">1</span><span class="op">-</span>δ)<span class="op">*</span>k_sim[t]</span>
+<span id="cb77-15"><a href=""></a>        <span class="cf">if</span> t <span class="op">&lt;</span> T</span>
+<span id="cb77-16"><a href=""></a>            k_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> kp</span>
+<span id="cb77-17"><a href=""></a>            s_sim[t<span class="op">+</span><span class="fl">1</span>] <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">Categorical</span>(P_z[s_sim[t], <span class="op">:</span>]))</span>
+<span id="cb77-18"><a href=""></a>        <span class="cf">end</span></span>
+<span id="cb77-19"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb77-20"><a href=""></a>    <span class="cf">return</span> <span class="fu">DataFrame</span>(t<span class="op">=</span><span class="fl">1</span><span class="op">:</span>T, k<span class="op">=</span>k_sim, z<span class="op">=</span>z_grid[s_sim], y<span class="op">=</span>y_sim, c<span class="op">=</span>c_sim, i<span class="op">=</span>i_sim)</span>
+<span id="cb77-21"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>simulateRBC_linear (generic function with 1 method)</code></pre>
 </div>
@@ -3203,15 +3216,15 @@ k_{t+1} \approx k_{ss} + \phi_k \, (k_t - k_{ss}) + \phi_z \, (z_t - 1)
 </section>
 <section id="comparing-simulated-output" class="slide level3">
 <h3>Comparing Simulated Output</h3>
-<div id="102" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href=""></a>sim_vfi <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">200</span>)</span>
-<span id="cb77-2"><a href=""></a>sim_lin <span class="op">=</span> <span class="fu">simulateRBC_linear</span>(m, lin, <span class="fl">200</span>)</span>
-<span id="cb77-3"><a href=""></a></span>
-<span id="cb77-4"><a href=""></a><span class="fu">plot</span>(sim_vfi.y, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>, legend<span class="op">=:</span>topright, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
-<span id="cb77-5"><a href=""></a><span class="fu">plot!</span>(sim_lin.y, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
-<span id="cb77-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Period"</span>)</span>
-<span id="cb77-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Output"</span>)</span>
-<span id="cb77-8"><a href=""></a><span class="fu">title!</span>(<span class="st">"Simulated Output: VFI vs. Linearized"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="104" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href=""></a>sim_vfi <span class="op">=</span> <span class="fu">simulateRBC</span>(m, sol, <span class="fl">200</span>)</span>
+<span id="cb79-2"><a href=""></a>sim_lin <span class="op">=</span> <span class="fu">simulateRBC_linear</span>(m, lin, <span class="fl">200</span>)</span>
+<span id="cb79-3"><a href=""></a></span>
+<span id="cb79-4"><a href=""></a><span class="fu">plot</span>(sim_vfi.y, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>, legend<span class="op">=:</span>topright, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">400</span>))</span>
+<span id="cb79-5"><a href=""></a><span class="fu">plot!</span>(sim_lin.y, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
+<span id="cb79-6"><a href=""></a><span class="fu">xlabel!</span>(<span class="st">"Period"</span>)</span>
+<span id="cb79-7"><a href=""></a><span class="fu">ylabel!</span>(<span class="st">"Output"</span>)</span>
+<span id="cb79-8"><a href=""></a><span class="fu">title!</span>(<span class="st">"Simulated Output: VFI vs. Linearized"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -3227,12 +3240,12 @@ k_{t+1} \approx k_{ss} + \phi_k \, (k_t - k_{ss}) + \phi_z \, (z_t - 1)
 </section>
 <section id="comparing-simulated-consumption-and-investment" class="slide level3">
 <h3>Comparing Simulated Consumption and Investment</h3>
-<div id="104" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb78-1"><a href=""></a>p1 <span class="op">=</span> <span class="fu">plot</span>(sim_vfi.c, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>, title<span class="op">=</span><span class="st">"Consumption"</span>, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">200</span>))</span>
-<span id="cb78-2"><a href=""></a><span class="fu">plot!</span>(p1, sim_lin.c, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
-<span id="cb78-3"><a href=""></a>p2 <span class="op">=</span> <span class="fu">plot</span>(sim_vfi.i, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>, title<span class="op">=</span><span class="st">"Investment"</span>, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">200</span>))</span>
-<span id="cb78-4"><a href=""></a><span class="fu">plot!</span>(p2, sim_lin.i, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
-<span id="cb78-5"><a href=""></a><span class="fu">plot</span>(p1, p2, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">450</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="106" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb80-1"><a href=""></a>p1 <span class="op">=</span> <span class="fu">plot</span>(sim_vfi.c, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>, title<span class="op">=</span><span class="st">"Consumption"</span>, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">200</span>))</span>
+<span id="cb80-2"><a href=""></a><span class="fu">plot!</span>(p1, sim_lin.c, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
+<span id="cb80-3"><a href=""></a>p2 <span class="op">=</span> <span class="fu">plot</span>(sim_vfi.i, linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">"VFI"</span>, title<span class="op">=</span><span class="st">"Investment"</span>, size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">200</span>))</span>
+<span id="cb80-4"><a href=""></a><span class="fu">plot!</span>(p2, sim_lin.i, linewidth<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">"Linearized"</span>)</span>
+<span id="cb80-5"><a href=""></a><span class="fu">plot</span>(p1, p2, layout<span class="op">=</span>(<span class="fl">2</span>,<span class="fl">1</span>), size<span class="op">=</span>(<span class="fl">700</span>, <span class="fl">450</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
