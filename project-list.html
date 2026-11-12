@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Evans">
-<meta name="dcterms.date" content="2026-05-11">
+<meta name="dcterms.date" content="2026-11-12">
 
 <title>EC 510 – Final Project Model List</title>
 <style>
@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="ProjectList_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="ProjectList_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="ProjectList_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="ProjectList_files/libs/bootstrap/bootstrap-a5be5c2b86aab4cd02b109e9a469e1ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="ProjectList_files/libs/bootstrap/bootstrap-36aaf2d9b7cdf6604b5ce9da7d5a667c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -202,7 +202,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 11, 2026</p>
+      <p class="date">November 12, 2026</p>
     </div>
   </div>
   
@@ -391,7 +391,7 @@ T\big[(a_i, y_s) \to (a_{j+1}, y_{s'})\big] = (1-\omega)\cdot \pi(y_{s'} \mid y_
 <p><strong>(d) Compute the stationary distribution.</strong> Two options:</p>
 <ul>
 <li><strong>Iteration (recommended):</strong> Start from any <span class="math inline">\(\mu_0\)</span> (e.g., uniform) and iterate <span class="math inline">\(\mu_{n+1} = T'\mu_n\)</span> until <span class="math inline">\(\|\mu_{n+1} - \mu_n\|_1 &lt; 10^{-9}\)</span>. Sparse matrix multiplication makes this very fast.</li>
-<li><strong>Eigenvector:</strong> Find the left eigenvector of <span class="math inline">\(T\)</span> associated with eigenvalue 1, normalized so <span class="math inline">\(\sum \mu = 1\)</span>.</li>
+<li><strong>Linear system:</strong> Solve <span class="math inline">\(\mu'(I - T) = 0\)</span> directly. Its equations are redundant (they sum to zero), so replace one of them with the normalization <span class="math inline">\(\sum \mu = 1\)</span> and solve with <code>\</code>. Use a sparse matrix for <span class="math inline">\(T\)</span> so the solve stays fast.</li>
 </ul>
 <p><strong>(e) Outer loop.</strong> Bisect on <span class="math inline">\(q\)</span> over <span class="math inline">\([β, 1]\)</span> until the bond market clearing residual <span class="math inline">\(\sum a' \mu\)</span> is within <span class="math inline">\(10^{-5}\)</span> of zero. Bond demand is monotonically decreasing in <span class="math inline">\(q\)</span>, so bisection is reliable.</p>
 </section>

@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="David Evans">
-  <meta name="dcterms.date" content="2026-04-20">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>McCall Search Model</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -209,7 +209,7 @@ David Evans
 </div>
 </div>
 
-  <p class="date">2026-04-20</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section>
 <section id="model-setup" class="title-slide slide level1 center">
@@ -488,7 +488,7 @@ V_{2,s} = \max\left\{ \bar w_s + \beta V_{1,s},\; c + \beta Q_1 \right\}
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href=""></a>Q2 <span class="op">=</span> <span class="fu">dot</span>(p, V2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>11.970484897959183</code></pre>
+<pre><code>11.970484897959185</code></pre>
 </div>
 </div>
 <ul>
@@ -1173,18 +1173,18 @@ V_s = \max\left\{ \bar w_s + \beta V_s,\; c + \beta Q \right\}
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb57-1"><a href=""></a>m <span class="op">=</span> <span class="fu">McCallModel</span>()</span>
 <span id="cb57-2"><a href=""></a>sol <span class="op">=</span> <span class="fu">solveMcCall</span>(m)       <span class="co"># returns a named tuple</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>(V = [158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073  …  166.93877550863462, 170.61224489635495, 174.28571428407582, 177.9591836717961, 181.63265305951697, 185.3061224472373, 188.97959183495811, 192.65306122267842, 196.32653061039926, 199.9999999981196], Q = 163.42093671832137, C = Bool[0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  1, 1, 1, 1, 1, 1, 1, 1, 1, 1])</code></pre>
+<pre><code>(V = [158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076  …  166.93877550863462, 170.61224489635495, 174.28571428407582, 177.9591836717961, 181.63265305951697, 185.3061224472373, 188.97959183495811, 192.65306122267842, 196.32653061039926, 199.9999999981196], Q = 163.42093671832134, C = Bool[0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  1, 1, 1, 1, 1, 1, 1, 1, 1, 1])</code></pre>
 </div>
 </div>
 <div id="72" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb59-1"><a href=""></a>sol.V[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>]                 <span class="co"># access value function by name</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 158.24988988232073
- 158.24988988232073
- 158.24988988232073
- 158.24988988232073
- 158.24988988232073</code></pre>
+ 158.24988988232076
+ 158.24988988232076
+ 158.24988988232076
+ 158.24988988232076
+ 158.24988988232076</code></pre>
 </div>
 </div>
 <div id="74" class="cell" data-execution_count="1">
@@ -1474,7 +1474,7 @@ U_t = c + \beta Q_{t-1}
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href=""></a><span class="fu">println</span>(<span class="st">"Mean under p:  "</span>, <span class="fu">dot</span>(p, w̄))</span>
 <span id="cb77-2"><a href=""></a><span class="fu">println</span>(<span class="st">"Mean under p₂: "</span>, <span class="fu">dot</span>(p2, w̄))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Mean under p:  5.500000000000001
+<pre><code>Mean under p:  5.5
 Mean under p₂: 5.5</code></pre>
 </div>
 </div>

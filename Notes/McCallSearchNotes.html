@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Evans">
-<meta name="dcterms.date" content="2026-04-20">
+<meta name="dcterms.date" content="2026-11-12">
 
 <title>The McCall Search Model</title>
 <style>
@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="McCallSearchNotes_files/libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="McCallSearchNotes_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="McCallSearchNotes_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="McCallSearchNotes_files/libs/bootstrap/bootstrap-a5be5c2b86aab4cd02b109e9a469e1ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="McCallSearchNotes_files/libs/bootstrap/bootstrap-36aaf2d9b7cdf6604b5ce9da7d5a667c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="McCallSearchNotes_files/libs/quarto-diagram/mermaid.min.js"></script>
 <script src="McCallSearchNotes_files/libs/quarto-diagram/mermaid-init.js"></script>
 <link href="McCallSearchNotes_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
@@ -208,7 +208,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 20, 2026</p>
+      <p class="date">November 12, 2026</p>
     </div>
   </div>
   
@@ -431,7 +431,7 @@ V_{2,s} = \max\left\{ \bar{w}_s + \beta V_{1,s},\; c + \beta Q_1 \right\}
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Q2 <span class="op">=</span> <span class="fu">dot</span>(p, V2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>11.970484897959183</code></pre>
+<pre><code>11.970484897959185</code></pre>
 </div>
 </div>
 <p>The pattern is now clear. We can use <span class="math inline">\(Q_2\)</span> to solve the three-period problem, <span class="math inline">\(Q_3\)</span> for the four-period problem, and so on.</p>
@@ -857,7 +857,7 @@ V_s = \max\left\{ \bar{w}_s + \beta V_s,\; c + \beta Q \right\}
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fu">McCallModel</span>()</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> <span class="fu">solveMcCall</span>(m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>(V = [158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073, 158.24988988232073  …  166.93877550863462, 170.61224489635495, 174.28571428407582, 177.9591836717961, 181.63265305951697, 185.3061224472373, 188.97959183495811, 192.65306122267842, 196.32653061039926, 199.9999999981196], Q = 163.42093671832137, C = Bool[0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  1, 1, 1, 1, 1, 1, 1, 1, 1, 1])</code></pre>
+<pre><code>(V = [158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076, 158.24988988232076  …  166.93877550863462, 170.61224489635495, 174.28571428407582, 177.9591836717961, 181.63265305951697, 185.3061224472373, 188.97959183495811, 192.65306122267842, 196.32653061039926, 199.9999999981196], Q = 163.42093671832134, C = Bool[0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  1, 1, 1, 1, 1, 1, 1, 1, 1, 1])</code></pre>
 </div>
 </div>
 <div id="60" class="cell" data-execution_count="1">
@@ -865,11 +865,11 @@ V_s = \max\left\{ \bar{w}_s + \beta V_s,\; c + \beta Q \right\}
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>sol.V[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 158.24988988232073
- 158.24988988232073
- 158.24988988232073
- 158.24988988232073
- 158.24988988232073</code></pre>
+ 158.24988988232076
+ 158.24988988232076
+ 158.24988988232076
+ 158.24988988232076
+ 158.24988988232076</code></pre>
 </div>
 </div>
 <div id="62" class="cell" data-execution_count="1">
@@ -1122,7 +1122,7 @@ U_t = c + \beta Q_{t-1}
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Mean under p:  "</span>, <span class="fu">dot</span>(p, w̄))</span>
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Mean under p₂: "</span>, <span class="fu">dot</span>(p2, w̄))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Mean under p:  5.500000000000001
+<pre><code>Mean under p:  5.5
 Mean under p₂: 5.5</code></pre>
 </div>
 </div>

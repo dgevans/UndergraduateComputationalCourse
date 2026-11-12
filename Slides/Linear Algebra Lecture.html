@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="David Evans">
-  <meta name="dcterms.date" content="2026-04-01">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>Linear Algebra</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -209,7 +209,7 @@ David Evans
 </div>
 </div>
 
-  <p class="date">2026-04-01</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -255,6 +255,7 @@ David Evans
 <li>Are there in fact many solutions, and if so how should we interpret them?</li>
 <li>If no solution exists, is there a “best” approximate solution?</li>
 <li>If a solution exists, how should we compute it?</li>
+<li>What if the equations are <strong>nonlinear</strong>?</li>
 </ul>
 <div class="fragment">
 <div class="callout callout-tip callout-titled callout-style-default">
@@ -266,7 +267,7 @@ David Evans
 <p><strong>This Lecture</strong></p>
 </div>
 <div class="callout-content">
-<p>We will show how to use Julia to solve these problems numerically.</p>
+<p>We will show how to use Julia to solve these problems numerically — and why solving <em>nonlinear</em> systems comes down to solving a sequence of <em>linear</em> ones.</p>
 </div>
 </div>
 </div>
@@ -370,15 +371,15 @@ z = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]</code></pre>
 <pre>ArgumentError: indexed assignment with a single value to possibly many locations is not supported; perhaps use broadcasting `.=` instead?
 Stacktrace:
  [1] <span class="ansi-bold">setindex_shape_check</span><span class="ansi-bold">(</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, ::Int64<span class="ansi-bold">)</span>
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">indices.jl:276</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">indices.jl:277</span>
  [2] <span class="ansi-bold">_unsafe_setindex!</span><span class="ansi-bold">(</span>::IndexLinear, <span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">x</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1017</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1045</span>
  [3] <span class="ansi-bold">_setindex!</span>
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1008</span><span class="ansi-bright-black-fg"> [inlined]</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">multidimensional.jl:1036</span><span class="ansi-bright-black-fg"> [inlined]</span>
  [4] <span class="ansi-bold">setindex!</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">A</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span>, <span class="ansi-bright-black-fg">v</span>::Tuple<span class="ansi-bright-black-fg">{Int64, Int64}</span>, <span class="ansi-bright-black-fg">I</span>::UnitRange<span class="ansi-bright-black-fg">{Int64}</span><span class="ansi-bold">)</span>
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">abstractarray.jl:1443</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">abstractarray.jl:1464</span>
  [5] top-level scope
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/University of Oregon Dropbox/David Evans/University of Oregon/Courses/Spring 2026/EC 410/Lectures and Website/Julia/Linear Algebra/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">Linear Algebra Lecture.qmd:138</span></pre>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/EC410-Source/EC410-Source/Linear Algebra/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">Linear Algebra Lecture.qmd:139</span></pre>
 </div>
 </div>
 </div>
@@ -1264,7 +1265,7 @@ g(\alpha w + \beta z) = \alpha g(w) + \beta g(z)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb78-1"><a href=""></a>m, c <span class="op">=</span> <span class="fu">pinv</span>(A) <span class="op">*</span> y</span>
 <span id="cb78-2"><a href=""></a><span class="fu">print</span>(m, c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.0000000000000002-0.9499999999999998</code></pre>
+<pre><code>0.9999999999999998-0.9499999999999997</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -1274,7 +1275,7 @@ g(\alpha w + \beta z) = \alpha g(w) + \beta g(z)
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>2-element Vector{Float64}:
   0.9999999999999998
- -0.9499999999999996</code></pre>
+ -0.9499999999999997</code></pre>
 </div>
 </div>
 </div>
@@ -1325,104 +1326,6 @@ A(x + \hat{x}) = Ax + A\hat{x} = Ax + 0 = y
 </div>
 <div class="callout-content">
 <p>Under-determined systems have infinitely many solutions. Methods like <code>pinv</code> return the solution with smallest norm <span class="math inline">\(\|x\|\)</span>.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section>
-<section id="eigenvalues-and-eigenvectors" class="title-slide slide level1 center">
-<h1>Eigenvalues and Eigenvectors</h1>
-
-</section>
-<section id="definition-2" class="title-slide slide level2 center">
-<h2>Definition</h2>
-
-</section>
-<section id="eigenvectors-and-eigenvalues" class="slide level3">
-<h3>Eigenvectors and Eigenvalues</h3>
-<ul>
-<li>For an <span class="math inline">\(n \times n\)</span> matrix <span class="math inline">\(A\)</span>, we want to find scalar <span class="math inline">\(\lambda\)</span> and vector <span class="math inline">\(v \in \mathbb{R}^n\)</span> such that</li>
-</ul>
-<p><span class="math display">\[
-Av = \lambda v
-\]</span></p>
-<ul>
-<li>The operation <span class="math inline">\(Av\)</span> returns a <strong>scalar multiple</strong> of <span class="math inline">\(v\)</span></li>
-</ul>
-</section>
-<section id="eigenvectors-and-eigenvalues-1" class="slide level3">
-<h3>Eigenvectors and Eigenvalues</h3>
-
-<img data-src="eigenvectors.png" class="r-stretch"></section>
-<section id="finding-eigenvalues" class="slide level3">
-<h3>Finding Eigenvalues</h3>
-<ul>
-<li>Rearranging: <span class="math inline">\(0 = Av - \lambda v = (A - \lambda I)v\)</span></li>
-<li>An eigenvalue exists when the columns of <span class="math inline">\(A - \lambda I\)</span> are linearly dependent</li>
-</ul>
-<div class="fragment">
-<ul>
-<li>We search for <span class="math inline">\(\lambda\)</span> such that <span class="math inline">\(\det(A - \lambda I) = 0\)</span></li>
-<li><span class="math inline">\(\det(A - \lambda I)\)</span> is a polynomial of degree <span class="math inline">\(n\)</span>; its roots are the eigenvalues</li>
-</ul>
-</div>
-</section>
-<section id="eigenvalue-properties" class="slide level3">
-<h3>Eigenvalue Properties</h3>
-<p>Nice facts about the eigenvalues of a square matrix <span class="math inline">\(A\)</span>:</p>
-<ol type="1">
-<li>The <strong>determinant</strong> of <span class="math inline">\(A\)</span> equals the product of its eigenvalues</li>
-<li>The <strong>trace</strong> of <span class="math inline">\(A\)</span> (sum of diagonal elements) equals the sum of its eigenvalues</li>
-<li>If <span class="math inline">\(A\)</span> is <strong>symmetric</strong>, all eigenvalues are real</li>
-<li>If <span class="math inline">\(A\)</span> is invertible with eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_n\)</span>, then <span class="math inline">\(A^{-1}\)</span> has eigenvalues <span class="math inline">\(1/\lambda_1, \ldots, 1/\lambda_n\)</span></li>
-</ol>
-</section>
-<section id="eigenvalues-in-julia" class="slide level3">
-<h3>Eigenvalues in Julia</h3>
-<div id="88" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb84-1"><a href=""></a>A <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">2</span> <span class="fl">1</span>];</span>
-<span id="cb84-2"><a href=""></a>evals, evecs <span class="op">=</span> <span class="fu">eigen</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>Eigen{Float64, Float64, Matrix{Float64}, Vector{Float64}}
-values:
-2-element Vector{Float64}:
- -1.0
-  3.0
-vectors:
-2×2 Matrix{Float64}:
- -0.707107  0.707107
-  0.707107  0.707107</code></pre>
-</div>
-</div>
-<div id="90" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb86-1"><a href=""></a>evals   <span class="co"># eigenvalues</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>2-element Vector{Float64}:
- -1.0
-  3.0</code></pre>
-</div>
-</div>
-<div id="92" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb88-1"><a href=""></a>evecs   <span class="co"># eigenvectors (columns)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>2×2 Matrix{Float64}:
- -0.707107  0.707107
-  0.707107  0.707107</code></pre>
-</div>
-</div>
-<div class="fragment">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Reading the Output</strong></p>
-</div>
-<div class="callout-content">
-<p>The columns of <code>evecs</code> are the eigenvectors corresponding to the eigenvalues in <code>evals</code>.</p>
 </div>
 </div>
 </div>
@@ -1525,11 +1428,20 @@ x - Ax = d \quad \Longrightarrow \quad (I - A)x = d \quad \Longrightarrow \quad 
 <section id="when-does-it-exist" class="slide level3">
 <h3>When Does It Exist?</h3>
 <ul>
-<li><p><span class="math inline">\((I - A)^{-1}\)</span> exists with non-negative entries if the <strong>spectral radius</strong> of <span class="math inline">\(A\)</span> is less than 1</p>
+<li>Need <span class="math inline">\((I - A)^{-1}\)</span> to exist <strong>and</strong> have non-negative entries
 <ul>
-<li>The <strong>spectral radius</strong> is the largest absolute eigenvalue of <span class="math inline">\(A\)</span></li>
+<li>otherwise some positive final demand would require negative output</li>
 </ul></li>
 </ul>
+<div class="fragment">
+<ul>
+<li>Sufficient condition: every <strong>column of <span class="math inline">\(A\)</span> sums to less than 1</strong>
+<ul>
+<li>each industry uses less than $1 of inputs to produce $1 of output</li>
+</ul></li>
+<li>Then each round of indirect effects is smaller than the last: <span class="math inline">\(A^k \to 0\)</span> and <span class="math inline">\(I + A + A^2 + \cdots\)</span> converges</li>
+</ul>
+</div>
 <div class="fragment">
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
@@ -1540,7 +1452,7 @@ x - Ax = d \quad \Longrightarrow \quad (I - A)x = d \quad \Longrightarrow \quad 
 <p><strong>Productive Economy</strong></p>
 </div>
 <div class="callout-content">
-<p>The spectral radius condition means each industry uses less than one unit of total inputs per unit of output. If it fails, the economy consumes more than it produces.</p>
+<p>When the column sums are below 1 the economy is <strong>productive</strong>: the Leontief inverse is a sum of non-negative matrices, so it is non-negative. If industries needed more than $1 of inputs per $1 of output, the economy would consume more than it produces.</p>
 </div>
 </div>
 </div>
@@ -1554,12 +1466,12 @@ x - Ax = d \quad \Longrightarrow \quad (I - A)x = d \quad \Longrightarrow \quad 
 <section id="setting-up-the-technology-matrix" class="slide level3">
 <h3>Setting Up the Technology Matrix</h3>
 <p>Three sectors: <strong>Agriculture</strong>, <strong>Manufacturing</strong>, <strong>Services</strong></p>
-<div id="94" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb90-1"><a href=""></a><span class="co"># a_ij = amount of good i needed per unit of good j</span></span>
-<span id="cb90-2"><a href=""></a><span class="co"># Columns: Agriculture, Manufacturing, Services</span></span>
-<span id="cb90-3"><a href=""></a>A_io <span class="op">=</span> [<span class="fl">0.10</span>  <span class="fl">0.20</span>  <span class="fl">0.05</span>;    <span class="co"># Agriculture inputs</span></span>
-<span id="cb90-4"><a href=""></a>        <span class="fl">0.15</span>  <span class="fl">0.10</span>  <span class="fl">0.10</span>;    <span class="co"># Manufacturing inputs</span></span>
-<span id="cb90-5"><a href=""></a>        <span class="fl">0.05</span>  <span class="fl">0.15</span>  <span class="fl">0.10</span>]    <span class="co"># Services inputs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="88" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb84-1"><a href=""></a><span class="co"># a_ij = amount of good i needed per unit of good j</span></span>
+<span id="cb84-2"><a href=""></a><span class="co"># Columns: Agriculture, Manufacturing, Services</span></span>
+<span id="cb84-3"><a href=""></a>A_io <span class="op">=</span> [<span class="fl">0.10</span>  <span class="fl">0.20</span>  <span class="fl">0.05</span>;    <span class="co"># Agriculture inputs</span></span>
+<span id="cb84-4"><a href=""></a>        <span class="fl">0.15</span>  <span class="fl">0.10</span>  <span class="fl">0.10</span>;    <span class="co"># Manufacturing inputs</span></span>
+<span id="cb84-5"><a href=""></a>        <span class="fl">0.05</span>  <span class="fl">0.15</span>  <span class="fl">0.10</span>]    <span class="co"># Services inputs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3×3 Matrix{Float64}:
  0.1   0.2   0.05
@@ -1575,50 +1487,41 @@ x - Ax = d \quad \Longrightarrow \quad (I - A)x = d \quad \Longrightarrow \quad 
 </section>
 <section id="checking-productivity" class="slide level3">
 <h3>Checking Productivity</h3>
-<div id="96" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb92-1"><a href=""></a>evals_io <span class="op">=</span> <span class="fu">eigvals</span>(A_io)</span>
-<span id="cb92-2"><a href=""></a>spectral_radius <span class="op">=</span> <span class="fu">maximum</span>(<span class="fu">abs</span>.(evals_io))</span>
-<span id="cb92-3"><a href=""></a><span class="fu">println</span>(<span class="st">"Spectral radius: </span><span class="sc">$</span>(<span class="fu">round</span>(spectral_radius, digits<span class="op">=</span><span class="fl">4</span>))<span class="st">"</span>)</span>
-<span id="cb92-4"><a href=""></a><span class="fu">println</span>(<span class="st">"Economy is productive: </span><span class="sc">$</span>(spectral_radius <span class="op">&lt;</span> <span class="fl">1</span>)<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Spectral radius: 0.3376
-Economy is productive: true</code></pre>
+<div id="90" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb86-1"><a href=""></a><span class="fu">sum</span>(A_io, dims<span class="op">=</span><span class="fl">1</span>)   <span class="co"># column sums: inputs per unit of output</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1×3 Matrix{Float64}:
+ 0.3  0.45  0.25</code></pre>
 </div>
 </div>
-<div class="fragment">
 <ul>
-<li>Spectral radius <span class="math inline">\(&lt; 1\)</span> <span class="math inline">\(\Longrightarrow\)</span> the Leontief inverse exists</li>
+<li>Every column sums to less than 1 <span class="math inline">\(\Longrightarrow\)</span> the economy is productive</li>
+</ul>
+<div class="fragment">
+<div id="92" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb88-1"><a href=""></a>leontief_inv <span class="op">=</span> <span class="fu">inv</span>(I <span class="op">-</span> A_io)</span>
+<span id="cb88-2"><a href=""></a><span class="fu">round</span>.(leontief_inv, digits<span class="op">=</span><span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 1.162  0.274  0.095
+ 0.205  1.18   0.143
+ 0.099  0.212  1.14</code></pre>
+</div>
+</div>
+<ul>
+<li>Every entry is positive: final demand for <strong>any</strong> good requires extra output of <strong>every</strong> good</li>
 </ul>
 </div>
 </section>
 <section id="computing-gross-output" class="slide level3">
 <h3>Computing Gross Output</h3>
 <p>Suppose final demand is <span class="math inline">\(d = (100, 200, 150)'\)</span>:</p>
-<div id="98" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb94-1"><a href=""></a>d <span class="op">=</span> [<span class="fl">100.0</span>, <span class="fl">200.0</span>, <span class="fl">150.0</span>]</span>
-<span id="cb94-2"><a href=""></a></span>
-<span id="cb94-3"><a href=""></a><span class="co"># Compute the Leontief inverse</span></span>
-<span id="cb94-4"><a href=""></a>leontief_inv <span class="op">=</span> <span class="fu">inv</span>(I <span class="op">-</span> A_io)</span>
-<span id="cb94-5"><a href=""></a><span class="fu">println</span>(<span class="st">"Leontief inverse:"</span>)</span>
-<span id="cb94-6"><a href=""></a><span class="fu">display</span>(<span class="fu">round</span>.(leontief_inv, digits<span class="op">=</span><span class="fl">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Leontief inverse:</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<pre><code>3×3 Matrix{Float64}:
- 1.1621  0.2741  0.095
- 0.2046  1.1803  0.1425
- 0.0987  0.2119  1.1401</code></pre>
-</div>
-</div>
-</section>
-<section id="gross-output-vs.-final-demand" class="slide level3">
-<h3>Gross Output vs.&nbsp;Final Demand</h3>
-<div id="100" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb97-1"><a href=""></a>x <span class="op">=</span> leontief_inv <span class="op">*</span> d</span>
-<span id="cb97-2"><a href=""></a><span class="fu">println</span>(<span class="st">"Final demand:  </span><span class="sc">$</span>d<span class="st">"</span>)</span>
-<span id="cb97-3"><a href=""></a><span class="fu">println</span>(<span class="st">"Gross output:  </span><span class="sc">$</span>(<span class="fu">round</span>.(x, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span>
-<span id="cb97-4"><a href=""></a><span class="fu">println</span>(<span class="st">"Intermediate:  </span><span class="sc">$</span>(<span class="fu">round</span>.(x <span class="op">.-</span> d, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="94" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb90-1"><a href=""></a>d <span class="op">=</span> [<span class="fl">100.0</span>, <span class="fl">200.0</span>, <span class="fl">150.0</span>]</span>
+<span id="cb90-2"><a href=""></a>x <span class="op">=</span> (I <span class="op">-</span> A_io) <span class="op">\</span> d           <span class="co"># solve (I - A)x = d</span></span>
+<span id="cb90-3"><a href=""></a><span class="fu">println</span>(<span class="st">"Final demand:  </span><span class="sc">$</span>d<span class="st">"</span>)</span>
+<span id="cb90-4"><a href=""></a><span class="fu">println</span>(<span class="st">"Gross output:  </span><span class="sc">$</span>(<span class="fu">round</span>.(x, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span>
+<span id="cb90-5"><a href=""></a><span class="fu">println</span>(<span class="st">"Intermediate:  </span><span class="sc">$</span>(<span class="fu">round</span>.(x <span class="op">.-</span> d, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Final demand:  [100.0, 200.0, 150.0]
 Gross output:  [185.27, 277.91, 223.28]
@@ -1635,10 +1538,10 @@ Intermediate:  [85.27, 77.91, 73.28]</code></pre>
 <section id="the-multiplier-effect" class="slide level3">
 <h3>The Multiplier Effect</h3>
 <p>What if manufacturing demand increases by 50 units?</p>
-<div id="102" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb99-1"><a href=""></a>d_new <span class="op">=</span> [<span class="fl">100.0</span>, <span class="fl">250.0</span>, <span class="fl">150.0</span>]</span>
-<span id="cb99-2"><a href=""></a>x_new <span class="op">=</span> leontief_inv <span class="op">*</span> d_new</span>
-<span id="cb99-3"><a href=""></a><span class="fu">println</span>(<span class="st">"Change in gross output: </span><span class="sc">$</span>(<span class="fu">round</span>.(x_new <span class="op">.-</span> x, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="96" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb92-1"><a href=""></a>d_new <span class="op">=</span> [<span class="fl">100.0</span>, <span class="fl">250.0</span>, <span class="fl">150.0</span>]</span>
+<span id="cb92-2"><a href=""></a>x_new <span class="op">=</span> leontief_inv <span class="op">*</span> d_new</span>
+<span id="cb92-3"><a href=""></a><span class="fu">println</span>(<span class="st">"Change in gross output: </span><span class="sc">$</span>(<span class="fu">round</span>.(x_new <span class="op">.-</span> x, digits<span class="op">=</span><span class="fl">2</span>))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Change in gross output: [13.7, 59.02, 10.6]</code></pre>
 </div>
@@ -1665,6 +1568,327 @@ Intermediate:  [85.27, 77.91, 73.28]</code></pre>
 </section>
 </section>
 <section>
+<section id="nonlinear-systems-of-equations" class="title-slide slide level1 center">
+<h1>Nonlinear Systems of Equations</h1>
+
+</section>
+<section id="from-linear-to-nonlinear" class="title-slide slide level2 center">
+<h2>From Linear to Nonlinear</h2>
+
+</section>
+<section id="beyond-linear-systems" class="slide level3">
+<h3>Beyond Linear Systems</h3>
+<ul>
+<li>Linear systems <span class="math inline">\(Ax = y\)</span>: check <span class="math inline">\(\det(A) \neq 0\)</span>, then solve in one line with <code>A \ y</code></li>
+<li>But most equilibrium conditions in economics are <strong>nonlinear</strong>
+<ul>
+<li>CES demand, Cobb-Douglas production, first-order conditions with diminishing returns</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>General problem: find <span class="math inline">\(x \in \mathbb{R}^n\)</span> such that</li>
+</ul>
+<p><span class="math display">\[
+f(x) = 0, \qquad f: \mathbb{R}^n \to \mathbb{R}^n
+\]</span></p>
+<ul>
+<li><span class="math inline">\(n\)</span> equations in <span class="math inline">\(n\)</span> unknowns — the linear case is <span class="math inline">\(f(x) = Ax - y\)</span></li>
+<li>No formula like <span class="math inline">\(x = A^{-1}y\)</span>, so we need an <strong>iterative</strong> algorithm</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Big Idea</strong></p>
+</div>
+<div class="callout-content">
+<p>Replace <span class="math inline">\(f\)</span> with a linear approximation, solve that <strong>linear system</strong>, and repeat. Linear algebra is the engine inside nonlinear solvers.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="example-two-market-equilibrium" class="slide level3">
+<h3>Example: Two-Market Equilibrium</h3>
+<p>Two goods that are substitutes, with constant-elasticity demand and supply:</p>
+<p><span class="math display">\[
+D_1 = 100\, p_1^{-2} p_2^{0.5}, \quad S_1 = 20\, p_1^{1.5}, \qquad
+D_2 = 80\, p_2^{-1.5} p_1^{0.3}, \quad S_2 = 15\, p_2^{2}
+\]</span></p>
+<ul>
+<li>Equilibrium: excess demand <span class="math inline">\(f(p) = D(p) - S(p)\)</span> is zero in <strong>both</strong> markets</li>
+</ul>
+<div class="fragment">
+<div id="98" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb94-1"><a href=""></a><span class="kw">function</span> <span class="fu">excess_demand</span>(p)</span>
+<span id="cb94-2"><a href=""></a>    p₁, p₂ <span class="op">=</span> p</span>
+<span id="cb94-3"><a href=""></a>    <span class="cf">return</span> [<span class="fl">100</span>p₁<span class="op">^-</span><span class="fl">2</span> <span class="op">*</span> p₂<span class="op">^</span><span class="fl">0.5</span> <span class="op">-</span> <span class="fl">20</span>p₁<span class="op">^</span><span class="fl">1.5</span>,    <span class="co"># market 1: D₁ - S₁</span></span>
+<span id="cb94-4"><a href=""></a>            <span class="fl">80</span>p₂<span class="op">^-</span><span class="fl">1.5</span> <span class="op">*</span> p₁<span class="op">^</span><span class="fl">0.3</span> <span class="op">-</span> <span class="fl">15</span>p₂<span class="op">^</span><span class="fl">2</span>]     <span class="co"># market 2: D₂ - S₂</span></span>
+<span id="cb94-5"><a href=""></a><span class="kw">end</span></span>
+<span id="cb94-6"><a href=""></a><span class="fu">excess_demand</span>([<span class="fl">2.0</span>, <span class="fl">2.0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -21.213203435596427
+ -25.177977468155035</code></pre>
+</div>
+</div>
+<ul>
+<li>At <span class="math inline">\(p = (2, 2)\)</span> both markets have excess supply: prices are too high</li>
+<li>Prices enter through powers and products — we can’t write this as <span class="math inline">\(Ap = y\)</span></li>
+</ul>
+</div>
+</section>
+
+<section id="newtons-method" class="title-slide slide level2 center">
+<h2>Newton’s Method</h2>
+
+</section>
+<section id="linearize-then-solve" class="slide level3">
+<h3>Linearize, Then Solve</h3>
+<ul>
+<li><strong>One equation</strong>: follow the tangent line at the guess <span class="math inline">\(x_n\)</span> to where it hits zero, <span class="math inline">\(x_{n+1} = x_n - f(x_n)/f'(x_n)\)</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><strong><span class="math inline">\(n\)</span> equations</strong>: the tangent line becomes a first-order Taylor approximation</li>
+</ul>
+<p><span class="math display">\[
+f(x) \approx f(x_n) + J(x_n)\,(x - x_n)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(J(x_n)\)</span> is the <strong>Jacobian</strong>: the <span class="math inline">\(n \times n\)</span> matrix of partial derivatives <span class="math inline">\(J_{ij} = \partial f_i / \partial x_j\)</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Set the approximation to zero and solve for the step <span class="math inline">\(\Delta = x_{n+1} - x_n\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+J(x_n)\, \Delta = -f(x_n), \qquad x_{n+1} = x_n + \Delta
+\]</span></p>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Each Newton Step Is a Linear System</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math inline">\(J(x_n)\Delta = -f(x_n)\)</span> is <span class="math inline">\(Ax = y\)</span> with <span class="math inline">\(A = J(x_n)\)</span> and <span class="math inline">\(y = -f(x_n)\)</span>. In Julia: <code>Δ = J(x) \ (-f(x))</code></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-jacobian" class="slide level3">
+<h3>The Jacobian</h3>
+<p>Differentiate each market’s excess demand with respect to each price:</p>
+<p><span class="math display">\[
+J(p) = \begin{bmatrix}
+-200\, p_1^{-3} p_2^{0.5} - 30\, p_1^{0.5} &amp; 50\, p_1^{-2} p_2^{-0.5} \\
+24\, p_1^{-0.7} p_2^{-1.5} &amp; -120\, p_1^{0.3} p_2^{-2.5} - 30\, p_2
+\end{bmatrix}
+\]</span></p>
+<div id="100" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb96-1"><a href=""></a><span class="kw">function</span> <span class="fu">jacobian</span>(p)</span>
+<span id="cb96-2"><a href=""></a>    p₁, p₂ <span class="op">=</span> p</span>
+<span id="cb96-3"><a href=""></a>    J₁₁ <span class="op">=</span> <span class="op">-</span><span class="fl">200</span>p₁<span class="op">^-</span><span class="fl">3</span> <span class="op">*</span> p₂<span class="op">^</span><span class="fl">0.5</span> <span class="op">-</span> <span class="fl">30</span>p₁<span class="op">^</span><span class="fl">0.5</span>     <span class="co"># ∂f₁/∂p₁ (own price)</span></span>
+<span id="cb96-4"><a href=""></a>    J₁₂ <span class="op">=</span> <span class="fl">50</span>p₁<span class="op">^-</span><span class="fl">2</span> <span class="op">*</span> p₂<span class="op">^-</span><span class="fl">0.5</span>                 <span class="co"># ∂f₁/∂p₂ (cross price)</span></span>
+<span id="cb96-5"><a href=""></a>    J₂₁ <span class="op">=</span> <span class="fl">24</span>p₁<span class="op">^-</span><span class="fl">0.7</span> <span class="op">*</span> p₂<span class="op">^-</span><span class="fl">1.5</span>               <span class="co"># ∂f₂/∂p₁ (cross price)</span></span>
+<span id="cb96-6"><a href=""></a>    J₂₂ <span class="op">=</span> <span class="op">-</span><span class="fl">120</span>p₁<span class="op">^</span><span class="fl">0.3</span> <span class="op">*</span> p₂<span class="op">^-</span><span class="fl">2.5</span> <span class="op">-</span> <span class="fl">30</span>p₂       <span class="co"># ∂f₂/∂p₂ (own price)</span></span>
+<span id="cb96-7"><a href=""></a>    <span class="cf">return</span> [J₁₁ J₁₂;</span>
+<span id="cb96-8"><a href=""></a>            J₂₁ J₂₂]</span>
+<span id="cb96-9"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>jacobian (generic function with 1 method)</code></pre>
+</div>
+</div>
+<ul>
+<li>Own-price effects (diagonal) are negative; cross-price effects are positive because the goods are substitutes</li>
+</ul>
+</section>
+<section id="one-newton-step" class="slide level3">
+<h3>One Newton Step</h3>
+<div id="102" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb98-1"><a href=""></a>p <span class="op">=</span> [<span class="fl">2.0</span>, <span class="fl">2.0</span>]                              <span class="co"># initial guess</span></span>
+<span id="cb98-2"><a href=""></a>Δ <span class="op">=</span> <span class="fu">jacobian</span>(p) <span class="op">\</span> (<span class="fu">-excess_demand</span>(p))       <span class="co"># solve J(p) Δ = -f(p)</span></span>
+<span id="cb98-3"><a href=""></a>p_new <span class="op">=</span> p <span class="op">+</span> Δ                               <span class="co"># take the step</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.6919253416011006
+ 1.6889430060896855</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div id="104" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb100-1"><a href=""></a><span class="fu">println</span>(<span class="st">"‖f(p)‖     = </span><span class="sc">$</span>(<span class="fu">norm</span>(<span class="fu">excess_demand</span>(p)))<span class="st">"</span>)</span>
+<span id="cb100-2"><a href=""></a><span class="fu">println</span>(<span class="st">"‖f(p_new)‖ = </span><span class="sc">$</span>(<span class="fu">norm</span>(<span class="fu">excess_demand</span>(p_new)))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>‖f(p)‖     = 32.92310054334073
+‖f(p_new)‖ = 1.3883008911248673</code></pre>
+</div>
+</div>
+<ul>
+<li>One linear solve shrinks excess demand from about 33 to about 1.4</li>
+<li>Now repeat from <code>p_new</code>, and again, until the step is tiny</li>
+</ul>
+</div>
+</section>
+<section id="newton-pseudocode" class="slide level3" data-auto-animate="true">
+<h3 data-id="quarto-animate-title"><code>newton</code>: Pseudocode</h3>
+<div id="106" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb102-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">newton</span>(f, J, x₀; tol <span class="op">=</span> <span class="fl">1e-10</span>, maxiter <span class="op">=</span> <span class="fl">50</span>)</span>
+<span id="cb102-2" class="hljs-ln-code"><a href=""></a>    <span class="co"># Start at the initial guess x₀</span></span>
+<span id="cb102-3" class="hljs-ln-code"><a href=""></a>    <span class="co"># For n = 1, 2, ..., maxiter:</span></span>
+<span id="cb102-4" class="hljs-ln-code"><a href=""></a>    <span class="co">#   solve J(x) Δ = -f(x) for the step Δ</span></span>
+<span id="cb102-5" class="hljs-ln-code"><a href=""></a>    <span class="co">#   update x = x + Δ</span></span>
+<span id="cb102-6" class="hljs-ln-code"><a href=""></a>    <span class="co">#   stop once the step Δ is tiny</span></span>
+<span id="cb102-7" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="newton-full-function" class="slide level3" data-auto-animate="true">
+<h3 data-id="quarto-animate-title"><code>newton</code>: Full Function</h3>
+<div id="108" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103" data-code-line-numbers="|2|3-5|6|7-9|11-12"><pre class="sourceCode numberSource julia number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode julia hljs"><span id="cb103-1" class="hljs-ln-code"><a href=""></a><span class="kw">function</span> <span class="fu">newton</span>(f, J, x₀; tol <span class="op">=</span> <span class="fl">1e-10</span>, maxiter <span class="op">=</span> <span class="fl">50</span>)</span>
+<span id="cb103-2" class="hljs-ln-code"><a href=""></a>    x <span class="op">=</span> x₀</span>
+<span id="cb103-3" class="hljs-ln-code"><a href=""></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>maxiter</span>
+<span id="cb103-4" class="hljs-ln-code"><a href=""></a>        Δ <span class="op">=</span> <span class="fu">J</span>(x) <span class="op">\</span> (<span class="fu">-f</span>(x))              <span class="co"># linearize, then solve</span></span>
+<span id="cb103-5" class="hljs-ln-code"><a href=""></a>        x <span class="op">=</span> x <span class="op">+</span> Δ                       <span class="co"># take the step</span></span>
+<span id="cb103-6" class="hljs-ln-code"><a href=""></a>        <span class="fu">println</span>(<span class="st">"iteration </span><span class="sc">$</span>n<span class="st">: ‖f(x)‖ = </span><span class="sc">$</span>(<span class="fu">norm</span>(<span class="fu">f</span>(x)))<span class="st">"</span>)</span>
+<span id="cb103-7" class="hljs-ln-code"><a href=""></a>        <span class="cf">if</span> <span class="fu">norm</span>(Δ) <span class="op">&lt;</span> tol                <span class="co"># converged: steps are tiny</span></span>
+<span id="cb103-8" class="hljs-ln-code"><a href=""></a>            <span class="cf">return</span> x</span>
+<span id="cb103-9" class="hljs-ln-code"><a href=""></a>        <span class="cf">end</span></span>
+<span id="cb103-10" class="hljs-ln-code"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb103-11" class="hljs-ln-code"><a href=""></a>    <span class="fu">println</span>(<span class="st">"Warning: no convergence after </span><span class="sc">$</span>maxiter<span class="st"> iterations"</span>)</span>
+<span id="cb103-12" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> x</span>
+<span id="cb103-13" class="hljs-ln-code"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>newton (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><code>f</code> and <code>J</code> are passed in as arguments — functions are values in Julia, so <code>newton</code> works for any system</li>
+</ul>
+</div>
+</section>
+<section id="watching-it-converge" class="slide level3">
+<h3>Watching It Converge</h3>
+<div id="110" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb105-1"><a href=""></a>p_star <span class="op">=</span> <span class="fu">newton</span>(excess_demand, jacobian, [<span class="fl">2.0</span>, <span class="fl">2.0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>iteration 1: ‖f(x)‖ = 1.3883008911248673
+iteration 2: ‖f(x)‖ = 0.009203787568081082
+iteration 3: ‖f(x)‖ = 4.049338246528834e-7
+iteration 4: ‖f(x)‖ = 0.0
+iteration 5: ‖f(x)‖ = 0.0</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.7069573735223966
+ 1.6889575066262879</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>Near the root the error is roughly <strong>squared</strong> each iteration: <span class="math inline">\(1.4 \to 0.009 \to 4 \times 10^{-7} \to 0\)</span>
+<ul>
+<li>the number of correct digits roughly doubles (<strong>quadratic convergence</strong>)</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Linear Systems Take One Step</strong></p>
+</div>
+<div class="callout-content">
+<p>If <span class="math inline">\(f(x) = Ax - y\)</span> then <span class="math inline">\(J = A\)</span> everywhere, and the first Newton step lands exactly on <span class="math inline">\(A^{-1}y\)</span>. Newton’s method generalizes <code>A \ y</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="solving-in-practice" class="title-slide slide level2 center">
+<h2>Solving in Practice</h2>
+
+</section>
+<section id="the-easy-way-solve" class="slide level3">
+<h3>The Easy Way: <code>solve</code></h3>
+<ul>
+<li>In practice, use a well-tested solver: the course package <code>EC410</code> provides <code>solve(f, x0)</code></li>
+</ul>
+<div id="112" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb108-1"><a href=""></a><span class="im">using</span> <span class="bu">EC410</span></span>
+<span id="cb108-2"><a href=""></a>p_solve <span class="op">=</span> <span class="fu">solve</span>(excess_demand, [<span class="fl">2.0</span>, <span class="fl">2.0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ 1.7069573735223966
+ 1.6889575066262879</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div id="114" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb110-1"><a href=""></a>p_solve <span class="op">≈</span> p_star     <span class="co"># same answer as our hand-written Newton loop</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<ul>
+<li>No Jacobian needed — the solver computes the derivatives for you</li>
+<li>Under the hood: Newton-type steps (each one a linear solve) plus safeguards for when a full step would overshoot</li>
+<li>One equation? Use <code>solve1D(f, a, b)</code> (with a bracket) or <code>solve1D(f, x0)</code></li>
+</ul>
+</div>
+</section>
+<section id="initial-guesses-and-multiple-solutions" class="slide level3">
+<h3>Initial Guesses and Multiple Solutions</h3>
+<ul>
+<li>Nonlinear systems can have <strong>several</strong> solutions — which one you find depends on the initial guess</li>
+</ul>
+<div id="116" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb112-1"><a href=""></a><span class="fu">g</span>(x) <span class="op">=</span> [x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">4</span>,      <span class="co"># circle of radius 2</span></span>
+<span id="cb112-2"><a href=""></a>        x[<span class="fl">2</span>] <span class="op">-</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">1</span>]        <span class="co"># parabola</span></span>
+<span id="cb112-3"><a href=""></a><span class="fu">println</span>(<span class="fu">solve</span>(g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>]))</span>
+<span id="cb112-4"><a href=""></a><span class="fu">println</span>(<span class="fu">solve</span>(g, [<span class="op">-</span><span class="fl">1.0</span>, <span class="fl">1.0</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1.5174899135519797, 1.3027756377319946]
+[-1.5174899135519797, 1.3027756377319946]</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>Newton also needs <span class="math inline">\(J(x_n)\)</span> to be <strong>invertible</strong>: here <span class="math inline">\(\det J(x) = 0\)</span> whenever <span class="math inline">\(x_1 = 0\)</span>, so from the guess <span class="math inline">\((0, 1)\)</span> the first step is undefined</li>
+<li>Far from a root the linear approximation can be poor, and steps can overshoot</li>
+</ul>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Always Check</strong></p>
+</div>
+<div class="callout-content">
+<p>Verify that <span class="math inline">\(f(x^*) \approx 0\)</span>, read any solver warnings, try several initial guesses, and make sure the answer makes economic sense (e.g.&nbsp;positive prices).</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section>
 <section id="summary" class="title-slide slide level1 center">
 <h1>Summary</h1>
 
@@ -1679,8 +1903,8 @@ Intermediate:  [85.27, 77.91, 73.28]</code></pre>
 <li>Spanning and linear independence</li>
 <li>Matrix operations and multiplication</li>
 <li>Inverse matrices and determinants</li>
-<li>Eigenvalues and eigenvectors</li>
 <li>Leontief input-output model</li>
+<li>Nonlinear systems and Newton’s method</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <p><strong>Julia Tools</strong></p>
@@ -1689,7 +1913,8 @@ Intermediate:  [85.27, 77.91, 73.28]</code></pre>
 <li><code>dot</code>, <code>norm</code>, <code>det</code></li>
 <li><code>inv(A)</code>, <code>A\y</code></li>
 <li><code>pinv(A)</code> for least-squares</li>
-<li><code>eigen(A)</code> for eigenvalues</li>
+<li><code>J \ (-f)</code> for a Newton step</li>
+<li><code>solve(f, x0)</code> from <code>EC410</code></li>
 <li><code>.*</code>, <code>.+</code> for broadcasting</li>
 </ul>
 </div></div>
